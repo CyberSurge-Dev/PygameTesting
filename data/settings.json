@@ -1,0 +1,12 @@
+{
+    "display": {
+        "fullscreen": false,
+        "resolution": [1366, 768]
+    },
+    "keybinds": {
+        "forward": "w",
+        "backward": "s",
+        "left": "a",
+        "right": "d"
+    }
+}
