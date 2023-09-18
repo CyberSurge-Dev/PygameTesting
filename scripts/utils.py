@@ -3,10 +3,15 @@
 # Version: 1.0
 # --------------------------------------------------------------------------------
 """
-This program contains many general-purpose classes used throughout the program.
+This program contains many general-purpose classes and functions used throughout the program.
 
+--+ Classes +-- 
 Settings() - The settings class is used to load settings information from settings.json.
-Animation() - The animation classs is used as a system to generalize the creation of aniumations throughout the program.
+Animation(images, image_dur, loop = False) - The animation classs is used as a system to generalize the creation of aniumations throughout the program.
+
+--+ Functions +-- 
+load_image(path) - Loads the image at the given path, and returns it as a pygame image object.
+load_images(path) - Loads all images in given path and returns them as a list of pygame image objects.
 """
 # --------------------------------------------------------------------------------
 # External imports
@@ -14,8 +19,10 @@ from tkinter import Tk
 import pygame
 import pygame.locals
 import json
+import os
 
-# Internal imports
+# Global variables
+BASE_IMAGE_PATH = "data/images"
 
 # --------------------------------------------------------------------------------
 
@@ -37,8 +44,22 @@ class Settings():
         for key in self.settings_data["keybinds"].keys(): # cycle through the keybinds dictionary from settings.json
             self.keybinds[key] = getattr(pygame.locals, "K_" + self.settings_data["keybinds"][key]) # set the keybind value to the pygame key attribute that corrosponds the value from settings.json using getattr()
 
+def load_image(path):
+    """Loads the image at the given path, and returns it as a pygame image object."""
+    return pygame.image.load(BASE_IMAGE_PATH + path) # returns the loaded pygame image object
+
+def load_images(path):
+    """Loads all images in given path and returns them as a list of pygame image objects."""
+    images = []
+    for img in sorted(os.listdir(path)): # Cycles through file paths of given directory (uses sorted() for Linux compatibility)
+        images.append(pygame.load(img)) # Saves the loaded image in the images list
+
+    return images # Return the list of pygame image objects
+
 class Animation():
     pass
+
+
 
 
 

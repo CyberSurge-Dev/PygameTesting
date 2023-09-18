@@ -6,7 +6,7 @@
 This program contains the main running code for the program, as well as the Game object with the game loop.
 This program updates the other game objects and acts an event handler for the program.
 
-Game() - The game class is the main object in the program, managing the update, rendering, and events of game objects.
+Game - The game class is the main object in the program, managing the update, rendering, and events of game objects.
 """
 # --------------------------------------------------------------------------------
 # External impots
