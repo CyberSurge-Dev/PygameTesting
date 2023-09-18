@@ -6,7 +6,8 @@
 This program contains the main running code for the program, as well as the Game object with the game loop.
 This program updates the other game objects and acts an event handler for the program.
 
-Game - The game class is the main object in the program, managing the update, rendering, and events of game objects.
+--+ Classes +--
+Game() - The game class is the main object in the program, managing the update, rendering, and events of game objects.
 """
 # --------------------------------------------------------------------------------
 # External impots
@@ -18,6 +19,7 @@ from scripts.utils import Settings
 # --------------------------------------------------------------------------------
 
 class Game():
+    """The game class is the main object in the program, managing the update, rendering, and events of game objects."""
     def __init__(self):
         """Initiate game object with attributes for game"""
         # Initialize pygame

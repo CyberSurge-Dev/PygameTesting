@@ -58,13 +58,3 @@ def load_images(path):
 
 class Animation():
     pass
-
-
-
-
-
-
-
-        
-
-    
