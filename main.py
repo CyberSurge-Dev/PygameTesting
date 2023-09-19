@@ -39,6 +39,9 @@ class Game():
         self.dWidth = self.sWidth - (self.sWidth % 16)
         self.dHeight = self.sHeight - (self.sHeight % 9)
 
+        print(self.dWidth)
+        print(self.dHeight)
+
 
         
         self.clock = pygame.time.Clock() # Create the game clock
@@ -77,8 +80,8 @@ class Game():
             self.display.fill((30, 30, 30))
             
 
-            self.screen.blit(pygame.transform.scale(self.display, (self.dWidth, self.dHeight)), 
-                             ((self.sWidth/2)-(self.display.get_size()[0]/2), (self.sHeight/2)-(self.display.get_size()[1]/2))))
+            self.screen.blit(pygame.transform.scale( self.display, (self.dWidth, self.dHeight) ), 
+                             (  (self.sWidth/2)-(self.dWidth/2) , (self.sHeight/2)-(self.dHeight/2) ))
             
             pygame.display.update() # Refresh the display
             self.clock.tick(60) # Limit FPS to 60 
