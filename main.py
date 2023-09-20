@@ -11,8 +11,7 @@ Game() - The game class is the main object in the program, managing the update, 
 """
 # --------------------------------------------------------------------------------
 # External impots
-import pygame
-import sys
+import pygame, sys, math
 
 # Internal imports
 from scripts.utils import Settings
@@ -36,17 +35,14 @@ class Game():
         self.sHeight = pygame.display.get_window_size()[1]
 
         # Determine the smallest 16:9 ratio that can fit in the screen for the display size
-        self.dWidth = self.sWidth - (self.sWidth % 16)
-        self.dHeight = self.sHeight - (self.sHeight % 9)
-
-        print(self.dWidth)
-        print(self.dHeight)
-
-
+        if (self.sWidth < self.sHeight or self.sWidth == self.sHeight):
+            self.dWidth = self.sWidth - (self.sWidth % 16)
+            self.dHeight = math.trunc(self.dWidth * (9/16))
+        else:
+            self.dHeight = self.sHeight - (self.sHeight % 16)
+            self.dWidth = math.trunc(self.dHeight * (16/9)) 
         
         self.clock = pygame.time.Clock() # Create the game clock
-
-
 
     def run(self):
         """Main game loop, handels updates and most game processes"""
@@ -78,7 +74,10 @@ class Game():
 
             self.screen.fill((20, 20, 20))
             self.display.fill((30, 30, 30))
-        
+            
+            self.display.blit(pygame.image("data/sprite.png"), (5, 5))
+            
+
             self.screen.blit(pygame.transform.scale( self.display, (self.dWidth, self.dHeight) ), 
                              (  (self.sWidth/2)-(self.dWidth/2) , (self.sHeight/2)-(self.dHeight/2) ))
             
