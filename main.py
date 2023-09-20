@@ -78,8 +78,7 @@ class Game():
 
             self.screen.fill((20, 20, 20))
             self.display.fill((30, 30, 30))
-            
-
+        
             self.screen.blit(pygame.transform.scale( self.display, (self.dWidth, self.dHeight) ), 
                              (  (self.sWidth/2)-(self.dWidth/2) , (self.sHeight/2)-(self.dHeight/2) ))
             
