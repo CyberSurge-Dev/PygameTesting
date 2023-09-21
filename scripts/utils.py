@@ -52,7 +52,7 @@ def load_images(path):
     """Loads all images in given path and returns them as a list of pygame image objects."""
     images = []
     for img in sorted(os.listdir(BASE_IMAGE_PATH + path)): # Cycles through file paths of given directory (uses sorted() for Linux compatibility)
-         images.append(load_image(path + img)) # Saves the loaded image in the images list
+         images.append(load_image(BASE_IMAGE_PATH + path + img)) # Saves the loaded image in the images list
 
     return images # Return the list of pygame image objects
 

@@ -6,7 +6,7 @@
 This program contains entity classes for physics objects, players, enemies, projectiles, etc. 
 
 --+ Classes +-- 
-PhysicsEntity() - Class object used for creating objects that interact with physics\
+PhysicsEntity() - Class object used for creating objects that interact with physics
 Player()
 Enemey()
 
@@ -16,16 +16,34 @@ Enemey()
 import pygame
 
 # --------------------------------------------------------------------------------
-class PhysicsEntity():
+class PhysicsEntity:
     """Class object used for creating objects that interact with physics"""
-    def __init__ (self, game, pos, size, exceptions = []):
-        """Initialize variables for physics entity"""
+
+    def __init__ (self, game, pos, size):
+        """Initialize the physics entity"""
+        self.pos = list(pos) # Convert to list for mutability
         self.game = game
-        self.pos = list(pos) # Convert to list to better be able to modify positions
         self.size = size
+        self.multiplyer = 1
 
-class SolidObject():
-    """Simple class for solid objects"""
+        # Create a dictionary to store colisions, and velocity
+        self.state = {
+            'forward': {'col':False, 'vel':0},
+            'backward': {'col':False, 'vel':0},
+            'left': {'col':False, 'vel':0},
+            'right': {'col':False, 'vel':0}
+        }
 
+    def rect(self):
+        """Returns a pygame Rect onject at the location of the player"""
+        return pygame.Rect(self.pos[0], self.pos[1], self.size[0], self.size[1])
 
+    def update(self, **movement):
+        """
+        Update function for handeling the movement of physics object
+
+        Pass in movement with direction = movment (ex: left = 1)
+        """
+
+        if
 
