@@ -15,6 +15,7 @@ import pygame, sys, math
 
 # Internal imports
 from scripts.utils import Settings
+from scripts.entities import PhysicsEntity
 # --------------------------------------------------------------------------------
 
 class Game():
@@ -33,8 +34,18 @@ class Game():
         self.keybinds = self.settings.keybinds # gets a dictionary for game keybinds
         self.sWidth = pygame.display.get_window_size()[0]
         self.sHeight = pygame.display.get_window_size()[1]
+        
+        self.movement = {
+            'forward':0,
+            'backward':0,
+            'left':0,
+            'right':0
+        }
+        
+        self.player = PhysicsEntity(self, (0, 0), (5, 10))
 
-        # Determine the smallest 16:9 ratio that can fit in the screen for the display size
+        # Determine the largest 16:9 ratio that can fit in the screen for the display size
+        # This method allows the program to automatically scale the game to any screen size
         if (self.sWidth < self.sHeight or self.sWidth == self.sHeight):
             self.dWidth = self.sWidth - (self.sWidth % 16)
             self.dHeight = math.trunc(self.dWidth * (9/16))
@@ -47,30 +58,32 @@ class Game():
     def run(self):
         """Main game loop, handels updates and most game processes"""
         while True:
-
             for event in pygame.event.get(): # Chack pygame events
                 if event.type == pygame.QUIT: # Check if the X on the window was clicked
                     pygame.quit()
                     sys.exit()
                 if event.type == pygame.KEYDOWN: # Check for buttons that were pressed
                     if event.key == self.keybinds["forward"]: # Check for the forward button being pressed
-                        pass
+                        self.movement['forward'] = 1
                     if event.key == self.keybinds["backward"]: # Check for the backward button being pressed
-                        pass
+                        self.movement['backward'] = 1
                     if event.key == self.keybinds["left"]: # Check for the left button being pressed
-                        pass
+                        self.movement['left'] = 1
                     if event.key == self.keybinds["right"]: # Check for the right button being pressed
-                        pass                       
+                        self.movement['right'] = 1                       
 
                 if event.type == pygame.KEYUP: # Check for buttons that were released
                     if event.key == self.keybinds["forward"]: # Check for the forward button being released
-                        pass
+                        self.movement['forward'] = 0
                     if event.key == self.keybinds["backward"]: # Check for the backward button being released
-                        pass
+                        self.movement['backward'] = 0
                     if event.key == self.keybinds["left"]: # Check for the left button being released
-                        pass
+                        self.movement['left'] = 0
                     if event.key == self.keybinds["right"]: # Check for the right button being released
-                        pass
+                        self.movement['right'] = 0
+                        
+            self.player.update(self.movement)
+            self.player.render()
 
             self.screen.fill((20, 20, 20))
             self.display.fill((30, 30, 30))
