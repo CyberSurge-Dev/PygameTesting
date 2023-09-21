@@ -75,7 +75,7 @@ class Game():
             self.screen.fill((20, 20, 20))
             self.display.fill((30, 30, 30))
             
-            self.display.blit(pygame.image("data/sprite.png"), (5, 5))
+            self.display.blit(pygame.image.load("data/sprite.png").convert(), (5, 5))
             
 
             self.screen.blit(pygame.transform.scale( self.display, (self.dWidth, self.dHeight) ), 

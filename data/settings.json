@@ -1,7 +1,7 @@
 {
     "display": {
         "fullscreen": false,
-        "resolution": [1280, 720]
+        "resolution": [700, 300]
     },
     "keybinds": {
         "forward": "w",

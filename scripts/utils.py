@@ -22,7 +22,7 @@ import json
 import os
 
 # Global variables
-BASE_IMAGE_PATH = "data/images"
+BASE_IMAGE_PATH = "data/images/"
 
 # --------------------------------------------------------------------------------
 
@@ -46,13 +46,13 @@ class Settings():
 
 def load_image(path):
     """Loads the image at the given path, and returns it as a pygame image object."""
-    return pygame.image.load(BASE_IMAGE_PATH + path) # returns the loaded pygame image object
+    return pygame.image.load(BASE_IMAGE_PATH + path).convert() # returns the loaded pygame image object
 
 def load_images(path):
     """Loads all images in given path and returns them as a list of pygame image objects."""
     images = []
-    for img in sorted(os.listdir(path)): # Cycles through file paths of given directory (uses sorted() for Linux compatibility)
-        images.append(pygame.load(img)) # Saves the loaded image in the images list
+    for img in sorted(os.listdir(BASE_IMAGE_PATH + path)): # Cycles through file paths of given directory (uses sorted() for Linux compatibility)
+         images.append(load_image(path + img)) # Saves the loaded image in the images list
 
     return images # Return the list of pygame image objects
 
