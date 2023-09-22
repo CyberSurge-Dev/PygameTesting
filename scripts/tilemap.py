@@ -4,9 +4,17 @@ import pygame
 import json
 
 BASE_TILEMAP_PATH = "data/rooms/"
-TILES_AROUND = ((0, 0), (0, -1), (0, 1), (1, 0), (-1, 0), (1, 1), (-1, 1),
-                (1, -1), (-1, -1))
-
+TILES_AROUND  = {
+    'top_left': (-1, 1),
+    'top_center': (0, 1),
+    'top_right': (1, 1),
+    'left': (-1, 0),
+    'center': (0, 0),
+    'right': (1, 0),
+    'bottom_left': (-1, -1),
+    'bottom_center': (0, -1),
+    'bottom_right': (1, -1) 
+}
 
 class Tilemap():
     """Class to manage tiles"""
@@ -30,21 +38,42 @@ class Tilemap():
 
     def get_tile(self, pos):
         return self.tilemap.get((pos[0], pos[1]), None)
+    
+    def tiles_arround(self, pos):
+        """Returns a dictionary of the tiles that are around a position"""
+        tiles = {}
+        # adjust pos to tilemap
+        pos = (int(pos[0] // self.tile_size), int(pos[1] // self.tile_size))
+        for txt, Tpos in TILES_AROUND.items():
+            tiles[txt] = self.get_tile((pos[0]+Tpos[0], pos[1]+Tpos[1]))
+            
+        return tiles
 
-    def get_solid_around(self):
+    def get_rects_around(self, pos):
         """Returns a matrix of the positions of the surrounding solid tiles"""
-        tiles = []
-        for tile in TILES_AROUND:
-            if self.get_tile(tile)['type'] == 'solid':
-                tiles.append(tile)
+        tiles = {}
+        for txt, tile in self.tiles_arround.items():
+            if tile.get('type') == 'solid':
+                tiles[txt] = pygame.Rect(
+                    # Rect position
+                    tile['pos'][0] * self.tile_size, 
+                    tile['pos'][1] * self.tile_size,
+                    # Rect size
+                    self.tile_size,
+                    self.tile_size 
+                )
+            else:
+                tiles[txt] = None
 
         return tiles
 
-    def get_interactable_arround(self):
+    def get_interactable_arround(self, pos):
         """Returns a matrix of surrounding interactable tiles"""
-        tiles = []
-        for tile in TILES_AROUND:
-            if self.get_tile(tile).get('interaction', False) != False:
-                tiles.append(tile)
+        tiles = {}
+        for txt, tile in self.tiles_arround.items():
+            if tile.get('interaction', False) != False:
+                tiles[txt] = tile
+            else:
+                tiles[txt] = None
 
         return tiles

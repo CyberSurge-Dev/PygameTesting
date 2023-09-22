@@ -12,6 +12,7 @@ Game() - The game class is the main object in the program, managing the update, 
 # --------------------------------------------------------------------------------
 # External impots
 import pygame, sys, math
+from scripts.tilemap import Tilemap
 
 # Internal imports
 from scripts.utils import Settings
@@ -34,6 +35,8 @@ class Game():
         self.keybinds = self.settings.keybinds # gets a dictionary for game keybinds
         self.sWidth = pygame.display.get_window_size()[0]
         self.sHeight = pygame.display.get_window_size()[1]
+        
+        self.tilemap = Tilemap()
         
         self.movement = {
             'forward':0,
@@ -82,8 +85,10 @@ class Game():
                     if event.key == self.keybinds["right"]: # Check for the right button being released
                         self.movement['right'] = 0
                         
-            self.player.update(self.movement)
-            self.player.render()
+            self.player.update(**self.movement)
+            self.player.render((0, 0))
+
+            print(self.movement)
 
             self.screen.fill((20, 20, 20))
             self.display.fill((30, 30, 30))

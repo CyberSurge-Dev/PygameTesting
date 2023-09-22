@@ -14,6 +14,7 @@ Enemey()
 # --------------------------------------------------------------------------------
 # External imports
 import pygame
+from scripts.tilemap import Tilemap
 
 # --------------------------------------------------------------------------------
 class PhysicsEntity:
@@ -25,6 +26,7 @@ class PhysicsEntity:
         self.game = game
         self.size = size
         self.multiplyer = 1
+        self.tilemap = game.tilemap
 
         # Create a dictionary to store colisions, and velocity
         self.state = {
@@ -44,6 +46,16 @@ class PhysicsEntity:
 
         Pass in movement with direction = movment (ex: left = 1)
         """
+        player_rect = self.rect()
+        tiles_around = self.tilemap.get_solid_around(self)
+        
+        if tiles_around['top_center'] != None:
+            tiles_around['top_center'] # add stuff for rects
+            
+            
+        
+    def render(self, offset):
+        pass
+        
 
-        if
 
