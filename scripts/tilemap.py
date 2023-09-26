@@ -1,4 +1,3 @@
-from scripts.entities import SolidObject
 from scripts.utils import load_image, load_images
 import pygame
 import json
@@ -52,8 +51,8 @@ class Tilemap():
     def get_rects_around(self, pos):
         """Returns a matrix of the positions of the surrounding solid tiles"""
         tiles = {}
-        for txt, tile in self.tiles_arround.items():
-            if tile.get('type') == 'solid':
+        for txt, tile in self.tiles_arround(pos).items():
+            if tile != None and tile.get('type') == 'solid':
                 tiles[txt] = pygame.Rect(
                     # Rect position
                     tile['pos'][0] * self.tile_size, 
@@ -64,14 +63,13 @@ class Tilemap():
                 )
             else:
                 tiles[txt] = None
-
         return tiles
 
     def get_interactable_arround(self, pos):
         """Returns a matrix of surrounding interactable tiles"""
         tiles = {}
-        for txt, tile in self.tiles_arround.items():
-            if tile.get('interaction', False) != False:
+        for txt, tile in self.tiles_arround(pos).items():
+            if tile != None and tile.get('interaction', False) != False:
                 tiles[txt] = tile
             else:
                 tiles[txt] = None

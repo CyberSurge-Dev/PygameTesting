@@ -47,7 +47,7 @@ class PhysicsEntity:
         Pass in movement with direction = movment (ex: left = 1)
         """
         player_rect = self.rect()
-        tiles_around = self.tilemap.get_solid_around(self)
+        tiles_around = self.tilemap.get_rects_around(self.pos)
         
         if tiles_around['top_center'] != None:
             tiles_around['top_center'] # add stuff for rects

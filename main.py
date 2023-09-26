@@ -36,7 +36,7 @@ class Game():
         self.sWidth = pygame.display.get_window_size()[0]
         self.sHeight = pygame.display.get_window_size()[1]
         
-        self.tilemap = Tilemap()
+        self.tilemap = Tilemap(self)
         
         self.movement = {
             'forward':0,
