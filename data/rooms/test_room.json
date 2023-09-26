@@ -1,0 +1,10 @@
+{
+    "tilemap": {
+        [0, 0] : {id:"wall", variant:0},
+        [1, 0] : {}
+    },
+    "meta": {
+        "type":"misc"
+        "visited":false
+    }
+}

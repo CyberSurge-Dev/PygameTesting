@@ -20,13 +20,14 @@ from scripts.tilemap import Tilemap
 class PhysicsEntity:
     """Class object used for creating objects that interact with physics"""
 
-    def __init__ (self, game, pos, size):
+    def __init__ (self, game, pos, size, exceptions=[]):
         """Initialize the physics entity"""
         self.pos = list(pos) # Convert to list for mutability
         self.game = game
         self.size = size
         self.multiplyer = 1
         self.tilemap = game.tilemap
+        self.exceptions = exceptions
 
         # Create a dictionary to store colisions, and velocity
         self.state = {
@@ -47,10 +48,13 @@ class PhysicsEntity:
         Pass in movement with direction = movment (ex: left = 1)
         """
         player_rect = self.rect()
-        tiles_around = self.tilemap.get_rects_around(self.pos)
+        tiles_around = self.tilemap.get_rects_around(self.pos, self.exceptions)
         
         if tiles_around['top_center'] != None:
             tiles_around['top_center'] # add stuff for rects
+        elif tiles_around['left'] != None:
+            pass
+        
             
             
         
