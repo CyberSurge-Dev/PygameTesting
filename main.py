@@ -17,6 +17,7 @@ from scripts.tilemap import Tilemap
 # Internal imports
 from scripts.utils import Settings
 from scripts.entities import PhysicsEntity
+from scripts.assetMap import AssetMap
 # --------------------------------------------------------------------------------
 
 class Game():
@@ -36,17 +37,19 @@ class Game():
         self.sWidth = pygame.display.get_window_size()[0]
         self.sHeight = pygame.display.get_window_size()[1]
         
+        self.assetMap = AssetMap()
+
         self.tilemap = Tilemap(self, 16)
         self.tilemap.load('test_room.json')
-        
+
         self.movement = {
-            'forward':0,
-            'backward':0,
-            'left':0,
-            'right':0
+            'up':False,
+            'down':False,
+            'left':False,
+            'right':False
         }
         
-        self.player = PhysicsEntity(self, (0, 0), (5, 10))
+        self.player = PhysicsEntity(self, (32, 32), (16, 16))
 
         # Determine the largest 16:9 ratio that can fit in the screen for the display size
         # This method allows the program to automatically scale the game to any screen size
@@ -67,32 +70,33 @@ class Game():
                     pygame.quit()
                     sys.exit()
                 if event.type == pygame.KEYDOWN: # Check for buttons that were pressed
-                    if event.key == self.keybinds["forward"]: # Check for the forward button being pressed
-                        self.movement['forward'] = 1
-                    if event.key == self.keybinds["backward"]: # Check for the backward button being pressed
-                        self.movement['backward'] = 1
+                    if event.key == self.keybinds["up"]: # Check for the forward button being pressed
+                        self.movement['up'] = True
+                    if event.key == self.keybinds["down"]: # Check for the backward button being pressed
+                        self.movement['down'] = True
                     if event.key == self.keybinds["left"]: # Check for the left button being pressed
-                        self.movement['left'] = 1
+                        self.movement['left'] = True
                     if event.key == self.keybinds["right"]: # Check for the right button being pressed
-                        self.movement['right'] = 1                       
+                        self.movement['right'] = True                       
 
                 if event.type == pygame.KEYUP: # Check for buttons that were released
-                    if event.key == self.keybinds["forward"]: # Check for the forward button being released
-                        self.movement['forward'] = 0
-                    if event.key == self.keybinds["backward"]: # Check for the backward button being released
-                        self.movement['backward'] = 0
+                    if event.key == self.keybinds["up"]: # Check for the forward button being released
+                        self.movement['up'] = False
+                    if event.key == self.keybinds["down"]: # Check for the backward button being released
+                        self.movement['down'] = False
                     if event.key == self.keybinds["left"]: # Check for the left button being released
-                        self.movement['left'] = 0
+                        self.movement['left'] = False
                     if event.key == self.keybinds["right"]: # Check for the right button being released
-                        self.movement['right'] = 0
-                        
-            self.player.update(**self.movement)
-            self.player.render((0, 0))
+                        self.movement['right'] = False
+                
 
             self.screen.fill((20, 20, 20))
             self.display.fill((30, 30, 30))
 
             self.tilemap.render()            
+
+            self.player.update(**self.movement)
+            self.player.render((0, 0))
 
             self.screen.blit(pygame.transform.scale( self.display, (self.dWidth, self.dHeight) ), 
                              ((self.sWidth/2)-(self.dWidth/2) , (self.sHeight/2)-(self.dHeight/2)))

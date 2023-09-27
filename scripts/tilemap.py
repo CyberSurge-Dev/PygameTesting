@@ -1,6 +1,5 @@
 import pygame
 import json
-from scripts.assetMap import AssetMap
 
 BASE_TILEMAP_PATH = "data/rooms/"
 TILES_AROUND  = {
@@ -22,6 +21,7 @@ class Tilemap():
         """Initialize the Tilemap class"""
         self.game = game
         self.tile_size = tile_size
+        self.assetMap = self.game.assetMap
 
         self.tilemap = {}
 
@@ -35,6 +35,7 @@ class Tilemap():
         self.tilemap = {tuple(int(v) for v in k.split(';')): v for k, v in level_data['tilemap'].items()}
 
     def get_tile(self, pos):
+        # print("Get Tile POS:", (pos[0], pos[1]))
         return self.tilemap.get((pos[0], pos[1]), None)
     
     def tiles_arround(self, pos, exceptions = []):
@@ -46,12 +47,14 @@ class Tilemap():
         for txt, Tpos in TILES_AROUND.items():
             tile = self.get_tile((pos[0]+Tpos[0], pos[1]+Tpos[1]))
             if tile != None:
-                tile = AssetMap.tiles[self.get_tile((pos[0]+Tpos[0], pos[1]+Tpos[1]))['id']]
+                # print("Tile ID:",self.get_tile((pos[0]+Tpos[0], pos[1]+Tpos[1]))['id'])
+                tile = self.assetMap.tiles[self.get_tile((pos[0]+Tpos[0], pos[1]+Tpos[1]))['id']]
                 # add tile position key
                 tile['pos'] = (pos[0]+Tpos[0], pos[1]+Tpos[1])
             # Check if the tile is in exceptions before adding
             if tile not in exceptions:
                 tiles[txt] = tile
+                # print("Tile:",tile)
             
         return tiles
 
@@ -87,7 +90,7 @@ class Tilemap():
         # Render each tile in the Tilemap
         for pos, tilemapped in self.tilemap.items():
             self.game.display.blit(
-                AssetMap.tiles[tilemapped['id']]['variants'][tilemapped['variant']],
+                self.assetMap.tiles[tilemapped['id']]['variants'][tilemapped['variant']],
                 (
                     pos[0] * self.tile_size,
                     pos[1] * self.tile_size

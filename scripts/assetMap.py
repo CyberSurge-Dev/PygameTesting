@@ -6,9 +6,7 @@ class AssetMap():
         'wall' : {'type':'solid', 'variants':load_images('tiles/walls')}  
     }
     entities = {
-        'player': {
-            
-        },
+        'player': load_image('entities/player/player.png'),
         'skeleton': {
             
         }

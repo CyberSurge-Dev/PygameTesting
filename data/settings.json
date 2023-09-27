@@ -1,11 +1,11 @@
 {
     "display": {
         "fullscreen": false,
-        "resolution": [700, 300]
+        "resolution": [1920, 1080]
     },
     "keybinds": {
-        "forward": "w",
-        "backward": "s",
+        "up": "w",
+        "down": "s",
         "left": "a",
         "right": "d"
     }
