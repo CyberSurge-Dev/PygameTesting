@@ -2,7 +2,7 @@ from scripts.attributes import *
 
 class Item():
     """Simple class to store all attributes of a Item"""
-    def __init__(self, display_name, stackable, *attrubtes):
+    def __init__(self, display_name, stackable, *attributes):
         """Initialize game Item"""
         self.attributes = attributes
         self.display_name = display_name

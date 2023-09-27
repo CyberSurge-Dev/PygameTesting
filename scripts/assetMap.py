@@ -7,7 +7,7 @@ class AssetMap():
     }
     entities = {
         'player': {
-            'idle':Animation(load_images('entities/player/idle'), 4)
+            
         },
         'skeleton': {
             

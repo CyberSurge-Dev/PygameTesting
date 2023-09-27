@@ -29,14 +29,15 @@ class Game():
         self.settings = Settings() # Initiate settings class
 
         # Create seperate display and screen elements to be able to easily scale to any screen size
-        self.display = pygame.Surface((640, 360)) # Only write to this surface 
+        self.display = pygame.Surface((320, 180)) # Only write to this surface 
         self.screen = pygame.display.set_mode(self.settings.screen_size) # Set screen size
         
         self.keybinds = self.settings.keybinds # gets a dictionary for game keybinds
         self.sWidth = pygame.display.get_window_size()[0]
         self.sHeight = pygame.display.get_window_size()[1]
         
-        self.tilemap = Tilemap(self)
+        self.tilemap = Tilemap(self, 16)
+        self.tilemap.load('test_room.json')
         
         self.movement = {
             'forward':0,
@@ -88,16 +89,13 @@ class Game():
             self.player.update(**self.movement)
             self.player.render((0, 0))
 
-            print(self.movement)
-
             self.screen.fill((20, 20, 20))
             self.display.fill((30, 30, 30))
-            
-            self.display.blit(pygame.image.load("data/sprite.png").convert(), (5, 5))
-            
+
+            self.tilemap.render()            
 
             self.screen.blit(pygame.transform.scale( self.display, (self.dWidth, self.dHeight) ), 
-                             (  (self.sWidth/2)-(self.dWidth/2) , (self.sHeight/2)-(self.dHeight/2) ))
+                             ((self.sWidth/2)-(self.dWidth/2) , (self.sHeight/2)-(self.dHeight/2)))
             
             pygame.display.update() # Refresh the display
             self.clock.tick(60) # Limit FPS to 60 

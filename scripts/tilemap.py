@@ -1,6 +1,6 @@
-from scripts.utils import load_image, load_images
 import pygame
 import json
+from scripts.assetMap import AssetMap
 
 BASE_TILEMAP_PATH = "data/rooms/"
 TILES_AROUND  = {
@@ -27,13 +27,12 @@ class Tilemap():
 
     def load(self, path):
         """Load tilemap from json file"""
-        level_file = open("data/settings.json",
+        level_file = open(BASE_TILEMAP_PATH + path,
                           "r")  # open the JSON file for settings
-        level_data = json.load(BASE_TILEMAP_PATH +
-                               path)  # Extract data from JSON as dictionary
+        level_data = json.load(level_file)  # Extract data from JSON as dictionary
         level_file.close()  # Close JSON file
 
-        self.tilemap = {tuple(k): v for k, v in level_data['tilemap'].items()}
+        self.tilemap = {tuple(int(v) for v in k.split(';')): v for k, v in level_data['tilemap'].items()}
 
     def get_tile(self, pos):
         return self.tilemap.get((pos[0], pos[1]), None)
@@ -46,6 +45,10 @@ class Tilemap():
         # Check each tile around the player
         for txt, Tpos in TILES_AROUND.items():
             tile = self.get_tile((pos[0]+Tpos[0], pos[1]+Tpos[1]))
+            if tile != None:
+                tile = AssetMap.tiles[self.get_tile((pos[0]+Tpos[0], pos[1]+Tpos[1]))['id']]
+                # add tile position key
+                tile['pos'] = (pos[0]+Tpos[0], pos[1]+Tpos[1])
             # Check if the tile is in exceptions before adding
             if tile not in exceptions:
                 tiles[txt] = tile
@@ -79,3 +82,14 @@ class Tilemap():
                 tiles[txt] = None
 
         return tiles
+
+    def render(self, offset=(0, 0)):
+        # Render each tile in the Tilemap
+        for pos, tilemapped in self.tilemap.items():
+            self.game.display.blit(
+                AssetMap.tiles[tilemapped['id']]['variants'][tilemapped['variant']],
+                (
+                    pos[0] * self.tile_size,
+                    pos[1] * self.tile_size
+                )
+            )
