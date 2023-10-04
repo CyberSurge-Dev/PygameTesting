@@ -1,5 +1,25 @@
+# Created By: Zachary Hoover
+# Created Date: 9/21/2023
+# Version: 1.0
+# --------------------------------------------------------------------------------
+"""
+This program contains the Tilemap class, which is a manager for all tile related
+inquiries.
+
+--+ Classes +-- 
+TileMap(game, tile_zise) - Class to manage the layout, and metadata of tiles displayed on the screen.
+
+--+ Variables +--
+BASE_TILEMAP_PATH - Contains the base path were all rooms are stored.
+TILES_AROUND - Store the relative positions of all tiles around a central tile.
+
+"""
+# --------------------------------------------------------------------------------
+# External imports
 import pygame
 import json
+
+# --------------------------------------------------------------------------------
 
 BASE_TILEMAP_PATH = "data/rooms/"
 TILES_AROUND  = {
@@ -15,8 +35,8 @@ TILES_AROUND  = {
 }
 
 class Tilemap():
-    """Class to manage tiles"""
-
+    """Class to manage Class to manage the layout, and metadata of tiles displayed on the screen."""
+    
     def __init__(self, game, tile_size):
         """Initialize the Tilemap class"""
         self.game = game

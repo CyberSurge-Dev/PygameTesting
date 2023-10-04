@@ -13,6 +13,10 @@ Telemetry(active) - Simple class for tracking variables and displaying/changing 
 --+ Functions +-- 
 load_image(path) - Loads the image at the given path, and returns it as a pygame image object.
 load_images(path) - Loads all images in given path and returns them as a list of pygame image objects.
+
+--+ Variables +-- 
+BASE_IMAGE_PATH - Stores the base path were all images are stored.
+
 """
 # --------------------------------------------------------------------------------
 # External imports
@@ -24,7 +28,6 @@ import os
 
 # Global variables
 BASE_IMAGE_PATH = "data/images/"
-TELEMETRY = {}
 clear = lambda: os.system('clear' if os.name == 'posix' else 'cls')
 
 # --------------------------------------------------------------------------------
