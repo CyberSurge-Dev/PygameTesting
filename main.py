@@ -15,7 +15,7 @@ import pygame, sys, math
 from scripts.tilemap import Tilemap
 
 # Internal imports
-from scripts.utils import Settings
+from scripts.utils import Settings, Telemetry
 from scripts.entities import PhysicsEntity
 from scripts.assetMap import AssetMap
 # --------------------------------------------------------------------------------
@@ -42,6 +42,8 @@ class Game():
         self.tilemap = Tilemap(self, 16)
         self.tilemap.load('test_room.json')
 
+        self.telemetry = Telemetry(self.settings.telemetry)
+
         self.movement = {
             'up':False,
             'down':False,
@@ -49,7 +51,7 @@ class Game():
             'right':False
         }
         
-        self.player = PhysicsEntity(self, (32, 32), (16, 16))
+        self.player = PhysicsEntity(self, (16, 16), (16, 16))
 
         # Determine the largest 16:9 ratio that can fit in the screen for the display size
         # This method allows the program to automatically scale the game to any screen size
@@ -57,8 +59,14 @@ class Game():
             self.dWidth = self.sWidth - (self.sWidth % 16)
             self.dHeight = math.trunc(self.dWidth * (9/16))
         else:
-            self.dHeight = self.sHeight - (self.sHeight % 16)
+            self.dHeight = self.sHeight - (self.sHeight % 9)
             self.dWidth = math.trunc(self.dHeight * (16/9)) 
+
+        print("Display Width:", self.dWidth)
+        print("Display height:", self.dHeight)
+
+        print("\nScreen Width:", self.sWidth)
+        print("Screen height:", self.sHeight)
         
         self.clock = pygame.time.Clock() # Create the game clock
 
@@ -93,14 +101,15 @@ class Game():
             self.screen.fill((20, 20, 20))
             self.display.fill((30, 30, 30))
 
-            self.tilemap.render()            
+            self.tilemap.render()
 
             self.player.update(**self.movement)
             self.player.render((0, 0))
 
             self.screen.blit(pygame.transform.scale( self.display, (self.dWidth, self.dHeight) ), 
                              ((self.sWidth/2)-(self.dWidth/2) , (self.sHeight/2)-(self.dHeight/2)))
-            
+
+            self.telemetry.update() # update telemetry data
             pygame.display.update() # Refresh the display
             self.clock.tick(60) # Limit FPS to 60 
 

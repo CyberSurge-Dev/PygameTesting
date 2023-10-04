@@ -14,7 +14,6 @@ Enemey()
 # --------------------------------------------------------------------------------
 # External imports
 import pygame
-from scripts.tilemap import Tilemap
 
 # --------------------------------------------------------------------------------
 class PhysicsEntity:
@@ -64,29 +63,35 @@ class PhysicsEntity:
             (movement['right']-movement['left']) + self.velocity[0],
             (movement['down']-movement['up']) + self.velocity[1]
         )
+
+        self.game.telemetry.add('movement[0]', frame_movement[0])
+        self.game.telemetry.add('movement[1]', frame_movement[1])
         
         # Check for collionions in left and right movement
         self.pos[0] += frame_movement[0]
         entity_rect = self.rect()
-        # print(entity_rect)
+        rect_pos = []
+
         for rect in self.tilemap.get_rects_around(self.pos, self.exceptions).values():
-            # print(rect)
             if rect != None and entity_rect.colliderect(rect):
-                print("col left-right")
+                rect_pos.append((rect.x, rect.y))
                 if frame_movement[0] > 0:
                     entity_rect.right = rect.left
                     self.collisions['right'] = True
+                    self.game.telemetry.add('colision', 'right')
                 if frame_movement[0] < 0:
                     entity_rect.left = rect.right
                     self.collisions['left'] = True
+                    self.game.telemetry.add('colision', 'left')
                 self.pos[0] = entity_rect.x
 
+        self.game.telemetry.add((entity_rect.centerx, entity_rect.centery), rect_pos)
+        
         # Check for collisions in up and down movement
         self.pos[1] += frame_movement[1]
         entity_rect = self.rect()
         for rect in self.tilemap.get_rects_around(self.pos, self.exceptions).values():
             if rect != None and entity_rect.colliderect(rect):
-                print("col up-down")
                 if frame_movement[1] > 0:
                     entity_rect.bottom = rect.top
                     self.collisions['down'] = True
@@ -94,16 +99,14 @@ class PhysicsEntity:
                     entity_rect.top = rect.bottom
                     self.collisions['up'] = True
                 self.pos[1] = entity_rect.y
-        
+
         if self.collisions['down'] or self.collisions['up']:
             self.velocity[0] = 0
         elif self.collisions['left'] or self.collisions['right']:
             self.velocity[1] = 0
 
-        tiles_around = self.tilemap.get_rects_around(self.pos, self.exceptions)
         
     def render(self, offset=(0, 0)):
         self.game.display.blit(self.assetMap.entities['player'], (self.pos[0] - offset[0], self.pos[1] - offset[1]))
-        
-
-
+    
+    

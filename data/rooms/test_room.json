@@ -11,7 +11,9 @@
         "19;0" : {"id":"wall", "variant":0},
         "19;1" : {"id":"wall", "variant":0},
         "19;2" : {"id":"wall", "variant":0},
-        "19;3" : {"id":"wall", "variant":0}
+        "19;3" : {"id":"wall", "variant":0},
+        "1;0" : {"id":"wall", "variant":0},
+        "2;0" : {"id":"wall", "variant":0}
     }, 
     "meta": {
         "type":"misc",

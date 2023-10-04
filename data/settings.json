@@ -1,12 +1,16 @@
 {
     "display": {
         "fullscreen": false,
-        "resolution": [1920, 1080]
+        "resolution": [640, 300]
     },
     "keybinds": {
         "up": "w",
         "down": "s",
         "left": "a",
         "right": "d"
+    },
+    "developer": {
+        "developer": true,
+        "telemetry": true
     }
 }
