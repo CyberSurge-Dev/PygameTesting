@@ -118,7 +118,7 @@ class Tilemap():
             self.game.display.blit(
                 self.assetMap.tiles[tilemapped['id']]['variants'][tilemapped['variant']],
                 (
-                    pos[0] * self.tile_size,
-                    pos[1] * self.tile_size
+                    pos[0] * self.tile_size - offset[0],
+                    pos[1] * self.tile_size - offset[1]
                 )
             )
