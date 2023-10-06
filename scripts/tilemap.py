@@ -113,12 +113,10 @@ class Tilemap():
         return tiles
 
     def render(self, offset=(0, 0)):
-        # Render each tile in the Tilemap
-        for pos, tilemapped in self.tilemap.items():
-            self.game.display.blit(
-                self.assetMap.tiles[tilemapped['id']]['variants'][tilemapped['variant']],
-                (
-                    pos[0] * self.tile_size - offset[0],
-                    pos[1] * self.tile_size - offset[1]
-                )
-            )
+        # Render each tile in the Tilemap        
+        for x in range(offset[0] // self.tile_size, (offset[0] + self.game.display.get_width()) // self.tile_size + 1):
+            for y in range(offset[1] // self.tile_size, (offset[1] + self.game.display.get_height()) // self.tile_size + 1):
+                loc = (x, y)
+                if loc in self.tilemap:
+                    tile = self.tilemap[loc]
+                    self.game.display.blit(self.assetMap.tiles[tile['id']]['variants'][tile['variant']], (loc[0] * self.tile_size - offset[0], loc[1] * self.tile_size - offset[1]))
