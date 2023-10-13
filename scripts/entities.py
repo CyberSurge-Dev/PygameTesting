@@ -24,7 +24,7 @@ class PhysicsEntity:
         self.pos = list(pos) # Convert to list for mutability
         self.game = game
         self.size = size
-        self.multiplyer = 1
+        self.multiplyer = 2
         self.tilemap = self.game.tilemap
         self.exceptions = exceptions
         self.assetMap = self.game.assetMap
@@ -60,8 +60,8 @@ class PhysicsEntity:
         
         # Calculate movement for the frame
         frame_movement = (
-            (movement['right']-movement['left']) + self.velocity[0],
-            (movement['down']-movement['up']) + self.velocity[1]
+            ((movement['right']-movement['left']) + self.velocity[0]) * self.multiplyer,
+            ((movement['down']-movement['up']) + self.velocity[1]) * self.multiplyer
         )
 
         self.game.telemetry.add('movement[0]', frame_movement[0])
@@ -108,5 +108,4 @@ class PhysicsEntity:
         
     def render(self, offset=(0, 0)):
         self.game.display.blit(self.assetMap.entities['player'], (self.pos[0] - offset[0], self.pos[1] - offset[1]))
-    
     
