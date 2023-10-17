@@ -52,8 +52,8 @@ class Game():
         }
 
         self.scroll = [0 , 0]
-
-        self.player = Player(self, (128, 128), (32, 32))
+        
+       self.player = Player(self, (128, 128), (32, 32))
 
         # Determine the largest 16:9 ratio that can fit in the screen for the display size
         # This method allows the program to automatically scale the game to any screen size
