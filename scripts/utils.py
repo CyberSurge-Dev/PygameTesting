@@ -57,6 +57,18 @@ class Settings():
         else:
             self.telemetry = False
 
+class DisplayPositions:
+    """Simple utility class to store display positions"""
+    def __init__(self, display_size):
+        """Using the dislpay size, set the positions of the display"""""
+        self.CENTER = (display_size[0] // 2, display_size[1] // 2)
+        self.BOTTOM_CENTER = (display_size[0] // 2, display_size[1])
+        self.TOP_CENTER = (display_size[0] // 2, 0)
+        self.TOP_LEFT = (0, 0)
+        self.TOP_RIGHT = (display_size[0], 0)
+        self.BOTTOM_LEFT = (0, display_size[1])
+        self.BOTTOM_RIGHT = (display_size[0], display_size[1])
+
 class Telemetry:
     """Simple class for tracking variables and displaying/changing telemetry data in console."""
     def __init__(self, active):
@@ -104,7 +116,6 @@ def load_images(path):
          images.append(load_image(path + "/" + img)) # Saves the loaded image in the images list
 
     return images # Return the list of pygame image objects
-    
 
 class Animation():
     pass

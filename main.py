@@ -15,9 +15,11 @@ import pygame, sys, math
 from scripts.tilemap import Tilemap
 
 # Internal imports
-from scripts.utils import Settings, Telemetry
+from scripts.utils import Settings, Telemetry, DisplayPositions
 from scripts.entities import PhysicsEntity
 from scripts.assetMap import AssetMap
+from scripts.guiManager import GUIManager
+from scripts.guiElements import Button
 # --------------------------------------------------------------------------------
 
 class Game():
@@ -57,21 +59,27 @@ class Game():
 
         # Determine the largest 16:9 ratio that can fit in the screen for the display size
         # This method allows the program to automatically scale the game to any screen size
-        if (self.sWidth < self.sHeight or self.sWidth == self.sHeight):
+        if (self.sWidth <= self.sHeight):
             self.dWidth = self.sWidth - (self.sWidth % 16)
             self.dHeight = math.trunc(self.dWidth * (9/16))
         else:
             self.dHeight = self.sHeight - (self.sHeight % 9)
-            self.dWidth = math.trunc(self.dHeight * (16/9)) 
+            self.dWidth = math.trunc(self.dHeight * (16/9))
 
-        print("Display Width:", self.dWidth)
-        print("Display height:", self.dHeight)
+        dPos = DisplayPositions((self.dWidth, self.dHeight))
 
-        print("\nScreen Width:", self.sWidth)
-        print("Screen height:", self.sHeight)
+        self.scale = (int(self.sWidth / self.dWidth), int(self.sHeight / self.dHeight))
+        
+        self.gameHUD = GUIManager()
+        self.gameHUD.add("testButton", Button((dPos.CENTER), (81, 24), self, self.scale, AssetMap.gui['Test'], "Sample Text", self.test))
+        self.telemetry.log(dPos.CENTER)
+        self.telemetry.log((self.dWidth, self.dHeight))
         
         self.clock = pygame.time.Clock() # Create the game clock
 
+    def test():
+        pass
+    
     def run(self):
         """Main game loop, handels updates and most game processes"""
         while True:
@@ -112,6 +120,8 @@ class Game():
             self.player.update(**self.movement)
             self.player.render(render_scroll)
 
+            self.gameHUD.render(self.display)
+            
             self.screen.blit(pygame.transform.scale( self.display, (self.dWidth, self.dHeight) ), 
                              ((self.sWidth/2)-(self.dWidth/2) , (self.sHeight/2)-(self.dHeight/2)))
 

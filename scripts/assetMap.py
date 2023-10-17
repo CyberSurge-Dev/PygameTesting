@@ -24,3 +24,7 @@ class AssetMap():
         'skeleton': {
         }
     }
+    gui = {
+        "Test" : load_image(r"gui/hud/itembar.png")
+    }
+    
