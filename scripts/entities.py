@@ -109,3 +109,7 @@ class PhysicsEntity:
     def render(self, offset=(0, 0)):
         self.game.display.blit(self.assetMap.entities['player'], (self.pos[0] - offset[0], self.pos[1] - offset[1]))
     
+class Player(PhysicsEntity):
+    """Class for all player related physics, and interactions."""
+    
+    

@@ -16,7 +16,7 @@ from scripts.tilemap import Tilemap
 
 # Internal imports
 from scripts.utils import Settings, Telemetry
-from scripts.entities import PhysicsEntity
+from scripts.entities import Player
 from scripts.assetMap import AssetMap
 # --------------------------------------------------------------------------------
 
@@ -53,7 +53,7 @@ class Game():
         
         self.scroll = [0 , 0]
         
-        self.player = PhysicsEntity(self, (128, 128), (32, 32))
+        self.player = Player(self, (128, 128), (32, 32))
 
         # Determine the largest 16:9 ratio that can fit in the screen for the display size
         # This method allows the program to automatically scale the game to any screen size
