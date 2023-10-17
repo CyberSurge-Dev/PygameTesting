@@ -15,30 +15,31 @@ import pygame, sys, math
 from scripts.tilemap import Tilemap
 
 # Internal imports
-from scripts.utils import Settings, Telemetry, DisplayPositions
-from scripts.entities import PhysicsEntity
+from scripts.utils import Settings, Telemetry
+from scripts.entities import Player
 from scripts.assetMap import AssetMap
-from scripts.guiManager import GUIManager
-from scripts.guiElements import Button
 # --------------------------------------------------------------------------------
+
 
 class Game():
     """The game class is the main object in the program, managing the update, rendering, and events of game objects."""
+
     def __init__(self):
         """Initiate game object with attributes for game"""
         # Initialize pygame
         pygame.init()
 
-        self.settings = Settings() # Initiate settings class
+        self.settings = Settings()  # Initiate settings class
 
         # Create seperate display and screen elements to be able to easily scale to any screen size
-        self.display = pygame.Surface((384, 216)) # Only write to this surface 
-        self.screen = pygame.display.set_mode(self.settings.screen_size) # Set screen size
-        
-        self.keybinds = self.settings.keybinds # gets a dictionary for game keybinds
+        self.display = pygame.Surface((384, 216))  # Only write to this surface
+        self.screen = pygame.display.set_mode(
+            self.settings.screen_size)  # Set screen size
+
+        self.keybinds = self.settings.keybinds  # gets a dictionary for game keybinds
         self.sWidth = pygame.display.get_window_size()[0]
         self.sHeight = pygame.display.get_window_size()[1]
-        
+
         self.assetMap = AssetMap()
 
         self.tilemap = Tilemap(self, 32)
@@ -47,69 +48,77 @@ class Game():
         self.telemetry = Telemetry(self.settings.telemetry)
 
         self.movement = {
-            'up':False,
-            'down':False,
-            'left':False,
-            'right':False
+            'up': False,
+            'down': False,
+            'left': False,
+            'right': False
         }
-        
-        self.scroll = [0 , 0]
-        
-        self.player = PhysicsEntity(self, (128, 128), (32, 32))
+
+        self.scroll = [0, 0]
+
+        self.player = Player(self, (128, 128), (32, 32))
 
         # Determine the largest 16:9 ratio that can fit in the screen for the display size
         # This method allows the program to automatically scale the game to any screen size
-        if (self.sWidth <= self.sHeight):
+        if (self.sWidth < self.sHeight or self.sWidth == self.sHeight):
             self.dWidth = self.sWidth - (self.sWidth % 16)
-            self.dHeight = math.trunc(self.dWidth * (9/16))
+            self.dHeight = math.trunc(self.dWidth * (9 / 16))
         else:
             self.dHeight = self.sHeight - (self.sHeight % 9)
-            self.dWidth = math.trunc(self.dHeight * (16/9))
+            self.dWidth = math.trunc(self.dHeight * (16 / 9))
 
-        dPos = DisplayPositions((self.dWidth, self.dHeight))
+        print("Display Width:", self.dWidth)
+        print("Display height:", self.dHeight)
 
-        self.scale = (int(self.sWidth / self.dWidth), int(self.sHeight / self.dHeight))
-        
-        self.gameHUD = GUIManager()
-        self.gameHUD.add("testButton", Button((dPos.CENTER), (81, 24), self, self.scale, AssetMap.gui['Test'], "Sample Text", self.test))
-        self.telemetry.log(dPos.CENTER)
-        self.telemetry.log((self.dWidth, self.dHeight))
-        
-        self.clock = pygame.time.Clock() # Create the game clock
+        print("\nScreen Width:", self.sWidth)
+        print("Screen height:", self.sHeight)
 
-    def test():
-        pass
-    
+        self.clock = pygame.time.Clock()  # Create the game clock
+
     def run(self):
         """Main game loop, handels updates and most game processes"""
         while True:
-            for event in pygame.event.get(): # Chack pygame events
-                if event.type == pygame.QUIT: # Check if the X on the window was clicked
+            for event in pygame.event.get():  # Chack pygame events
+                if event.type == pygame.QUIT:  # Check if the X on the window was clicked
                     pygame.quit()
                     sys.exit()
-                if event.type == pygame.KEYDOWN: # Check for buttons that were pressed
-                    if event.key == self.keybinds["up"]: # Check for the forward button being pressed
+                if event.type == pygame.KEYDOWN:  # Check for buttons that were pressed
+                    if event.key == self.keybinds[
+                            "up"]:  # Check for the forward button being pressed
                         self.movement['up'] = True
-                    if event.key == self.keybinds["down"]: # Check for the backward button being pressed
+                    if event.key == self.keybinds[
+                            "down"]:  # Check for the backward button being pressed
                         self.movement['down'] = True
-                    if event.key == self.keybinds["left"]: # Check for the left button being pressed
+                    if event.key == self.keybinds[
+                            "left"]:  # Check for the left button being pressed
                         self.movement['left'] = True
-                    if event.key == self.keybinds["right"]: # Check for the right button being pressed
-                        self.movement['right'] = True                       
+                    if event.key == self.keybinds[
+                            "right"]:  # Check for the right button being pressed
+                        self.movement['right'] = True
 
-                if event.type == pygame.KEYUP: # Check for buttons that were released
-                    if event.key == self.keybinds["up"]: # Check for the forward button being released
+                if event.type == pygame.KEYUP:  # Check for buttons that were released
+                    if event.key == self.keybinds[
+                            "up"]:  # Check for the forward button being released
                         self.movement['up'] = False
-                    if event.key == self.keybinds["down"]: # Check for the backward button being released
+                    if event.key == self.keybinds[
+                            "down"]:  # Check for the backward button being released
                         self.movement['down'] = False
-                    if event.key == self.keybinds["left"]: # Check for the left button being released
+                    if event.key == self.keybinds[
+                            "left"]:  # Check for the left button being released
                         self.movement['left'] = False
-                    if event.key == self.keybinds["right"]: # Check for the right button being released
+                    if event.key == self.keybinds[
+                            "right"]:  # Check for the right button being released
                         self.movement['right'] = False
-            
+
             # Create scroll offsets to have camera 'lag' behind the player for more fluid movement
-            self.scroll[0] += (self.player.rect().centerx - self.display.get_width() / 2 - self.scroll[0]) / 5 # Smaller the last value (5), the less the lag 
-            self.scroll[1] += (self.player.rect().centery - self.display.get_height() / 2 - self.scroll[1]) / 5 # Smaller the last value (5), the less the lag 
+            self.scroll[0] += (
+                self.player.rect().centerx - self.display.get_width() / 2 -
+                self.scroll[0]
+            ) / 5  # Smaller the last value (5), the less the lag
+            self.scroll[1] += (
+                self.player.rect().centery - self.display.get_height() / 2 -
+                self.scroll[1]
+            ) / 5  # Smaller the last value (5), the less the lag
             render_scroll = (int(self.scroll[0]), int(self.scroll[1]))
 
             self.screen.fill((20, 20, 20))
@@ -120,13 +129,15 @@ class Game():
             self.player.update(**self.movement)
             self.player.render(render_scroll)
 
-            self.gameHUD.render(self.display)
-            
-            self.screen.blit(pygame.transform.scale( self.display, (self.dWidth, self.dHeight) ), 
-                             ((self.sWidth/2)-(self.dWidth/2) , (self.sHeight/2)-(self.dHeight/2)))
+            self.screen.blit(
+                pygame.transform.scale(self.display,
+                                       (self.dWidth, self.dHeight)),
+                ((self.sWidth / 2) - (self.dWidth / 2),
+                 (self.sHeight / 2) - (self.dHeight / 2)))
 
-            self.telemetry.update() # update telemetry data
-            pygame.display.update() # Refresh the display
-            self.clock.tick(60) # Limit FPS to 60 
+            self.telemetry.update()  # update telemetry data
+            pygame.display.update()  # Refresh the display
+            self.clock.tick(60)  # Limit FPS to 60
 
-Game().run() # Initialize and run the game
+
+Game().run()  # Initialize and run the game
