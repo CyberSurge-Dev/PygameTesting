@@ -24,7 +24,8 @@ class GUIManager():
     def check_events(self, event):
         """Check for events"""
         for item in self.menu_items.values():
-            item.check_events()
+            if event.type in item.events:
+                item.check_events(event)
 
     def add(self, key, menu_item):
         """Adds passed in item to menu"""""

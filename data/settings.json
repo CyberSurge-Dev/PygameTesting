@@ -1,13 +1,14 @@
 {
     "display": {
-        "fullscreen": true,
-        "resolution": [640, 300]
+        "fullscreen": false,
+        "resolution": [640, 350]
     },
     "keybinds": {
         "up": "w",
         "down": "s",
         "left": "a",
-        "right": "d"
+        "right": "d",
+        "inventory" : "e"
     },
     "developer": {
         "developer": true,
