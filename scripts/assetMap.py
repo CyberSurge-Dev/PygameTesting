@@ -27,4 +27,7 @@ class AssetMap():
     gui = {
         "Test" : load_image(r"gui/hud/itembar.png")
     }
+    items = {
+        "sample" : load_image('items/test/sample.png')
+    }
     

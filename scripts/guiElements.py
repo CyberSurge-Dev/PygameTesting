@@ -12,6 +12,7 @@ This program contains base classes to create gui objects eaily throughout the pr
 # --------------------------------------------------------------------------------
 # External imports
 import pygame
+from scripts.gameItems import *
 
 # --------------------------------------------------------------------------------
 
@@ -20,16 +21,20 @@ class MenuItem():
 
     def __init__(self, pos, size, scale, events, center = True):
         """Initiazlizes the menu item""" ""
-        if center:
-            self.pos = (pos[0]-(size[0]//2), pos[1]-(size[1]))
-        else:
-            self.pos = pos
+
+        self.pos = pos   
+        self.center_pos = (pos[0]-(size[0]//2), pos[1]-(size[1]))
+        self.center = center
         self.size = size
         self.events = events
         self.scale = scale
 
     def render(self, disp):
         """Renders the menu item"""
+        if self.center:
+            disp.blit(self.image, self.center_pos)
+        else:
+            disp.blit(self.image, self.pos)
 
     def check_events(self):
         """Check the events for the menu item"""
@@ -54,8 +59,7 @@ class Button(MenuItem):
             if s_rect.collidepoint(event.pos):
                 self.func()
 
-    def render(self, disp):
-        disp.blit(self.image, self.pos)
+        
 
 class ItemBar(MenuItem):
     """Button menu item"""
@@ -65,7 +69,11 @@ class ItemBar(MenuItem):
         super().__init__(pos, size, scale, [pygame.MOUSEWHEEL])
         self.slot_selected = 0
         self.max_items = 4
-        self.items = [None] * self.max_items
+        self.icon_size = 16
+        self.padding = 4
+        self.spacing = 3
+        self.font = font = pygame.font.Font('freesansbold.ttf', 32)
+        self.items = [Item("Test Item", False)] * self.max_items
         self.image = image
 
     def check_events(self, event):
@@ -85,8 +93,17 @@ class ItemBar(MenuItem):
         self.items[index] = None
         
     def render(self, disp):
-        disp.blit(self.image, self.pos)
-
-
-
-
+        super().render(disp)
+        
+        # Index variabel
+        i = 0
+        while (i < self.max_items):
+            if self.center:
+                disp.blit(self.items[i].icon, (self.center_pos[0] + (self.padding + self.icon_size*i + self.spacing*i), self.center_pos[1] + self.padding))
+            else:
+                disp.blit(self.items[i].icon, (self.pos[0] + (self.padding + self.icon_size*i + self.spacing*i), self.pos[1] + self.padding))
+            i += 1
+            
+        # Display current items name above the item bar
+        # text = self.font.render(item.display_name, True, (255, 255, 255))
+        # textRect = text.get_rect()
