@@ -25,9 +25,15 @@ class Item():
         self.stackable = stackable
 
     def update(self):
-        """Updates and check events"""
-
+        """Updates the items attributes (ex: Give holder health boost)."""
         for attribute in self.attributes:
             attribute.update()
+
+    def left_button(self, event):
+        """Handles the event for the left mouse button."""
+
+    def right_button(self, event):
+        """Handles the event for the right mouse button."""
+        
 
 

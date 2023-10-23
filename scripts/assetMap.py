@@ -16,16 +16,16 @@ from scripts.utils import load_image, load_images, Animation
 class AssetMap():
     """Simple class to store the asset map"""
     tiles = {
-        'wall' : {'type':'solid', 'variants':load_images('tiles/walls')}, 
-        'floor' : {'type':'floor', 'variants':load_images('tiles/floors')}
+        'wall' : {'type':'solid', 'variants' : load_images('tiles/walls')}, 
+        'floor' : {'type':'floor', 'variants' : load_images('tiles/floors')}
     }
     entities = {
         'player': load_image('entities/player/player.png'),
-        'skeleton': {
-        }
+        'skeleton': {}
     }
     gui = {
-        "Test" : load_image(r"gui/hud/itembar.png")
+        "itembar" : load_image(r"gui/hud/itembar.png"),
+        "itembar_selected" : load_image(r"gui/hud/selected.png"),
     }
     items = {
         "sample" : load_image('items/test/sample.png')

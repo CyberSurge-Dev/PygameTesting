@@ -70,7 +70,7 @@ class Game():
         self.dPos = DisplayPositions((self.display.get_width(), self.display.get_height()))
         
         self.hud = GUIManager()
-        self.hud.add('test', ItemBar(self.dPos.BOTTOM_CENTER, (81, 24), self.scale, self.assetMap.gui['Test']))
+        self.hud.add('itembar', ItemBar(self.dPos.BOTTOM_CENTER, (81, 24), self.scale, self.assetMap.gui['itembar'], self.assetMap.gui['itembar_selected']))
         
         
         self.clock = pygame.time.Clock() # Create the game clock
@@ -105,7 +105,7 @@ class Game():
                     if event.key == self.keybinds["right"]: # Check for the right button being released
                         self.movement['right'] = False
 
-                self.hud.check_events(event)
+                self.hud.check_events(event) # Check for events on HUD objects
 
             # Create scroll offsets to have camera 'lag' behind the player for more fluid movement
             self.scroll[0] += (self.player.rect().centerx - self.display.get_width() / 2 - self.scroll[0]) / 5 # Smaller the last value (5), the less the lag 
@@ -115,18 +115,25 @@ class Game():
             self.screen.fill((20, 20, 20))
             self.display.fill((30, 30, 30))
 
+            # Render the tilemap
             self.tilemap.render(offset=render_scroll)
 
+            # Update movement and render player
             self.player.update(**self.movement)
             self.player.render(render_scroll)
 
+            # Render the HUD elements
             self.hud.render(self.display)
 
+            # Scale the display surface to best fit the screen
             self.screen.blit(pygame.transform.scale( self.display, (self.dWidth, self.dHeight) ), 
                              ((self.sWidth/2)-(self.dWidth/2) , (self.sHeight/2)-(self.dHeight/2)))
 
+            # Update Telemetry data
             self.telemetry.update() # update telemetry data
+            # Update the display with data
             pygame.display.update() # Refresh the display
+            
             self.clock.tick(60) # Limit FPS to 60 
 
 Game().run() # Initialize and run the game
