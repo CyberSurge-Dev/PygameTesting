@@ -15,16 +15,19 @@ Enemey()
 # External imports
 import pygame
 
+# Internal imports
+from scripts.guiElements import ItemBar
+from scripts.guiManager import GUIManager
 # --------------------------------------------------------------------------------
 class PhysicsEntity:
     """Class object used for creating objects that interact with physics"""
 
-    def __init__ (self, game, pos, size,  exceptions=[]):
+    def __init__ (self, game, pos, size, multiplier=1, *exceptions):
         """Initialize the physics entity"""
         self.pos = list(pos) # Convert to list for mutability
         self.game = game
         self.size = size
-        self.multiplyer = 2
+        self.multiplier = multiplier
         self.tilemap = self.game.tilemap
         self.exceptions = exceptions
         self.assetMap = self.game.assetMap
@@ -60,8 +63,8 @@ class PhysicsEntity:
         
         # Calculate movement for the frame
         frame_movement = (
-            ((movement['right']-movement['left']) + self.velocity[0]) * self.multiplyer,
-            ((movement['down']-movement['up']) + self.velocity[1]) * self.multiplyer
+            ((movement['right']-movement['left']) + self.velocity[0]) * self.multiplier,
+            ((movement['down']-movement['up']) + self.velocity[1]) * self.multiplier
         )
 
         self.game.telemetry.add('movement[0]', frame_movement[0])
@@ -106,10 +109,44 @@ class PhysicsEntity:
             self.velocity[1] = 0
 
         
-    def render(self, offset=(0, 0)):
-        self.game.display.blit(self.assetMap.entities['player'], (self.pos[0] - offset[0], self.pos[1] - offset[1]))
+    def render(self, disp, offset=(0, 0)):
+        disp.blit(self.assetMap.entities['player'], (self.pos[0] - offset[0], self.pos[1] - offset[1]))
     
 class Player(PhysicsEntity):
     """Class for all player related physics, and interactions."""
-    
-    
+
+    def __init__ (self, game, pos, size, multiplier=1, *exceptions):
+        """Initialize the player and physics entity"""""
+        super().__init__(game, pos, size, multiplier, exceptions)
+
+        # Create variables for reference to other elements
+        self.game = game
+        self.tilemap = self.game.tilemap
+        self.assetMap = self.game.assetMap
+        self.inventory = {}
+        # Create variables specific to the player
+        self.health = 100
+        # Create HUD items
+        self.hud = GUIManager()
+        self.hud.add('itembar', ItemBar(self.game.dPos.BOTTOM_CENTER, (81, 24), self.game.scale, self.assetMap.gui['itembar'], self.assetMap.gui['itembar_selected']))
+        self.itembar = self.hud.menu_items['itembar']
+
+    def check_events(self, event):
+        """Check events for the player"""
+        if event.type == pygame.MOUSEBUTTONDOWN and self.itembar.items[self.itembar.slot_selected] != None:
+            if event.button == 1:  # Left mouse button.
+                self.itembar.    items[self.itembar.slot_selected].left_button(event)
+            elif event.button == 3:  # Right mouse button.
+                self.itembar.items[self.itembar.slot_selected].right_button(event)
+
+        self.itembar.check_events(event)
+        # Update currently held items attributes 
+        if self.itembar.items[self.itembar.slot_selected] != None:
+            self.itembar.items[self.itembar.slot_selected].update()
+
+    def render(self, disp, offset=(0, 0)):
+        """Render player and HUD elements."""
+        super().render(disp, offset)
+        # Render the HUD items
+        self.hud.render(disp)
+            

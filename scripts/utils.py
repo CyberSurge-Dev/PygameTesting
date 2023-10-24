@@ -9,6 +9,7 @@ This program contains many general-purpose classes and functions used throughout
 Settings() - The settings class is used to load settings information from settings.json.
 Animation(images, image_dur, loop = False) - The animation classs is used as a system to generalize the creation of aniumations throughout the program.
 Telemetry(active) - Simple class for tracking variables and displaying/changing telemetry data in console.
+GameManager() - The game manager class is used to manage and load save files.
 
 --+ Functions +-- 
 load_image(path) - Loads the image at the given path, and returns it as a pygame image object.
@@ -31,6 +32,11 @@ BASE_IMAGE_PATH = "data/images/"
 clear = lambda: os.system('clear' if os.name == 'posix' else 'cls')
 
 # --------------------------------------------------------------------------------
+
+class GameManager():
+    """The game manager class is used to manage and load save files."""
+    def __init__(self, player):
+        """Initialize GameManager variables"""
 
 class Settings():
     def __init__(self):

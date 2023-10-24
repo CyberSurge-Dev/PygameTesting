@@ -12,6 +12,8 @@ This program contains base classes to create gui objects eaily throughout the pr
 # --------------------------------------------------------------------------------
 # External imports
 import pygame
+
+# Internal imports
 from scripts.gameItems import Item
 
 # --------------------------------------------------------------------------------
@@ -68,7 +70,7 @@ class ItemBar(MenuItem):
     """Button menu item"""
 
     def __init__(self, pos, size, scale, image, selected_image):
-        """Initializes the button"""
+        """Initializes the ItemBar"""
         super().__init__(pos, size, scale, [pygame.MOUSEWHEEL, pygame.KEYDOWN, pygame.MOUSEBUTTONDOWN])
         self.slot_selected = 0
         self.max_items = 4
@@ -76,9 +78,11 @@ class ItemBar(MenuItem):
         self.padding = 4
         self.spacing = 3
         self.font = pygame.font.Font('freesansbold.ttf', 8)
-        self.items = [Item("Test Item", False)] * self.max_items
+        self.items = [None] * self.max_items
         self.image = image
         self.selected_image = selected_image
+        if self.items[self.slot_selected] != None:
+            self.text = self.font.render(self.items[self.slot_selected].display_name, True, (255, 250, 250))
 
     def check_events(self, event):
         """Checks the event for the element"""
@@ -97,13 +101,9 @@ class ItemBar(MenuItem):
                 for index in range(1, self.max_items + 1):
                     if event.key == getattr(pygame.locals, f"K_{index}"):
                         self.slot_selected = index - 1
-                        
-        elif event.type == pygame.MOUSEBUTTONDOWN:
-            if event.button == 1:  # Left mouse button.
-                self.items[self.slot_selected].left_button(event)
-            elif event.button == 3:  # Right mouse button.
-                self.items[self.slot_selected].right_button(event)
-            
+
+        if self.items[self.slot_selected] != None:
+            self.text = self.font.render(self.items[self.slot_selected].display_name, True, (255, 250, 250))
 
     def add_item(self, item, pos):
         """Adds an item to the bar"""
@@ -145,5 +145,4 @@ class ItemBar(MenuItem):
 
         # Display current items name above the item bar
         if self.items[self.slot_selected] != None:
-            text = self.font.render(self.items[self.slot_selected].display_name, True, (255, 250, 250))
-            disp.blit(text, ((self.center_pos[0]+(self.size[0]/2))-text.get_width()/2, self.center_pos[1]-text.get_height()))
+            disp.blit(self.text, ((self.center_pos[0]+(self.size[0]/2))-self.text.get_width()/2, self.center_pos[1]-self.text.get_height()))

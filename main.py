@@ -17,8 +17,6 @@ import pygame, sys, math
 from scripts.utils import Settings, Telemetry, DisplayPositions
 from scripts.entities import Player
 from scripts.assetMap import AssetMap
-from scripts.guiElements import ItemBar
-from scripts.guiManager import GUIManager
 from scripts.tilemap import Tilemap
 # --------------------------------------------------------------------------------
 
@@ -55,8 +53,6 @@ class Game():
 
         self.scroll = [0 , 0]
 
-        self.player = Player(self, (128, 128), (32, 32))
-
         # Determine the largest 16:9 ratio that can fit in the screen for the display size
         # This method allows the program to automatically scale the game to any screen size
         if (self.sWidth < self.sHeight or self.sWidth == self.sHeight):
@@ -69,9 +65,7 @@ class Game():
         self.scale = (self.sWidth / self.display.get_width(), self.sHeight / self.display.get_height())
         self.dPos = DisplayPositions((self.display.get_width(), self.display.get_height()))
         
-        self.hud = GUIManager()
-        self.hud.add('itembar', ItemBar(self.dPos.BOTTOM_CENTER, (81, 24), self.scale, self.assetMap.gui['itembar'], self.assetMap.gui['itembar_selected']))
-        
+        self.player = Player(self, (128, 128), (32, 32))
         
         self.clock = pygame.time.Clock() # Create the game clock
 
@@ -105,8 +99,8 @@ class Game():
                     if event.key == self.keybinds["right"]: # Check for the right button being released
                         self.movement['right'] = False
 
-                self.hud.check_events(event) # Check for events on HUD objects
-
+                self.player.check_events(event)
+            
             # Create scroll offsets to have camera 'lag' behind the player for more fluid movement
             self.scroll[0] += (self.player.rect().centerx - self.display.get_width() / 2 - self.scroll[0]) / 5 # Smaller the last value (5), the less the lag 
             self.scroll[1] += (self.player.rect().centery - self.display.get_height() / 2 - self.scroll[1]) / 5 # Smaller the last value (5), the less the lag 
@@ -118,12 +112,9 @@ class Game():
             # Render the tilemap
             self.tilemap.render(offset=render_scroll)
 
-            # Update movement and render player
+            # Update movement and render player (and HUD elements)
             self.player.update(**self.movement)
-            self.player.render(render_scroll)
-
-            # Render the HUD elements
-            self.hud.render(self.display)
+            self.player.render(self.display, render_scroll)
 
             # Scale the display surface to best fit the screen
             self.screen.blit(pygame.transform.scale( self.display, (self.dWidth, self.dHeight) ), 

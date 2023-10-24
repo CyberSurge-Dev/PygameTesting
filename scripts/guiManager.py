@@ -6,7 +6,7 @@
 This program contains base classes to create gui objects eaily throughout the program
 
 --+ Classes +-- 
-
+GUIManager() - Gui object, acts as a way to group GUI objects together
 
 """
 # --------------------------------------------------------------------------------

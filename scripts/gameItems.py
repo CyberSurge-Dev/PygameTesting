@@ -14,20 +14,19 @@ Item(display_name, stackable, *attributes) - Simple class to store all attribute
 from scripts.assetMap import AssetMap
 from scripts.utils import load_image
 
-
 class Item():
     """Simple class to store all attributes of a Item"""
-    def __init__(self, display_name, stackable, *attributes):
+    def __init__(self, display_name, max_stack, icon, *attributes):
         """Initialize game Item"""
         self.attributes = attributes
-        self.icon = load_image('items/test/sample.png')
+        self.icon = icon
         self.display_name = display_name
-        self.stackable = stackable
+        self.max_stack = max_stack
 
     def update(self):
         """Updates the items attributes (ex: Give holder health boost)."""
         for attribute in self.attributes:
-            attribute.update()
+            attribute.update(self)
 
     def left_button(self, event):
         """Handles the event for the left mouse button."""
