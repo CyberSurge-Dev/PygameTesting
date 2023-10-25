@@ -19,6 +19,9 @@ TILES_AROUND - Store the relative positions of all tiles around a central tile.
 import pygame
 import json
 
+# Internal imports
+from scripts.utils import blit
+
 # --------------------------------------------------------------------------------
 
 BASE_TILEMAP_PATH = "data/rooms/"
@@ -112,11 +115,11 @@ class Tilemap():
 
         return tiles
 
-    def render(self, offset=(0, 0)):
+    def render(self, disp, offset=(0, 0)):
         # Render each tile in the Tilemap        
         for x in range(offset[0] // self.tile_size, (offset[0] + self.game.display.get_width()) // self.tile_size + 1):
             for y in range(offset[1] // self.tile_size, (offset[1] + self.game.display.get_height()) // self.tile_size + 1):
                 loc = (x, y)
                 if loc in self.tilemap:
                     tile = self.tilemap[loc]
-                    self.game.display.blit(self.assetMap.tiles[tile['id']]['variants'][tile['variant']], (loc[0] * self.tile_size - offset[0], loc[1] * self.tile_size - offset[1]))
+                    blit(disp, self.assetMap.tiles[tile['id']]['variants'][tile['variant']], (loc[0] * self.tile_size - offset[0], loc[1] * self.tile_size - offset[1]))

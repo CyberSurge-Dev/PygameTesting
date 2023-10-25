@@ -18,11 +18,12 @@ import pygame
 # Internal imports
 from scripts.guiElements import ItemBar
 from scripts.guiManager import GUIManager
+from scripts.utils import blit
 # --------------------------------------------------------------------------------
 class PhysicsEntity:
     """Class object used for creating objects that interact with physics"""
 
-    def __init__ (self, game, pos, size, multiplier=1, *exceptions):
+    def __init__ (self, game, pos, size, sprite=None, multiplier=1, *exceptions):
         """Initialize the physics entity"""
         self.pos = list(pos) # Convert to list for mutability
         self.game = game
@@ -31,6 +32,7 @@ class PhysicsEntity:
         self.tilemap = self.game.tilemap
         self.exceptions = exceptions
         self.assetMap = self.game.assetMap
+        self.sprite = sprite
 
         # Create a dictionary to store colisions, and velocity
         self.colisions = {
@@ -110,15 +112,13 @@ class PhysicsEntity:
 
         
     def render(self, disp, offset=(0, 0)):
-        disp.blit(self.assetMap.entities['player'], (self.pos[0] - offset[0], self.pos[1] - offset[1]))
+        blit(disp, self.assetMap.entities['player'], (self.pos[0] - offset[0], self.pos[1] - offset[1]))
     
 class Player(PhysicsEntity):
     """Class for all player related physics, and interactions."""
 
     def __init__ (self, game, pos, size, multiplier=1, *exceptions):
         """Initialize the player and physics entity"""""
-        super().__init__(game, pos, size, multiplier, exceptions)
-
         # Create variables for reference to other elements
         self.game = game
         self.tilemap = self.game.tilemap
@@ -130,6 +130,8 @@ class Player(PhysicsEntity):
         self.hud = GUIManager()
         self.hud.add('itembar', ItemBar(self.game.dPos.BOTTOM_CENTER, (81, 24), self.game.scale, self.assetMap.gui['itembar'], self.assetMap.gui['itembar_selected']))
         self.itembar = self.hud.menu_items['itembar']
+
+        super().__init__(game, pos, size, self.assetMap.entities['player'], multiplier, exceptions)
 
     def check_events(self, event):
         """Check events for the player"""

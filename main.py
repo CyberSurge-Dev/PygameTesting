@@ -110,7 +110,7 @@ class Game():
             self.display.fill((30, 30, 30))
 
             # Render the tilemap
-            self.tilemap.render(offset=render_scroll)
+            self.tilemap.render(self.display, render_scroll)
 
             # Update movement and render player (and HUD elements)
             self.player.update(**self.movement)

@@ -14,7 +14,7 @@ This program contains base classes to create gui objects eaily throughout the pr
 import pygame
 
 # Internal imports
-from scripts.gameItems import Item
+from scripts.utils import blit
 
 # --------------------------------------------------------------------------------
 
@@ -35,9 +35,9 @@ class MenuItem():
     def render(self, disp):
         """Renders the menu item"""
         if self.center:
-            disp.blit(self.image, self.center_pos)
+            blit(disp, self.image, self.center_pos)
         else:
-            disp.blit(self.image, self.pos)
+            blit(disp, self.image, self.pos)
 
     def check_events(self):
         """Check the events for the menu item"""

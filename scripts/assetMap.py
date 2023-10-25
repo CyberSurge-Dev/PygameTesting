@@ -20,7 +20,7 @@ class AssetMap():
         'floor' : {'type':'floor', 'variants' : load_images('tiles/floors')}
     }
     entities = {
-        'player': load_image('entities/player/player.png'),
+        'player': Animation(load_images('entities/player/test'), 10),
         'skeleton': {}
     }
     gui = {
