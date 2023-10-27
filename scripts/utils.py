@@ -80,6 +80,7 @@ class Settings():
         else:
             self.telemetry = False
 
+
 class DisplayPositions:
     """Simple utility class to store display positions"""
 
@@ -137,6 +138,7 @@ def load_image(path):
     return pygame.image.load(BASE_IMAGE_PATH +
                              path)  # returns the loaded pygame image object
 
+
 def blit(surface, image, pos):
     if image == None:
         pass
@@ -145,15 +147,15 @@ def blit(surface, image, pos):
     else:
         surface.blit(image, pos)
 
+
 def load_images(path):
-    """Loads all images in given path and returns them as a list of pygame image objects."""
+    """Loads all images in given path and returns them as a list of pygame surface objects (can also be Animation objects)."""
     images = []
-    for img in sorted(
-            os.listdir(BASE_IMAGE_PATH + path)
-    ):  # Cycles through file paths of given directory (uses sorted() for Linux compatibility)
-        images.append(
-            load_image(path + "/" +
-                       img))  # Saves the loaded image in the images list
+    for img in sorted(os.listdir(BASE_IMAGE_PATH + path)):  # Cycles through file paths of given directory (uses sorted() for Linux compatibility)
+        if os.path.isdir(os.path.join(BASE_IMAGE_PATH + path, img)):
+            images.append(Animation(load_images(os.path.join(path, img))))
+        else:
+            images.append(load_image(path + "/" + img))  # Saves the loaded image in the images list
 
     return images  # Return the list of pygame image objects
 
@@ -161,12 +163,12 @@ def load_images(path):
 class Animation():
     """Animation object, stores frames and is ued for animated images"""
 
-    def __init__(self, frames, fps):
+    def __init__(self, frames, fps=5):
         """Initialize variables needed for animation"""
         self.frames = frames
-        self.frame_index = 0 # Current frame
+        self.frame_index = 0  # Current frame
         self.fps = fps
-        self.current_tick = 0 # Current tick
+        self.current_tick = 0  # Current tick
         self.frame_time = 60 / fps  # Calculate the time between frames in game ticks
 
     def tick(self):
@@ -178,7 +180,7 @@ class Animation():
             if self.frame_index < len(self.frames) - 1:
                 self.frame_index += 1
             else:
-                # Reset frame back to beginning 
+                # Reset frame back to beginning
                 self.frame_index = 0
         else:
             self.current_tick += 1

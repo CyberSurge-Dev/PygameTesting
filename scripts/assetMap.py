@@ -20,7 +20,17 @@ class AssetMap():
         'floor' : {'type':'floor', 'variants' : load_images('tiles/floors')}
     }
     entities = {
-        'player': Animation(load_images('entities/player/test'), 10),
+        'player': {
+            'left' : Animation(load_images('entities/player/left'), 7),
+            'right' : Animation(load_images('entities/player/right'), 7),
+            'up' : Animation(load_images('entities/player/up'), 7),
+            'down' : Animation(load_images('entities/player/down'), 7),
+            'down-left' : Animation(load_images('entities/player/left'), 7),
+            'down-right' : Animation(load_images('entities/player/right'), 7),
+            'up-left' : Animation(load_images('entities/player/left'), 7),
+            'up-right' : Animation(load_images('entities/player/right'), 7),
+            'idle' : load_image('entities/player/player.png')
+        },
         'skeleton': {}
     }
     gui = {

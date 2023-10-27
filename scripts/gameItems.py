@@ -10,10 +10,6 @@ Item(display_name, stackable, *attributes) - Simple class to store all attribute
 
 """
 # --------------------------------------------------------------------------------
-
-from scripts.assetMap import AssetMap
-from scripts.utils import load_image
-
 class Item():
     """Simple class to store all attributes of a Item"""
     def __init__(self, display_name, max_stack, icon, *attributes):
@@ -33,6 +29,9 @@ class Item():
 
     def right_button(self, event):
         """Handles the event for the right mouse button."""
-        
 
+class Weapon(Item):
+    """Base class for creating a weapon"""
+    def __init__(self, display_name, max_stack, icon, cls, *attributes):
+        super().__init__(display_name, max_stack, icon, *attributes)
 

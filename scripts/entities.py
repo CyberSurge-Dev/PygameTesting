@@ -31,8 +31,7 @@ class PhysicsEntity:
         self.multiplier = multiplier
         self.tilemap = self.game.tilemap
         self.exceptions = exceptions
-        self.assetMap = self.game.assetMap
-        self.sprite = sprite
+        self.sprite = sprite # Can be a dictionary or just a pygame surface
 
         # Create a dictionary to store colisions, and velocity
         self.colisions = {
@@ -42,6 +41,8 @@ class PhysicsEntity:
             'right': False
         }
 
+        self.state = "idle"
+        
         self.velocity = [0, 0]
 
     def rect(self):
@@ -110,9 +111,37 @@ class PhysicsEntity:
         elif self.collisions['left'] or self.collisions['right']:
             self.velocity[1] = 0
 
+        # Set the player state based on the frame movement
+        if frame_movement[0] > 0:
+            if frame_movement[1] > 0:
+                self.state = 'up-right'
+            elif frame_movement[1] < 0:
+                self.state = 'down-right'
+            else:
+                self.state = 'right'
+        elif frame_movement[0] < 0:
+            if frame_movement[1] > 0:
+                self.state = 'up-left'
+            elif frame_movement[1] < 0:
+                self.state = 'down-left'
+            else:
+                self.state = 'left'
+        elif frame_movement[1] > 0:
+            self.state = 'down'
+        elif frame_movement[1] < 0:
+            self.state = 'up'
+        else:
+            self.state = 'idle'
         
     def render(self, disp, offset=(0, 0)):
-        blit(disp, self.assetMap.entities['player'], (self.pos[0] - offset[0], self.pos[1] - offset[1]))
+        """Render the entity to the screen"""
+        img = None # Set to None as placeholder
+        if type(self.sprite) == dict:
+            img = self.sprite.get(self.state, None)
+        else:
+            img = self.sprite
+        
+        blit(disp, img, (self.pos[0] - offset[0], self.pos[1] - offset[1]))
     
 class Player(PhysicsEntity):
     """Class for all player related physics, and interactions."""
