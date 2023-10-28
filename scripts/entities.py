@@ -142,6 +142,9 @@ class PhysicsEntity:
             img = self.sprite
         
         blit(disp, img, (self.pos[0] - offset[0], self.pos[1] - offset[1]))
+
+    def set_pos(self, position):
+        """Sets the location of the entity, relative to the center of the rect"""
     
 class Player(PhysicsEntity):
     """Class for all player related physics, and interactions."""
@@ -175,6 +178,12 @@ class Player(PhysicsEntity):
         if self.itembar.items[self.itembar.slot_selected] != None:
             self.itembar.items[self.itembar.slot_selected].update()
 
+    def update(self, **movement):
+        """Updates the player"""
+        super().update(**movement)
+
+        
+        
     def render(self, disp, offset=(0, 0)):
         """Render player and HUD elements."""
         super().render(disp, offset)

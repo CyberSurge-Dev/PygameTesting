@@ -57,6 +57,11 @@ class Tilemap():
 
         # Load tilemap as dictionary from JSON file, convert strings to tuples
         self.tilemap = {tuple(int(v) for v in k.split(';')): v for k, v in level_data['tilemap'].items()}
+        self.interactable_tiles = dict(filter(lambda x: x[1]["interactable-type"] == 'tile', {tuple(int(v) for v in k.split(';')): v for k, v in level_data['interactables'].items()}.items()))
+        self.interactable_items = dict(filter(lambda x: x[1]["interactable-type"] == 'item', {tuple(int(v) for v in k.split(';')): v for k, v in level_data['interactables'].items()}.items()))
+        for txt, tile in self.interactable_tiles.items():
+            self.tilemap[txt] = tile
+
 
     def get_tile(self, pos):
         return self.tilemap.get(pos, None)
@@ -104,16 +109,41 @@ class Tilemap():
                 tiles[txt] = None
         return tiles
 
-    def get_interactable_arround(self, pos, exceptions = []):
+    def get_interactable_tiles(self, pos, exceptions = []):
         """Returns a matrix of surrounding interactable tiles"""
         tiles = {}
-        for txt, tile in self.tiles_arround(pos, exceptions).items():
-            if tile != None and tile.get('interaction', False) != False:
-                tiles[txt] = tile
+        # adjust pos to tilemap
+        pos = (int(pos[0] // self.tile_size), int(pos[1] // self.tile_size))
+        # Check each tile around the posiyion
+        
+        for txt, Tpos in TILES_AROUND.items(): 
+            # Get tile from tilemap
+            tile = self.interactable_tiles.get((pos[0]+Tpos[0], pos[1]+Tpos[1]), None)
+            if tile != None:
+                # Get the tiledata from assetMap
+                tile = self.assetMap.tiles.get(tile.get('id'))
+                # add tile position key
+                tile['pos'] = (pos[0]+Tpos[0], pos[1]+Tpos[1])
+
+            # Check for how the tile should be added to the dictionary
+            if tile not in exceptions and tile != None:
+                tiles[txt] = tile.copy()
             else:
                 tiles[txt] = None
-
+        
+        self.game.telemetry.add("Interactable tiles", tiles)
         return tiles
+    
+    def get_interactable_items(self, rect, exceptions = []):
+        """Returns a list of interactable items"""
+        items = []
+        for pos, item in self.interactable_items.items():
+            item_rect = pygame.Rect(self.assetMap.items[item['id']].get_width(), self.assetMap.items[item['id']].get_height(), pos[0], pos[1])
+            if rect.colliderect(item_rect):
+                items.append((item_rect, item))
+        
+        self.game.telemetry.add("Interactable items", items)
+        return items
 
     def render(self, disp, offset=(0, 0)):
         # Render each tile in the Tilemap        
@@ -123,3 +153,6 @@ class Tilemap():
                 if loc in self.tilemap:
                     tile = self.tilemap[loc]
                     blit(disp, self.assetMap.tiles[tile['id']]['variants'][tile['variant']], (loc[0] * self.tile_size - offset[0], loc[1] * self.tile_size - offset[1]))
+        for loc, item in self.interactable_items.items():
+            tile = self.interactable_items[loc]
+            blit(disp, self.assetMap.tiles[tile['id']]['variants'][tile['variant']], (loc[0] - offset[0], loc[1] - offset[1]))

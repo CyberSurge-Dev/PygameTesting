@@ -146,3 +146,7 @@ class ItemBar(MenuItem):
         # Display current items name above the item bar
         if self.items[self.slot_selected] != None:
             disp.blit(self.text, ((self.center_pos[0]+(self.size[0]/2))-self.text.get_width()/2, self.center_pos[1]-self.text.get_height()))
+
+class TextBox(MenuItem):
+    """Class to create a text-box on the screen"""
+    

@@ -83,6 +83,8 @@
         "10;0" : {"id":"wall", "variant":7}
     }, "doors" : {
         
+    }, "interactables" : {
+        "5;0" : {"id":"note-wall", "variant":0, "interactable-type":"tile", "text":["Congradulations, you are the last one alive!", "You need to fix up the bunker", "- Love Mom"]} 
     },
     "meta": {
         "type":"misc"

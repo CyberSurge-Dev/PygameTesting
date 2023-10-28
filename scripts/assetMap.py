@@ -12,12 +12,14 @@ AssetMap() - Simple class to store the asset map
 
 """
 from scripts.utils import load_image, load_images, Animation
+from scripts.interactions import *
 
 class AssetMap():
     """Simple class to store the asset map"""
     tiles = {
         'wall' : {'type':'solid', 'variants' : load_images('tiles/walls')}, 
-        'floor' : {'type':'floor', 'variants' : load_images('tiles/floors')}
+        'floor' : {'type':'floor', 'variants' : load_images('tiles/floors')},
+        'note-wall' : {'type':'solid', 'variants' : load_images("tiles/note_walls")}
     }
     entities = {
         'player': {
@@ -36,8 +38,11 @@ class AssetMap():
     gui = {
         "itembar" : load_image(r"gui/hud/itembar.png"),
         "itembar_selected" : load_image(r"gui/hud/selected.png"),
+        "interaction" : Animation(load_images("gui/icons/interaction"), 2),
+        "text-box" : load_image("gui/text_box.png")
     }
     items = {
         "sample" : load_image('items/test/sample.png')
+        
     }
     

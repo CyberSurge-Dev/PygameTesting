@@ -40,7 +40,7 @@ class Game():
         self.assetMap = AssetMap()
 
         self.tilemap = Tilemap(self, 32)
-        self.tilemap.load('test_room.json')
+        self.tilemap.load('main_room.json')
 
         self.telemetry = Telemetry(self.settings.telemetry)
 

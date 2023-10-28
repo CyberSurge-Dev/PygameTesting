@@ -1,7 +1,7 @@
 {
     "display": {
         "fullscreen": false,
-        "resolution": [640, 350]
+        "resolution": [1280, 700]
     },
     "keybinds": {
         "up": "w",
@@ -12,6 +12,6 @@
     },
     "developer": {
         "developer": true,
-        "telemetry": false
+        "telemetry": true
     }
 }
