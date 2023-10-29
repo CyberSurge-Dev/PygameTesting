@@ -40,11 +40,19 @@ clear = lambda: os.system('clear' if os.name == 'posix' else 'cls')
 class GameManager():
     """The game manager class is used to manage and load save files."""
 
-    def __init__(self, save_file, player, tilemap):
+    def __init__(self, save_file, tilemap):
         """Initialize GameManager variables"""
-        self.player = player
-        self.save_file = save_file
         self.tilemap = tilemap
+        with open(save_file+'/rooms.json') as f:
+            self.rooms = {tuple(int(v) for v in k.split(';')): v for k, v in json.load(f).items()}
+        self.tilemap.load(self.rooms[(0,0)]['room'])
+        self.current_room = (0,0)
+
+    def increment_room(self, room):
+        self.tilemap.load(self.rooms[(self.current_room[0]+room[0], self.current_room[1]+room[1])]['room'])
+
+    def set_room(self, room):
+        self.tilemap.load(self.rooms[room]['room'])
 
 
 

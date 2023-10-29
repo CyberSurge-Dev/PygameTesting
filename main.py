@@ -14,7 +14,7 @@ Game() - The game class is the main object in the program, managing the update, 
 import pygame, sys, math
 
 # Internal imports
-from scripts.utils import Settings, Telemetry, DisplayPositions
+from scripts.utils import Settings, Telemetry, DisplayPositions, GameManager
 from scripts.entities import Player
 from scripts.assetMap import AssetMap
 from scripts.tilemap import Tilemap
@@ -40,7 +40,7 @@ class Game():
         self.assetMap = AssetMap()
 
         self.tilemap = Tilemap(self, 32)
-        self.tilemap.load('main_room.json')
+        
 
         self.telemetry = Telemetry(self.settings.telemetry)
 
@@ -65,7 +65,9 @@ class Game():
         self.scale = (self.sWidth / self.display.get_width(), self.sHeight / self.display.get_height())
         self.dPos = DisplayPositions((self.display.get_width(), self.display.get_height()))
         
-        self.player = Player(self, (128, 128), (32, 32))
+        self.gameManager = GameManager('data/saves/test_save', self.tilemap)
+        self.player = Player(self, (128, 128), (32, 32), self.gameManager)
+        
         
         self.clock = pygame.time.Clock() # Create the game clock
 

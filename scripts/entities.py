@@ -149,10 +149,11 @@ class PhysicsEntity:
 class Player(PhysicsEntity):
     """Class for all player related physics, and interactions."""
 
-    def __init__ (self, game, pos, size, multiplier=1, *exceptions):
+    def __init__ (self, game, pos, size, gameManager, multiplier=1, *exceptions):
         """Initialize the player and physics entity"""""
         # Create variables for reference to other elements
         self.game = game
+        self.gameManager = gameManager
         self.tilemap = self.game.tilemap
         self.assetMap = self.game.assetMap
         self.inventory = {}
