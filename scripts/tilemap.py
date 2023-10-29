@@ -59,6 +59,10 @@ class Tilemap():
         self.tilemap = {tuple(int(v) for v in k.split(';')): v for k, v in level_data['tilemap'].items()}
         self.interactable_tiles = dict(filter(lambda x: x[1]["interactable-type"] == 'tile', {tuple(int(v) for v in k.split(';')): v for k, v in level_data['interactables'].items()}.items()))
         self.interactable_items = dict(filter(lambda x: x[1]["interactable-type"] == 'item', {tuple(int(v) for v in k.split(';')): v for k, v in level_data['interactables'].items()}.items()))
+        self.maxx = max([x[0] for x in self.tilemap])
+        self.maxy = max([y[1] for y in self.tilemap])
+        print(self.maxx)
+        print(self.maxy)
         self.decor = {tuple(int(v) for v in k.split(';')): v for k, v in level_data['decor'].items()}
         self.doors = {tuple(int(v) for v in k.split(';')): v for k, v in level_data['doors'].items()}
         for pos, door in self.doors.items():
@@ -184,7 +188,6 @@ class Tilemap():
                 items.append((item_rect, item))
         
         self.game.telemetry.add("Interactable items", items)
-        print(items)
         return items
 
     def render(self, disp, offset=(0, 0)):

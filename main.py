@@ -45,8 +45,8 @@ class Game():
         self.total_trash = 10
         self.total_recyclables = 10
         self.font = pygame.font.Font('freesansbold.ttf', 12)
-        self.trash_font = self.font.render(f"0 / {self.total_trash}", True, (255, 250, 250))
-        self.recyclables_text = self.font.render(f"0 / {self.total_recyclables}", True, (255, 250, 250))
+        self.trash_font = self.font.render(f"0", True, (255, 250, 250))
+        self.recyclables_text = self.font.render(f"0", True, (255, 250, 250))
         
 
         self.telemetry = Telemetry(self.settings.telemetry)
@@ -82,8 +82,8 @@ class Game():
         pass
 
     def update_trash(self):
-        self.trash_font = self.font.render(f"{self.trash_collected} / {self.total_trash}", True, (255, 250, 250))
-        self.recyclables_text = self.font.render(f"{self.recyclables_collected} / {self.total_recyclables}", True, (255, 250, 250))
+        self.trash_font = self.font.render(f"{self.trash_collected}", True, (255, 250, 250))
+        self.recyclables_text = self.font.render(f"{self.recyclables_collected}", True, (255, 250, 250))
 
     def run(self):
         """Main game loop, handels updates and most game processes"""  

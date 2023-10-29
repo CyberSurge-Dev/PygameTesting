@@ -3,12 +3,22 @@
         "room" : "main_room.json"
     },
     "1;0" : {
-        
+        "room" : "plant_room.json"
+    },
+    "2;0" : {
+        "room" : "closet.json"
     },
     "-1;0" : {
         "room" : "trash_room.json"
     },
+    "-1;1" : {
+        "room" : "bedroom_left.json"
+    },
+    "1;1" : {
+        "room" : "bedroom_right.json"
+    },
     "0;1" : {
-
+        "room" : "hallway.json"
     }
+    
 }

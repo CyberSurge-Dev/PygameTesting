@@ -51,6 +51,7 @@ class GameManager():
     def increment_room(self, room):
         self.current_room[0] += room[0]
         self.current_room[1] += room[1]
+        print(f"Loaded: {self.current_room}")
         self.tilemap.load(self.rooms[(self.current_room[0], self.current_room[1])]['room'])
 
     def set_room(self, room):

@@ -167,9 +167,6 @@ class Player(PhysicsEntity):
         self.hud.add('inventory', Inventory(self.game.dPos.CENTER, (81, 95), self.game.scale, self.assetMap.gui['inventory'], self.assetMap.gui['itembar_selected'], self.itembar, self.game))
         self.hud.ignore('inventory')
         self.inventory = self.hud.menu_items['inventory']
-        self.inventory.add(self.assetMap.items['bucket'].copy())
-        self.inventory.add(self.assetMap.items['bucket'].copy())
-        self.inventory.add(self.assetMap.items['bucket'].copy())
         self.inventory_open = False
         self.interaction = False
 
@@ -225,12 +222,12 @@ class Player(PhysicsEntity):
         inter = 0
         if self.itembar.items[self.itembar.slot_selected][0] != None:
             self.itembar.items[self.itembar.slot_selected][0].update()
-            for tile in self.tilemap.get_interactable_tiles(self.pos).values():
-                if tile != None:
-                    inter += 1
-            for item in self.tilemap.get_interactable_items(self.rect()):
-                if item[1] != None:
-                    inter += 1
+        for tile in self.tilemap.get_interactable_tiles(self.pos).values():
+            if tile != None:
+                inter += 1
+        for item in self.tilemap.get_interactable_items(self.rect()):
+            if item[1] != None:
+                inter += 1
         if inter > 0:
             self.interaction = True
         else:
@@ -240,6 +237,9 @@ class Player(PhysicsEntity):
         for value in self.tilemap.get_collided_doors(self.pos):
             if value != None:
                 self.gameManager.increment_room(value['increments'][0][value['variant']])
+                print([int(self.tilemap.maxx/2)*self.tilemap.tile_size, int(self.tilemap.maxy/2)*self.tilemap.tile_size])
+                self.pos = [int(self.tilemap.maxx/4)*self.tilemap.tile_size, int(self.tilemap.maxy/2)*self.tilemap.tile_size]
+                
                 
         
     def render(self, disp, offset=(0, 0)):

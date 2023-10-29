@@ -46,7 +46,7 @@
     }, "doors" : {
         "6;2" : {"id":"door", "variant":3}
      }, "interactables" : {
-        "2;0" : {"id":"note-wall", "variant":0, "interactable-type":"tile", "text":["Trash is all over the place! How do you", "expect the next generation to live", "like this!?"]},
+        "4;0" : {"id":"note-wall", "variant":0, "interactable-type":"tile", "text":["Trash is all over the place! How do you", "expect the next generation to live", "like this!?"]},
         "1;1" : {"id":"recycling-bin", "variant":0, "interactable-type":"tile"},
         "1;3" : {"id":"trash-bin", "variant":0, "interactable-type":"tile"},
         "2;4" : {"id":"crushed-can", "interactable-type":"item"}
