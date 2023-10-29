@@ -19,14 +19,21 @@ class GUIManager():
 
     def render(self, disp):
         """Render all menu items"""
-        for item in self.menu_items.values():
-            item.render(disp)
+        for key, item in self.menu_items.items():
+            if key not in self.ignore_events:
+                item.render(disp)
 
     def check_events(self, event):
         """Check for events"""
+        delete = []
         for key, item in self.menu_items.items():
+            if item.delete == True:
+                delete.append(key)
             if event.type in item.events and key not in self.ignore_events:
                 item.check_events(event)
+
+        for key in delete:
+            self.remove(key)
 
     def add(self, key, menu_item):
         """Adds passed in item to menu"""""
@@ -38,7 +45,13 @@ class GUIManager():
 
     def ignore(self, *keys):
         """Add keys to ignore check_events() list"""
-        self.ignore_events.append(keys)
+        for key in keys:
+            self.ignore_events.append(key)
+
+    def unignore(self, *keys):
+        for key in keys:
+            print(key)
+            self.ignore_events.remove(key)
 
     def reset_ignore(self):
         """Remove keys from ignore check_events() list"""

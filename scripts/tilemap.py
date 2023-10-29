@@ -118,15 +118,18 @@ class Tilemap():
         
         for txt, Tpos in TILES_AROUND.items(): 
             # Get tile from tilemap
-            tile = self.interactable_tiles.get((pos[0]+Tpos[0], pos[1]+Tpos[1]), None)
-            if tile != None:
+            temp = self.interactable_tiles.get((pos[0]+Tpos[0], pos[1]+Tpos[1]), None)
+            if temp != None:
                 # Get the tiledata from assetMap
-                tile = self.assetMap.tiles.get(tile.get('id'))
+                tile = self.assetMap.tiles.get(temp.get('id'))
+                
                 # add tile position key
                 tile['pos'] = (pos[0]+Tpos[0], pos[1]+Tpos[1])
+                for key in temp:
+                    tile[key] = temp[key]
 
             # Check for how the tile should be added to the dictionary
-            if tile not in exceptions and tile != None:
+            if temp not in exceptions and temp != None:
                 tiles[txt] = tile.copy()
             else:
                 tiles[txt] = None

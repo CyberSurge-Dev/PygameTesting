@@ -13,13 +13,14 @@ AssetMap() - Simple class to store the asset map
 """
 from scripts.utils import load_image, load_images, Animation
 from scripts.interactions import *
+from scripts.gameItems import Item
 
 class AssetMap():
     """Simple class to store the asset map"""
     tiles = {
         'wall' : {'type':'solid', 'variants' : load_images('tiles/walls')}, 
         'floor' : {'type':'floor', 'variants' : load_images('tiles/floors')},
-        'note-wall' : {'type':'solid', 'variants' : load_images("tiles/note_walls")}
+        'note-wall' : {'type':'solid', 'variants' : load_images("tiles/note_walls"), "interaction" : show_text_box}
     }
     entities = {
         'player': {
@@ -36,13 +37,15 @@ class AssetMap():
         'skeleton': {}
     }
     gui = {
-        "itembar" : load_image(r"gui/hud/itembar.png"),
-        "itembar_selected" : load_image(r"gui/hud/selected.png"),
+        "itembar" : load_image("gui/hud/itembar.png"),
+        "itembar_selected" : load_image("gui/hud/selected.png"),
         "interaction" : Animation(load_images("gui/icons/interaction"), 2),
-        "text-box" : load_image("gui/text_box.png")
+        "text-box" : load_image("gui/text_box.png"),
+        "close" : load_image("gui/icons/close.png"),
+        "inventory" : load_image("gui/inventory.png")
     }
     items = {
-        "sample" : load_image('items/test/sample.png')
-        
+        "sample" : {'icon' : load_image('items/test/sample.png')},
+        "bucket" : Item("Bucket", 1, load_image('items/bucket.png'))
     }
     

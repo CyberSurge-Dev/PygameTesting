@@ -16,7 +16,7 @@ Enemey()
 import pygame
 
 # Internal imports
-from scripts.guiElements import ItemBar
+from scripts.guiElements import ItemBar, ClosableTextBox, Inventory
 from scripts.guiManager import GUIManager
 from scripts.utils import blit
 # --------------------------------------------------------------------------------
@@ -162,27 +162,50 @@ class Player(PhysicsEntity):
         self.hud = GUIManager()
         self.hud.add('itembar', ItemBar(self.game.dPos.BOTTOM_CENTER, (81, 24), self.game.scale, self.assetMap.gui['itembar'], self.assetMap.gui['itembar_selected']))
         self.itembar = self.hud.menu_items['itembar']
+        self.hud.add('inventory', Inventory(self.game.dPos.CENTER, (81, 95), self.game.scale, self.assetMap.gui['inventory'], self.assetMap.gui['itembar_selected'], self.itembar, self.game))
+        self.hud.ignore('inventory')
+        self.inventory = self.hud.menu_items['inventory']
+        self.inventory.add(self.assetMap.items['bucket'])
+        self.inventory.add(self.assetMap.items['bucket'])
+        self.inventory.add(self.assetMap.items['bucket'])
+        self.inventory_open = False
 
         super().__init__(game, pos, size, self.assetMap.entities['player'], multiplier, exceptions)
 
+    def test():
+        print("Clicked 2!")
+
     def check_events(self, event):
         """Check events for the player"""
-        if event.type == pygame.MOUSEBUTTONDOWN and self.itembar.items[self.itembar.slot_selected] != None:
+        if event.type == pygame.MOUSEBUTTONDOWN and self.itembar.items[self.itembar.slot_selected][0] != None:
             if event.button == 1:  # Left mouse button.
-                self.itembar.    items[self.itembar.slot_selected].left_button(event)
+                self.itembar.items[self.itembar.slot_selected][0].left_button(event)
             elif event.button == 3:  # Right mouse button.
-                self.itembar.items[self.itembar.slot_selected].right_button(event)
+                self.itembar.items[self.itembar.slot_selected][0].right_button(event)
+        elif event.type == pygame.KEYDOWN:
+            if event.key == self.game.keybinds['inventory']:
+                if self.inventory_open:
+                    self.hud.unignore('itembar')
+                    self.hud.ignore('inventory')
+                    self.inventory_open = False
+                else:
+                    self.hud.ignore('itembar')
+                    self.hud.unignore('inventory')
+                    self.inventory_open = True
+            elif event.key == pygame.K_e:
+                for tile in self.tilemap.get_interactable_tiles(self.pos).values():
+                    if tile != None:
+                        tile['interaction'](tile, self)
 
-        self.itembar.check_events(event)
-        # Update currently held items attributes 
-        if self.itembar.items[self.itembar.slot_selected] != None:
-            self.itembar.items[self.itembar.slot_selected].update()
+
+        self.hud.check_events(event)
 
     def update(self, **movement):
         """Updates the player"""
         super().update(**movement)
-
-        
+        # Update currently held items attributes 
+        if self.itembar.items[self.itembar.slot_selected][0] != None:
+            self.itembar.items[self.itembar.slot_selected][0].update()
         
     def render(self, disp, offset=(0, 0)):
         """Render player and HUD elements."""
