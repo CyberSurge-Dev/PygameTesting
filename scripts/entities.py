@@ -14,6 +14,7 @@ Enemey()
 # --------------------------------------------------------------------------------
 # External imports
 import pygame
+import math
 
 # Internal imports
 from scripts.guiElements import ItemBar, ClosableTextBox, Inventory
@@ -166,10 +167,11 @@ class Player(PhysicsEntity):
         self.hud.add('inventory', Inventory(self.game.dPos.CENTER, (81, 95), self.game.scale, self.assetMap.gui['inventory'], self.assetMap.gui['itembar_selected'], self.itembar, self.game))
         self.hud.ignore('inventory')
         self.inventory = self.hud.menu_items['inventory']
-        self.inventory.add(self.assetMap.items['bucket'])
-        self.inventory.add(self.assetMap.items['bucket'])
-        self.inventory.add(self.assetMap.items['bucket'])
+        self.inventory.add(self.assetMap.items['bucket'].copy())
+        self.inventory.add(self.assetMap.items['bucket'].copy())
+        self.inventory.add(self.assetMap.items['bucket'].copy())
         self.inventory_open = False
+        self.interaction = False
 
         super().__init__(game, pos, size, self.assetMap.entities['player'], multiplier, exceptions)
 
@@ -193,11 +195,26 @@ class Player(PhysicsEntity):
                     self.hud.ignore('itembar')
                     self.hud.unignore('inventory')
                     self.inventory_open = True
-            elif event.key == pygame.K_e:
+            elif event.key == pygame.K_e and self.interaction:
+                tiles = {}
+                rect = self.rect()
                 for tile in self.tilemap.get_interactable_tiles(self.pos).values():
                     if tile != None:
-                        tile['interaction'](tile, self)
+                        tiles[abs(math.hypot(rect.centerx-int((tile['pos'][0]*self.tilemap.tile_size)/2), rect.centery-int((tile['pos'][1]*self.tilemap.tile_size)/2)))] = tile
 
+                items = {}
+                for item in self.tilemap.get_interactable_items(self.rect()):
+                    if item[1] != None:
+                        items[abs(math.hypot(rect.centerx-item[0].centerx, rect.centery-item[0].centery))] = item[1]
+
+                try:
+                    self.assetMap.items[items.get(min(items.keys(), default=0), {})['id']].interaction(self.assetMap.items[items.get(min(items.keys(), default=0), {})['id']], self)
+                except Exception as e: print(e)
+                try:
+                    tiles.get(min(tiles.keys(), default=0), {}).get('interaction', lambda x,y: None)(tiles.get(min(tiles.keys(), default=0), None), self)
+                except Exception as e: print(e) 
+
+                self.game.update_trash()
 
         self.hud.check_events(event)
 
@@ -205,12 +222,31 @@ class Player(PhysicsEntity):
         """Updates the player"""
         super().update(**movement)
         # Update currently held items attributes 
+        inter = 0
         if self.itembar.items[self.itembar.slot_selected][0] != None:
             self.itembar.items[self.itembar.slot_selected][0].update()
+            for tile in self.tilemap.get_interactable_tiles(self.pos).values():
+                if tile != None:
+                    inter += 1
+            for item in self.tilemap.get_interactable_items(self.rect()):
+                if item[1] != None:
+                    inter += 1
+        if inter > 0:
+            self.interaction = True
+        else:
+            self.interaction = False
+            
+
+        for value in self.tilemap.get_collided_doors(self.pos):
+            if value != None:
+                self.gameManager.increment_room(value['increments'][0][value['variant']])
+                
         
     def render(self, disp, offset=(0, 0)):
         """Render player and HUD elements."""
         super().render(disp, offset)
         # Render the HUD items
         self.hud.render(disp)
+        if self.interaction:
+            blit(disp, self.assetMap.gui['interaction'], (self.pos[0]-offset[0], self.pos[1]-offset[1]))
             

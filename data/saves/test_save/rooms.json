@@ -3,10 +3,10 @@
         "room" : "main_room.json"
     },
     "1;0" : {
-
+        
     },
     "-1;0" : {
-
+        "room" : "trash_room.json"
     },
     "0;1" : {
 

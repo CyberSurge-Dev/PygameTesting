@@ -59,9 +59,10 @@ class Tilemap():
         self.tilemap = {tuple(int(v) for v in k.split(';')): v for k, v in level_data['tilemap'].items()}
         self.interactable_tiles = dict(filter(lambda x: x[1]["interactable-type"] == 'tile', {tuple(int(v) for v in k.split(';')): v for k, v in level_data['interactables'].items()}.items()))
         self.interactable_items = dict(filter(lambda x: x[1]["interactable-type"] == 'item', {tuple(int(v) for v in k.split(';')): v for k, v in level_data['interactables'].items()}.items()))
-        for txt, tile in self.interactable_tiles.items():
-            self.tilemap[txt] = tile
-
+        self.decor = {tuple(int(v) for v in k.split(';')): v for k, v in level_data['decor'].items()}
+        self.doors = {tuple(int(v) for v in k.split(';')): v for k, v in level_data['doors'].items()}
+        for pos, door in self.doors.items():
+            self.tilemap[pos] = door
 
     def get_tile(self, pos):
         return self.tilemap.get(pos, None)
@@ -137,15 +138,53 @@ class Tilemap():
         self.game.telemetry.add("Interactable tiles", tiles)
         return tiles
     
+    def get_doors_around(self, pos, exceptions = []):
+        """Returns a matrix of surrounding interactable tiles"""
+        tiles = {}
+        # adjust pos to tilemap
+        pos = (int(pos[0] // self.tile_size), int(pos[1] // self.tile_size))
+        # Check each tile around the posiyion
+        
+        for txt, Tpos in TILES_AROUND.items(): 
+            # Get tile from tilemap
+            temp = self.doors.get((pos[0]+Tpos[0], pos[1]+Tpos[1]), None)
+            if temp != None:
+                # Get the tiledata from assetMap
+                tile = self.assetMap.tiles.get(temp.get('id'))
+                
+                # add tile position key
+                tile['pos'] = (pos[0]+Tpos[0], pos[1]+Tpos[1])
+                for key in temp:
+                    tile[key] = temp[key]
+
+            # Check for how the tile should be added to the dictionary
+            if temp not in exceptions and temp != None:
+                tiles[txt] = tile.copy()
+            else:
+                tiles[txt] = None
+        
+        self.game.telemetry.add("Interactable tiles", tiles)
+        return tiles
+    
+    def get_collided_doors(self, player_pos):
+        ret_doors = []
+        for pos, door in self.doors.items():
+            if pygame.Rect(pos[0]*self.tile_size, pos[1]*self.tile_size, self.tile_size, self.tile_size).colliderect(pygame.Rect(player_pos[0], player_pos[1], self.tile_size, self.tile_size)):
+                for key, value in self.assetMap.tiles[door['id']].items():
+                    door[key] = [value]
+                ret_doors.append(door)
+        return ret_doors
+    
     def get_interactable_items(self, rect, exceptions = []):
         """Returns a list of interactable items"""
         items = []
         for pos, item in self.interactable_items.items():
-            item_rect = pygame.Rect(self.assetMap.items[item['id']].get_width(), self.assetMap.items[item['id']].get_height(), pos[0], pos[1])
+            item_rect = pygame.Rect(pos[0]*self.tile_size, pos[1]*self.tile_size, self.assetMap.items[item['id']].icon.get_width(), self.assetMap.items[item['id']].icon.get_height())
             if rect.colliderect(item_rect):
                 items.append((item_rect, item))
         
         self.game.telemetry.add("Interactable items", items)
+        print(items)
         return items
 
     def render(self, disp, offset=(0, 0)):
@@ -156,6 +195,14 @@ class Tilemap():
                 if loc in self.tilemap:
                     tile = self.tilemap[loc]
                     blit(disp, self.assetMap.tiles[tile['id']]['variants'][tile['variant']], (loc[0] * self.tile_size - offset[0], loc[1] * self.tile_size - offset[1]))
-        for loc, item in self.interactable_items.items():
-            tile = self.interactable_items[loc]
-            blit(disp, self.assetMap.tiles[tile['id']]['variants'][tile['variant']], (loc[0] - offset[0], loc[1] - offset[1]))
+                if loc in self.interactable_items:
+                    tile = self.interactable_items[loc]
+                    blit(disp, self.assetMap.items[tile['id']].icon,  (loc[0] * self.tile_size - offset[0], loc[1] * self.tile_size - offset[1]))
+                if loc in self.decor:
+                    tile = self.decor[loc]
+                    blit(disp, self.assetMap.tiles[tile['id']].icon,  (loc[0] * self.tile_size - offset[0], loc[1] * self.tile_size - offset[1]))
+                if loc in self.interactable_tiles:
+                    tile = self.interactable_tiles[loc]
+                    blit(disp, self.assetMap.tiles[tile['id']]['variants'][tile['variant']], (loc[0] * self.tile_size - offset[0], loc[1] * self.tile_size - offset[1]))
+                    if self.assetMap.tiles[tile['id']].get('onRender', None) != None:
+                        self.assetMap.tiles[tile['id']]['onRender'](disp, offset, self.game, loc)

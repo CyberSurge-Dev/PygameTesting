@@ -14,13 +14,22 @@ AssetMap() - Simple class to store the asset map
 from scripts.utils import load_image, load_images, Animation
 from scripts.interactions import *
 from scripts.gameItems import Item
+from scripts.itemAttributes import Trash, Recyclable
 
 class AssetMap():
     """Simple class to store the asset map"""
     tiles = {
         'wall' : {'type':'solid', 'variants' : load_images('tiles/walls')}, 
         'floor' : {'type':'floor', 'variants' : load_images('tiles/floors')},
-        'note-wall' : {'type':'solid', 'variants' : load_images("tiles/note_walls"), "interaction" : show_text_box}
+        'note-wall' : {'type':'solid', 'variants' : load_images("tiles/note_walls"), "interaction" : show_text_box},
+        'door' : {'type':'door', 'variants':load_images('tiles/doors'), 'increments' : {
+            0: (0,1),
+            1: (-1, 0),
+            2: (0, -1),
+            3: (1, 0)
+        }},
+        'recycling-bin' : {'variants': [load_image("tiles/recycling_bin.png")], 'onRender':render_recycle, 'interaction': on_interact_recycle},
+        'trash-bin' : {'variants': [load_image("tiles/trash_bin.png")], 'onRender':render_trash, 'interaction': on_interact_trash}
     }
     entities = {
         'player': {
@@ -46,6 +55,7 @@ class AssetMap():
     }
     items = {
         "sample" : {'icon' : load_image('items/test/sample.png')},
-        "bucket" : Item("Bucket", 1, load_image('items/bucket.png'))
+        "bucket" : Item("Bucket", 4, load_image('items/bucket.png'), pickup_item),
+        "crushed-can" : Item("Crushed Can", 64, load_image('items/crushed_can.png'), pickup_item, Recyclable()),
     }
     

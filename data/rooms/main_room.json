@@ -82,9 +82,14 @@
         "10;1" : {"id":"wall", "variant":6},
         "10;0" : {"id":"wall", "variant":7}
     }, "doors" : {
+        "6;0" : {"id":"door", "variant":0},
+        "0;3" : {"id":"door", "variant":1},
+        "10;3" : {"id":"door", "variant":3}
+     }, "interactables" : {
+        "5;0" : {"id":"note-wall", "variant":0, "interactable-type":"tile", "text":["Congradulations, you are the last one!", "You need to fix up the bunker", "- Love Mom"]},
+        "5;4" : {"id":"bucket", "interactable-type":"item"}
+    }, "decor" : {
         
-    }, "interactables" : {
-        "5;0" : {"id":"note-wall", "variant":0, "interactable-type":"tile", "text":["Congradulations, you are the last one alive!", "You need to fix up the bunker", "- Love Mom"]} 
     },
     "meta": {
         "type":"misc"

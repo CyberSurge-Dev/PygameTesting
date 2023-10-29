@@ -333,12 +333,12 @@ class Inventory(MenuItem):
 
     def add(self, item):
         for i in range(0, len(self.itembar.items)):
-            if self.itembar.items[i][0] == None:
-                self.itembar.items[i] = (item, 1)
+            if self.itembar.items[i][0] == None or (self.itembar.items[i][0].display_name == item.display_name and self.itembar.items[i][1] < item.max_stack):
+                self.itembar.items[i] = (item, self.itembar.items[i][1]+1)
                 return
         for x in self.inventory:
-            if self.inventory[x][0] == None:
-                self.inventory[x] = (item, 1)
+            if self.inventory[x][0] == None or (self.inventory[x][0].display_name == item.display_name and self.inventory[x][1] < item.max_stack):
+                self.inventory[x] = (item, self.inventory[x][1]+1)
                 return
 
                                     
