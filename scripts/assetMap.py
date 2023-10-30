@@ -31,9 +31,8 @@ class AssetMap():
         'recycling-bin' : {'variants': [load_image("tiles/recycling_bin.png")], 'onRender':render_recycle, 'interaction': on_interact_recycle},
         'trash-bin' : {'variants': [load_image("tiles/trash_bin.png")], 'onRender':render_trash, 'interaction': on_interact_trash},
         'bed' : {'variants': [load_image("tiles/bed.png")]},
-        'bookshelf' : {'variants': [load_image("tiles/bookshelf.png")]},
-        'desk' : {'variants': [load_image("tiles/bed.png")]},
-        'plant' : {'variants': [load_image("tiles/plant.png")]}
+        'plant' : {'variants': [load_image("tiles/plant.png")]},
+        'chest' : {'variants': [load_image("tiles/chest.png")], 'type':'solid'}
     }
     entities = {
         'player': {
@@ -58,12 +57,15 @@ class AssetMap():
         "inventory" : load_image("gui/inventory.png")
     }
     items = {
-        "sample" : {'icon' : load_image('items/test/sample.png')},
         "bucket" : Item("Bucket", 4, load_image('items/bucket.png'), pickup_item),
         "crushed-can" : Item("Crushed Can", 64, load_image('items/crushed_can.png'), pickup_item, Recyclable()),
         "crumbled-paper" : Item("Crumbled Paper", 64, load_image('items/crumpled_paper.png'), pickup_item, Recyclable()),
         "paper-cup" : Item("Paper Cup", 64, load_image('items/paper_cup.png'), pickup_item, Recyclable()),
         "rotton-apple" : Item("Rotton Apple", 64, load_image('items/rotton_apple.png'), pickup_item, Trash()),
+    }
+    decor = {
+        'desk' : {'variants': [load_image("tiles/desk.png")]},
+        'bookshelf' : {'variants': [load_image("tiles/bookshelf.png")]},
     }
     
     

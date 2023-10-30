@@ -47,7 +47,7 @@
         "3;0" : {"id":"note-wall", "variant":0, "interactable-type":"tile", "text":["The pile of trash was like a time-lapse; we", "never realized how much was piling up", "We just dumped all of our plastic into it.", "-Melanie"]},
         "1;1" : {"id":"bed", "variant":0, "interactable-type" : "tile"}
     }, "decor" : {
-       
+        
     },
     "meta": {
         "type":"misc"

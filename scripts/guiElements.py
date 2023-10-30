@@ -249,6 +249,7 @@ class Inventory(MenuItem):
     def check_events(self, event):
         if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
             self.held = True
+
             if self.center:
                 # Check for inventory click
                 for loc in self.inventory:
@@ -265,7 +266,6 @@ class Inventory(MenuItem):
             
         elif event.type == pygame.MOUSEBUTTONUP and event.button == 1:
             self.held = False
-            self.mouse_pos = event.pos
             # Check for inventory click
             for loc in self.inventory:
                 rect = pygame.Rect((int((self.center_pos[0]+self.padding+loc[0]*(self.icon_size+2)+loc[0])*self.scale[0]), int((self.center_pos[1]+11+loc[1]*(self.icon_size+2)+loc[1])*self.scale[1])), 
@@ -328,8 +328,10 @@ class Inventory(MenuItem):
                 blit(disp, self.itembar.counts[loc], pos)
         
         if self.held and self.selcted != None and self.selcted[2][0] != None:
+            mx, my = pygame.mouse.get_pos()
             icon = self.selcted[2][0].icon
-            blit(disp, icon, (self.mouse_pos[0]-int(icon.get_width()/2), self.mouse_pos[1]-int(icon.get_height()/2)))
+            blit(disp, icon, (mx/self.scale[0]-int(icon.get_width()//2), 
+                              my/self.scale[1]-int(icon.get_height()//2)))
 
     def add(self, item):
         for i in range(0, len(self.itembar.items)):

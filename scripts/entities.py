@@ -189,6 +189,7 @@ class Player(PhysicsEntity):
                     self.hud.ignore('inventory')
                     self.inventory_open = False
                 else:
+                    self.interaction = False
                     self.hud.ignore('itembar')
                     self.hud.unignore('inventory')
                     self.inventory_open = True
@@ -228,7 +229,7 @@ class Player(PhysicsEntity):
         for item in self.tilemap.get_interactable_items(self.rect()):
             if item[1] != None:
                 inter += 1
-        if inter > 0:
+        if inter > 0 and not self.inventory_open:
             self.interaction = True
         else:
             self.interaction = False
@@ -238,7 +239,7 @@ class Player(PhysicsEntity):
             if value != None:
                 self.gameManager.increment_room(value['increments'][0][value['variant']])
                 print([int(self.tilemap.maxx/2)*self.tilemap.tile_size, int(self.tilemap.maxy/2)*self.tilemap.tile_size])
-                self.pos = [int(self.tilemap.maxx/4)*self.tilemap.tile_size, int(self.tilemap.maxy/2)*self.tilemap.tile_size]
+                self.pos = [int(self.tilemap.maxx/2)*self.tilemap.tile_size, int(self.tilemap.maxy/2)*self.tilemap.tile_size]
                 
                 
         

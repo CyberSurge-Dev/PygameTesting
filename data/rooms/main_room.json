@@ -7,10 +7,6 @@
         "0;3" : {"id":"wall", "variant":2},
         "0;4" : {"id":"wall", "variant":2},
         "0;5" : {"id":"wall", "variant":2},
-        "19;0" : {"id":"wall", "variant":0},
-        "19;1" : {"id":"wall", "variant":0},
-        "19;2" : {"id":"wall", "variant":0},
-        "19;3" : {"id":"wall", "variant":0},
         "2;0" : {"id":"wall", "variant":0},
         "3;0" : {"id":"wall", "variant":0},
         "4;0" : {"id":"wall", "variant":0},
@@ -89,9 +85,8 @@
         "5;0" : {"id":"note-wall", "variant":0, "interactable-type":"tile", "text":["The world is collapsing around us, there", "are not many of us left", "We can only hope for a rebirth", "-Unknown"]},
         "5;4" : {"id":"crushed-can", "interactable-type":"item"},
         "9;2" : {"id":"crumbled-paper", "interactable-type":"item"},
-        "2;3" : {"id":"plant", "interactable-type":"tile", "variant":0}
-        }, "decor" : {
-        
+        "2;1" : {"id":"chest", "interactable-type":"tile", "variant":0}
+    }, "decor" : {
     },
     "meta": {
         "type":"misc"

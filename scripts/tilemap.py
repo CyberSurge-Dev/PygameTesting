@@ -173,7 +173,7 @@ class Tilemap():
     def get_collided_doors(self, player_pos):
         ret_doors = []
         for pos, door in self.doors.items():
-            if pygame.Rect(pos[0]*self.tile_size, pos[1]*self.tile_size, self.tile_size, self.tile_size).colliderect(pygame.Rect(player_pos[0], player_pos[1], self.tile_size, self.tile_size)):
+            if pygame.Rect(pos[0]*self.tile_size-4, pos[1]*self.tile_size-4, self.tile_size+4, self.tile_size+4).colliderect(pygame.Rect(player_pos[0], player_pos[1], self.tile_size, self.tile_size)):
                 for key, value in self.assetMap.tiles[door['id']].items():
                     door[key] = [value]
                 ret_doors.append(door)
@@ -198,12 +198,16 @@ class Tilemap():
                 if loc in self.tilemap:
                     tile = self.tilemap[loc]
                     blit(disp, self.assetMap.tiles[tile['id']]['variants'][tile['variant']], (loc[0] * self.tile_size - offset[0], loc[1] * self.tile_size - offset[1]))
+        # Render decor and other objects onto tilemap
+        for x in range(offset[0] // self.tile_size, (offset[0] + self.game.display.get_width()) // self.tile_size + 1):
+            for y in range(offset[1] // self.tile_size, (offset[1] + self.game.display.get_height()) // self.tile_size + 1):
+                loc = (x, y)
                 if loc in self.interactable_items:
                     tile = self.interactable_items[loc]
                     blit(disp, self.assetMap.items[tile['id']].icon,  (loc[0] * self.tile_size - offset[0], loc[1] * self.tile_size - offset[1]))
                 if loc in self.decor:
                     tile = self.decor[loc]
-                    blit(disp, self.assetMap.tiles[tile['id']].icon,  (loc[0] * self.tile_size - offset[0], loc[1] * self.tile_size - offset[1]))
+                    blit(disp, self.assetMap.decor[tile['id']]['variants'][tile['variant']],  (loc[0] * self.tile_size - offset[0], loc[1] * self.tile_size - offset[1]))
                 if loc in self.interactable_tiles:
                     tile = self.interactable_tiles[loc]
                     blit(disp, self.assetMap.tiles[tile['id']]['variants'][tile['variant']], (loc[0] * self.tile_size - offset[0], loc[1] * self.tile_size - offset[1]))
