@@ -191,7 +191,7 @@ class Tilemap():
         return items
 
     def render(self, disp, offset=(0, 0)):
-        # Render each tile in the Tilemap        
+        # Render each tile in the Tilemap  
         for x in range(offset[0] // self.tile_size, (offset[0] + self.game.display.get_width()) // self.tile_size + 1):
             for y in range(offset[1] // self.tile_size, (offset[1] + self.game.display.get_height()) // self.tile_size + 1):
                 loc = (x, y)

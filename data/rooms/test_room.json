@@ -81,6 +81,8 @@
         "10;2" : {"id":"wall", "variant":6},
         "10;1" : {"id":"wall", "variant":6},
         "10;0" : {"id":"wall", "variant":7}
+    }, "items" : {
+        
     }, "doors" : {
         
     },

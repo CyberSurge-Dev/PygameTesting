@@ -15,33 +15,42 @@ import pygame
 
 class Item():
     """Simple class to store all attributes of a Item"""
-    def __init__(self, display_name, max_stack, icon, interaction=lambda x,y: None, *attributes):
+    def __init__(self, display_name, max_stack, icon, meta, interaction=None, left_button=None, right_button=None, *attributes):
         """Initialize game Item"""
         self.attributes = attributes
         self.icon = icon
         self.display_name = display_name
+        self.l_button = left_button
+        self.r_button = right_button
         self.max_stack = max_stack
         self.interaction = interaction
+        self.meta = meta
 
     def update(self):
         """Updates the items attributes (ex: Give holder health boost)."""
         for attribute in self.attributes:
             attribute.update(self)
 
+    def interact(self, *args):
+        """Interaction with object (When out of inventory)"""
+        if self.interaction != None:
+            self.interaction(self, *args)
+
     def hide(self):
         self.icon = pygame.Surface((0, 0))
 
-    def left_button(self, event):
+    def is_interactable(self):
+        return self.interaction != None
+
+    def left_button(self, *args):
         """Handles the event for the left mouse button."""
-
-    def right_button(self, event):
+        if self.l_button != None:
+            self.l_button(self, *args)
+        
+    def right_button(self, *args):
         """Handles the event for the right mouse button."""
-
+        if self.r_button != None:
+            self.r_button(self, *args)
+            
     def copy(self):
-        return Item(self.display_name, self.max_stack, self.icon, self.interaction, *self.attributes)
-
-class Weapon(Item):
-    """Base class for creating a weapon"""
-    def __init__(self, display_name, max_stack, icon, cls, *attributes):
-        super().__init__(display_name, max_stack, icon, *attributes)
-
+        return Item(self.display_name, self.max_stack, self.icon, self.meta, self.interaction, *self.attributes)

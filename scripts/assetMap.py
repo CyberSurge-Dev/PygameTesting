@@ -15,10 +15,12 @@ from scripts.utils import load_image, load_images, Animation
 from scripts.interactions import *
 from scripts.gameItems import Item
 from scripts.itemAttributes import Trash, Recyclable
+from scripts.tiles import Tile
 
 class AssetMap():
     """Simple class to store the asset map"""
     tiles = {
+        'NaT' : Tile(load_image('tiles/not_a_tile.png')),
         'wall' : {'type':'solid', 'variants' : load_images('tiles/walls')}, 
         'floor' : {'type':'floor', 'variants' : load_images('tiles/floors')},
         'note-wall' : {'type':'solid', 'variants' : load_images("tiles/note_walls"), "interaction" : show_text_box},
@@ -57,11 +59,11 @@ class AssetMap():
         "inventory" : load_image("gui/inventory.png")
     }
     items = {
-        "bucket" : Item("Bucket", 4, load_image('items/bucket.png'), pickup_item),
-        "crushed-can" : Item("Crushed Can", 64, load_image('items/crushed_can.png'), pickup_item, Recyclable()),
-        "crumbled-paper" : Item("Crumbled Paper", 64, load_image('items/crumpled_paper.png'), pickup_item, Recyclable()),
-        "paper-cup" : Item("Paper Cup", 64, load_image('items/paper_cup.png'), pickup_item, Recyclable()),
-        "rotton-apple" : Item("Rotton Apple", 64, load_image('items/rotton_apple.png'), pickup_item, Trash()),
+        "bucket" : Item("Bucket", 4, load_image('items/bucket.png'), {}, pickup_item),
+        "crushed-can" : Item("Crushed Can", 64, load_image('items/crushed_can.png'), {}, pickup_item, Recyclable()),
+        "crumbled-paper" : Item("Crumbled Paper", 64, load_image('items/crumpled_paper.png'), {}, pickup_item, Recyclable()),
+        "paper-cup" : Item("Paper Cup", 64, load_image('items/paper_cup.png'), {}, pickup_item, Recyclable()),
+        "rotton-apple" : Item("Rotton Apple", 64, load_image('items/rotton_apple.png'), {}, pickup_item, Trash()),
     }
     decor = {
         'desk' : {'variants': [load_image("tiles/desk.png")]},
