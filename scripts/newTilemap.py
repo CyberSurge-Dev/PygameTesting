@@ -17,6 +17,7 @@ from scripts.tiles import Tile, InteractableTile
 
 # External imports
 import pygame
+import math
 
 POSITIONS_AROUND = ((0, 1), (0, -1), (-1, 0), (1, 0), (-1, -1), (-1, 1),
                     (1, -1), (1, 1), (0, 0))
@@ -67,13 +68,22 @@ class Tilemap():
                                  None))
         return tiles
 
-    def get_rects_around(self, pos):
+    def get_solid_rects_around(self, pos):
         """Returns a list of rects areound the given position"""
         return [
             pygame.Rect(tile.pos[0] * self.tile_size,
                         tile.pos[1] * self.tile_size, self.tile_size,
                         self.tile_size) for tile in self.get_tiles_around(pos)
             if tile != None and tile.solid
+        ]
+    
+    def get__rects_around(self, pos):
+        """Returns a list of rects areound the given position"""
+        return [
+            pygame.Rect(tile.pos[0] * self.tile_size,
+                        tile.pos[1] * self.tile_size, self.tile_size,
+                        self.tile_size) for tile in self.get_tiles_around(pos)
+            if tile != None
         ]
 
     def get_interactable_tiles(self):
@@ -82,6 +92,24 @@ class Tilemap():
 
     def get_interactable_tiles_around(self, pos):
         """Returns a list of interactable tiles around pos"""
+        return [x for x in self.get_tiles_around(pos) if type(x) == InteractableTile]
+    
+    def get_collided_items(self, rect):
+        """Returns a list of Item objects that collide with the passed in Rect"""
+        return [
+            item for pos, item in self.items.items() 
+            if pygame.Rect(item.icon.get_width(), item.icon.get_height(), pos[0]*self.tile_size, pos[1]*self.tile_size).colliderect(rect)
+        ]
+    
+    def closest_interactable_tile(self, pos):
+        pos = (int(pos[0]-self.tile_size//2), int(pos[1]-self.tile_size//2))
+        distances = {abs(math.hypot((int(tile.pos[0]-self.tile_size//2), int(tile.pos[1]-self.tile_size//2)), pos)): tile for tile in self.get_interactable_tiles_around(pos)}
+        # Return closest interactable tiles
+        return distances.get(min(*distances, default=0), None)
+    
+    def closest_item(self, pos):
+        pass
+       
 
     def render(self, disp, offset):
         """Render the tilemap"""

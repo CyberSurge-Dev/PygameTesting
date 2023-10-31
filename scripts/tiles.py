@@ -57,6 +57,7 @@ class InteractableTile(Tile):
         self.interactable = True
         self.times_interacted = 0
         self.interaction = interaction
+        self.on_colision = on_collision
         if first_interaction == None:
             self.first_interaction = interaction
         else:
@@ -74,7 +75,7 @@ class InteractableTile(Tile):
 
     def collision(self, *args):
         """Call appropraite collision function"""""
-        if self.interactable:
+        if self.interactable and self.on_colision != None:
             # Run correct function if the tile is interactable
             self.on_collision(self, *args)
 
