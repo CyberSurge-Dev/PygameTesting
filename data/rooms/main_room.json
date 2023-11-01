@@ -77,7 +77,14 @@
         "10;2" : {"id":"wall", "variant":6},
         "10;1" : {"id":"wall", "variant":6},
         "10;0" : {"id":"wall", "variant":7}
-    }, "doors" : {
+    }, "tile-groups" : [
+        {
+            "meta" : {},
+            "tiles" : {
+                
+            }
+        }
+    ], "doors" : {
         "6;0" : {"id":"door", "variant":0},
         "0;3" : {"id":"door", "variant":1},
         "10;3" : {"id":"door", "variant":3}

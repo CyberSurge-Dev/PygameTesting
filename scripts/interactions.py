@@ -3,8 +3,8 @@
 # Version: 1.0
 # --------------------------------------------------------------------------------
 """
-This program contains functions for game interactions
-
+This file contains functions for game interactions, these range from item item and tile interactions, 
+to functions used by any game elements.
 """
 # --------------------------------------------------------------------------------
 # Internal imports 
@@ -33,7 +33,10 @@ def on_interact_trash(item, player):
             player.game.trash_collected +=  player.itembar.items[player.itembar.slot_selected][1]
             player.itembar.items[player.itembar.slot_selected] = (None, 0)
 
-    
+def set_room(tile, *args):
+    args[0].gameManager.set_room_from_id(args[0].tilemap.get_tile(tile.pos).meta.get('id', 0))
+    args[0].pos = [(args[0].tilemap.size[0]//2)*args[0].tilemap.tile_size+args[0].tilemap.tile_size//2, (args[0].tilemap.size[1]//2)*args[0].tilemap.tile_size]
+
 def on_interact_recycle(item, player):
     for attribute in player.itembar.items[player.itembar.slot_selected][0].attributes:
         if isinstance(attribute, Trash):

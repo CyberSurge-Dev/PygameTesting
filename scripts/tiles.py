@@ -24,7 +24,8 @@ class Tile():
 
         # Tile information set when loaded from tilemap
         self.pos = (0, 0)
-        self.variant = 0;
+        self.variant = 0
+        self.tile_group # Tile group refference 
 
     def render(self, disp, offset, tilesize, *args):
         """Render the tile given the tilesize and position"""
@@ -94,3 +95,6 @@ class InteractableTile(Tile):
             self.on_render,
             self.render_override
         )
+
+class TileGroup:
+    """Groups tiles together with shared metadata"""

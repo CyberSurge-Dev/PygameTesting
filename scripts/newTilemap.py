@@ -37,6 +37,7 @@ class Tilemap():
         self.tilemap = {}
         self.decor = {}  # Just images, can have floating point positions
         self.items = {}  # Item objects to be rendered on the tilemap
+        self.size = (0, 0)
 
     def load(self, filename):
         """Load the tilemap from a provided dictionary"""
@@ -66,6 +67,9 @@ class Tilemap():
             # Load items from tilemap (these are objects derived from the Item class)
             self.items[tuple([float(x) for x in k.split(";")
                               ])] = self.assetMap.items[v.get('id', 'NaI')]
+            
+        # Set size variable
+        self.size = (max([x[0] for x in self.tilemap]), max([y[1] for y in self.tilemap]))
 
     def get_tile(self, pos):
         """Returns tile at given position"""
