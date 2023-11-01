@@ -63,7 +63,6 @@ class PhysicsEntity:
             'left': False,
             'right': False
         }
-
         
         # Calculate movement for the frame
         frame_movement = (
@@ -79,7 +78,7 @@ class PhysicsEntity:
         entity_rect = self.rect()
         rect_pos = []
 
-        for rect in self.tilemap.get_rects_around(self.pos, self.exceptions).values():
+        for rect in self.tilemap.get_solid_rects_around(self.pos):
             if rect != None and entity_rect.colliderect(rect):
                 rect_pos.append((rect.x, rect.y))
                 if frame_movement[0] > 0:
@@ -97,7 +96,7 @@ class PhysicsEntity:
         # Check for collisions in up and down movement
         self.pos[1] += frame_movement[1]
         entity_rect = self.rect()
-        for rect in self.tilemap.get_rects_around(self.pos, self.exceptions).values():
+        for rect in self.tilemap.get_solid_rects_around(self.pos):
             if rect != None and entity_rect.colliderect(rect):
                 if frame_movement[1] > 0:
                     entity_rect.bottom = rect.top
@@ -159,7 +158,8 @@ class Player(PhysicsEntity):
         self.assetMap = self.game.assetMap
         self.inventory = {}
         # Create variables specific to the player
-        self.health = 100
+        self.health = 3
+        self.max_health = 3
         # Create HUD items
         self.hud = GUIManager()
         self.hud.add('itembar', ItemBar(self.game.dPos.BOTTOM_CENTER, (81, 24), self.game.scale, self.assetMap.gui['itembar'], self.assetMap.gui['itembar_selected']))
@@ -171,9 +171,6 @@ class Player(PhysicsEntity):
         self.interaction = False
 
         super().__init__(game, pos, size, self.assetMap.entities['player'], multiplier, exceptions)
-
-    def test():
-        print("Clicked 2!")
 
     def check_events(self, event):
         """Check events for the player"""
@@ -194,26 +191,10 @@ class Player(PhysicsEntity):
                     self.hud.unignore('inventory')
                     self.inventory_open = True
             elif event.key == pygame.K_e and self.interaction:
-                tiles = {}
-                rect = self.rect()
-                for tile in self.tilemap.get_interactable_tiles(self.pos).values():
-                    if tile != None:
-                        tiles[abs(math.hypot(rect.centerx-int((tile['pos'][0]*self.tilemap.tile_size)/2), rect.centery-int((tile['pos'][1]*self.tilemap.tile_size)/2)))] = tile
-
-                items = {}
-                for item in self.tilemap.get_interactable_items(self.rect()):
-                    if item[1] != None:
-                        items[abs(math.hypot(rect.centerx-item[0].centerx, rect.centery-item[0].centery))] = item[1]
-
-                try:
-                    self.assetMap.items[items.get(min(items.keys(), default=0), {})['id']].interaction(self.assetMap.items[items.get(min(items.keys(), default=0), {})['id']], self)
-                except Exception as e: print(e)
-                try:
-                    tiles.get(min(tiles.keys(), default=0), {}).get('interaction', lambda x,y: None)(tiles.get(min(tiles.keys(), default=0), None), self)
-                except Exception as e: print(e) 
-
-                self.game.update_trash()
-
+                thing = self.tilemap.closest_interactable(self.pos)
+                if thing != None:
+                    thing.interact(self)
+            
         self.hud.check_events(event)
 
     def update(self, **movement):
@@ -223,25 +204,16 @@ class Player(PhysicsEntity):
         inter = 0
         if self.itembar.items[self.itembar.slot_selected][0] != None:
             self.itembar.items[self.itembar.slot_selected][0].update()
-        for tile in self.tilemap.get_interactable_tiles(self.pos).values():
+        for tile in self.tilemap.get_interactable_tiles_around((self.pos[0], self.pos[1])):
             if tile != None:
                 inter += 1
-        for item in self.tilemap.get_interactable_items(self.rect()):
-            if item[1] != None:
+        for item in self.tilemap.get_collided_items(self.rect()):
+            if item != None:
                 inter += 1
         if inter > 0 and not self.inventory_open:
             self.interaction = True
         else:
-            self.interaction = False
-            
-
-        for value in self.tilemap.get_collided_doors(self.pos):
-            if value != None:
-                self.gameManager.increment_room(value['increments'][0][value['variant']])
-                print([int(self.tilemap.maxx/2)*self.tilemap.tile_size, int(self.tilemap.maxy/2)*self.tilemap.tile_size])
-                self.pos = [int(self.tilemap.maxx/2)*self.tilemap.tile_size, int(self.tilemap.maxy/2)*self.tilemap.tile_size]
-                
-                
+            self.interaction = False            
         
     def render(self, disp, offset=(0, 0)):
         """Render player and HUD elements."""

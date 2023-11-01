@@ -51,13 +51,14 @@ class Tile():
 
 class InteractableTile(Tile):
     """Interactable tile, add interaction behaviour"""
-    def __init__(self, image, solid=False, meta={}, interaction=None, first_interaction=None, on_collision=None, on_render=None, render_override=None):
+    def __init__(self, image, solid=False, meta={}, interaction=None, first_interaction=None, on_collision=None, interactable=True, collision_interactable=True, on_render=None, render_override=None):
         """Initialize values on initialization"""
         super().__init__(image, solid, meta, on_render, render_override)
-        self.interactable = True
+        self.interactable = interactable
+        self.collision_interactable = collision_interactable
         self.times_interacted = 0
         self.interaction = interaction
-        self.on_colision = on_collision
+        self.on_collision = on_collision
         if first_interaction == None:
             self.first_interaction = interaction
         else:
@@ -75,10 +76,21 @@ class InteractableTile(Tile):
 
     def collision(self, *args):
         """Call appropraite collision function"""""
-        if self.interactable and self.on_colision != None:
+        if self.collision_interactable and self.on_colision != None:
             # Run correct function if the tile is interactable
             self.on_collision(self, *args)
 
     def copy(self):
         """Returns a copy of the object"""
-        return InteractableTile(self.image, self.solid, self.meta, self.interaction, self.first_interaction, self.on_collision, self.on_render, self.render_override)
+        return InteractableTile(
+            self.image,
+            self.solid,
+            self.meta,
+            self.interaction,
+            self.first_interaction,
+            self.on_collision,
+            self.interactable,
+            self.collision_interactable,
+            self.on_render,
+            self.render_override
+        )

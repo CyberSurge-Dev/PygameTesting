@@ -15,15 +15,15 @@ from scripts.utils import load_image, load_images, Animation
 from scripts.interactions import *
 from scripts.gameItems import Item
 from scripts.itemAttributes import Trash, Recyclable
-from scripts.tiles import Tile
+from scripts.tiles import Tile, InteractableTile
 
 class AssetMap():
     """Simple class to store the asset map"""
     tiles = {
         'NaT' : Tile(load_image('tiles/not_a_tile.png')),
-        'wall' : {'type':'solid', 'variants' : load_images('tiles/walls')}, 
-        'floor' : {'type':'floor', 'variants' : load_images('tiles/floors')},
-        'note-wall' : {'type':'solid', 'variants' : load_images("tiles/note_walls"), "interaction" : show_text_box},
+        'wall' : Tile(load_images('tiles/walls'), True), 
+        'floor' : Tile(load_images('tiles/floors')),
+        'note-wall' : InteractableTile(load_images('tiles/note_walls'), True, {}, show_text_box),
         'door' : {'type':'door', 'variants':load_images('tiles/doors'), 'increments' : {
             0: (0,1),
             1: (-1, 0),

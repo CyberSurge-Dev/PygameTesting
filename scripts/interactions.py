@@ -15,7 +15,8 @@ from scripts.guiElements import ClosableTextBox
 
 def show_text_box(item, player):
     """Shows a textbox to the screen with the text passed in"""
-    player.hud.add(str(item['pos']), ClosableTextBox(player.game.dPos.BOTTOM_CENTER, player.game.scale, player.assetMap.gui['text-box'], player.assetMap.gui['close'], item['text']))
+    print("Text-Box")
+    player.hud.add(str(item.pos), ClosableTextBox(player.game.dPos.BOTTOM_CENTER, player.game.scale, player.assetMap.gui['text-box'], player.assetMap.gui['close'], item.meta['text']))
     print("CALLED RENDER")
 
 def render_trash(disp, offset, game, loc):
@@ -44,4 +45,9 @@ def on_interact_recycle(item, player):
 def pickup_item(item, player):
     player.inventory.add(item.copy())
     item.hide()
-    
+
+def on_off(tile, *args):
+    if tile.meta.get('state', False):
+        tile.variant = 1
+    else:
+        tile.variant = 0

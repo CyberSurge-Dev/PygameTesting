@@ -18,9 +18,11 @@ from scripts.tiles import Tile, InteractableTile
 # External imports
 import pygame
 import math
+import json
 
 POSITIONS_AROUND = ((0, 1), (0, -1), (-1, 0), (1, 0), (-1, -1), (-1, 1),
                     (1, -1), (1, 1), (0, 0))
+BASE_TILEMAP_PATH = "data/rooms/"
 
 
 class Tilemap():
@@ -28,28 +30,35 @@ class Tilemap():
 
     def __init__(self, asset_map, tile_size):
         """Initialize variables"""
-        self.asset_map = asset_map
+        self.assetMap = asset_map
         self.tile_size = tile_size
 
         self.tilemap = {}
         self.decor = {}  # Just images, can have floating point positions
         self.items = {}  # Item objects to be rendered on the tilemap
 
-    def load(self, tile_data):
-        """Load the tilemap from a provided dictionary""" ""
+    def load(self, filename):
+        """Load the tilemap from a provided dictionary"""
+        with open(BASE_TILEMAP_PATH + filename, "r") as f:
+            tile_data = json.load(f) 
 
         # Load information from Tilemap
-        for k, v in tile_data['tilemap']:
+        for k, v in tile_data.get('tilemap', {}).items():
+            # Load tile information from fle and assetMap
             tile = self.assetMap.tiles[v.get('id', 'NaT')].copy()
             tile.pos = tuple([int(x) for x in k.split(";")])
             tile.variant = v.get('variant', 0)
-
+            tile.meta.update(v.get('meta', {}))
+            # Put the tile into the tilemap
             self.tilemap[tuple([int(x) for x in k.split(";")])] = tile
-        for k, v in tile_data['decor']:
+        
+        for k, v in tile_data.get('decor', {}).items():
+            # Load decor from file, these are just images
             self.decor[tuple([float(x) for x in k.split(";")
                               ])] = self.assetMap.decor[v.get('id', 'NaD')]
 
-        for k, v in tile_data['items']:
+        for k, v in tile_data.get('items', {}).items():
+            # Load items from tilemap (these are objects derived from the Item class)
             self.items[tuple([float(x) for x in k.split(";")
                               ])] = self.assetMap.items[v.get('id', 'NaI')]
 
@@ -77,7 +86,7 @@ class Tilemap():
             if tile != None and tile.solid
         ]
     
-    def get__rects_around(self, pos):
+    def get_rects_around(self, pos):
         """Returns a list of rects areound the given position"""
         return [
             pygame.Rect(tile.pos[0] * self.tile_size,
@@ -87,7 +96,7 @@ class Tilemap():
         ]
 
     def get_interactable_tiles(self):
-        """Returns a list of all interactable tiles in tilemap"""
+        """Returns a list of all interactable tiles in tilemdap"""
         return [x for x in self.tilemap.values() if type(x) == InteractableTile]
 
     def get_interactable_tiles_around(self, pos):
@@ -98,19 +107,63 @@ class Tilemap():
         """Returns a list of Item objects that collide with the passed in Rect"""
         return [
             item for pos, item in self.items.items() 
-            if pygame.Rect(item.icon.get_width(), item.icon.get_height(), pos[0]*self.tile_size, pos[1]*self.tile_size).colliderect(rect)
+            if pygame.Rect(pos[0]*self.tile_size, pos[1]*self.tile_size, item.icon.get_width(), item.icon.get_height()).colliderect(rect)
         ]
     
     def closest_interactable_tile(self, pos):
-        pos = (int(pos[0]-self.tile_size//2), int(pos[1]-self.tile_size//2))
-        distances = {abs(math.hypot((int(tile.pos[0]-self.tile_size//2), int(tile.pos[1]-self.tile_size//2)), pos)): tile for tile in self.get_interactable_tiles_around(pos)}
-        # Return closest interactable tiles
-        return distances.get(min(*distances, default=0), None)
+        pos = (int(pos[0]+self.tile_size//2), int(pos[1]+self.tile_size//2))
+        distances = {abs(math.hypot((int(tile.pos[0]+self.tile_size//2), int(tile.pos[1]+self.tile_size//2)), pos)): tile for tile in self.get_interactable_tiles_around(pos)}
+        # Return closest interactable tile
+        return distances.get(min(*distances.keys(), default=0), None)
     
-    def closest_item(self, pos):
-        pass
-       
+    def closest_interactable_item(self, pos):
+        pos = (int(pos[0]+self.tile_size//2), int(pos[1]+self.tile_size//2))
+        distances = {
+            abs(math.hypot(pos, (k[0] + int(item.icon.get_width()//2), k[1] + int(item.icon.get_height()//2)))) : item 
+            for k, item in self.items.items() if item.is_interactable()
+        }
+        # Return closest interactable item
+        return distances.get(min(*distances.keys(), default=0), None)
 
+    def closest_interactable(self, position):
+        pos = (int(position[0]+self.tile_size//2), int(position[1]+self.tile_size//2))
+        distances = {
+            abs(math.hypot(int(tile.pos[0]+self.tile_size//2) - pos[0], int(tile.pos[1]+self.tile_size//2) - pos[1])) : tile 
+                           for tile in self.get_interactable_tiles_around(pos)
+        }
+        # Return closest interactable tile
+        items_collided = self.get_collided_items(pygame.Rect(position[0], position[1], self.tile_size, self.tile_size)) 
+        distances.update({
+            abs(math.hypot(k[0] + int(item.icon.get_width()//2) - pos[0], k[1] + int(item.icon.get_height()//2) - pos[1])) : item 
+            for k, item in self.items.items() 
+            if item != None and item.is_interactable() and item in items_collided
+        })
+
+        return distances.get(min(distances.keys(), default=0), None)
+
+    def check_collisions(self, rect, *args):
+        """Checks if the passed in rect is colliding with any tiles"""
+        # Set rect to collide with
+        for tile in self.get_interactable_tiles(self.x, self.y):
+            if pygame.Rect(tile.pos[0], tile.pos[1], self.tile_size, self.tile_size).colliderect(rect):
+                tile.on_collision(*args)
+
+    def add_tile(self, pos, tile):
+        """Adds or overwrites tile at location"""
+        if type(pos) != tuple:
+            raise ValueError("Position must be a tuple.")
+        else:
+            tile.pos = pos # Make sure the pos for both is equal
+            self.tilemap[pos] = tile
+
+    def add_decor(self, pos, decor):
+        """Adds surface to decor at given position(can be a float)"""
+        self.decor[pos] = decor
+
+    def add_item(self, pos, item):
+        """Adds item to be rendered on Tilemap (Note: input should be a copy)"""
+        self.items[pos] = item
+    
     def render(self, disp, offset):
         """Render the tilemap"""
         for tile in self.tilemap.values():

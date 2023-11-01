@@ -17,7 +17,7 @@ import pygame, sys, math
 from scripts.utils import Settings, Telemetry, DisplayPositions, GameManager
 from scripts.entities import Player
 from scripts.assetMap import AssetMap
-from scripts.tilemap import Tilemap
+from scripts.newTilemap import Tilemap
 # --------------------------------------------------------------------------------
 
 class Game():
@@ -39,7 +39,7 @@ class Game():
 
         self.assetMap = AssetMap()
 
-        self.tilemap = Tilemap(self, 32)
+        self.tilemap = Tilemap(self.assetMap, 32)
         self.trash_collected = 0
         self.recyclables_collected = 0
         self.total_trash = 10
