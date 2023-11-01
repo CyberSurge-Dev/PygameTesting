@@ -12,6 +12,7 @@ Tilemap() - Tilemap class manages, loads, and renders the tiles for the game
 """
 # --------------------------------------------------------------------------------
 # Internal imports
+from code import interact
 from scripts.utils import blit
 from scripts.tiles import Tile, InteractableTile
 
@@ -41,6 +42,10 @@ class Tilemap():
         """Load the tilemap from a provided dictionary"""
         with open(BASE_TILEMAP_PATH + filename, "r") as f:
             tile_data = json.load(f) 
+        # Reset tilemaps
+        self.tilemap = {}
+        self.decor = {}  # Just images, can have floating point positions
+        self.items = {}  # Item objects to be rendered on the tilemap
 
         # Load information from Tilemap
         for k, v in tile_data.get('tilemap', {}).items():
@@ -73,8 +78,7 @@ class Tilemap():
         tiles = []
         for position in POSITIONS_AROUND:
             tiles.append(
-                self.tilemap.get((pos[0] + position[0], pos[1] + position[1]),
-                                 None))
+                self.tilemap.get((pos[0] + position[0], pos[1] + position[1]), None))
         return tiles
 
     def get_solid_rects_around(self, pos):
@@ -103,6 +107,14 @@ class Tilemap():
         """Returns a list of interactable tiles around pos"""
         return [x for x in self.get_tiles_around(pos) if type(x) == InteractableTile]
     
+    def get_interactable_only_tiles_around(self, pos):
+        """Returns a list of interactable tiles around pos"""
+        return [x for x in self.get_interactable_tiles_around(pos) if x.collision_interactable == False or x.interactable]
+    
+    def get_collide_only_tiles_around(self, pos):
+        """Returns a list of interactable tiles around pos that are collision only."""
+        return [x for x in self.get_interactable_tiles_around(pos) if type(x) == InteractableTile and x.interactable == False and x.collision_interactable]
+    
     def get_collided_items(self, rect):
         """Returns a list of Item objects that collide with the passed in Rect"""
         return [
@@ -129,7 +141,7 @@ class Tilemap():
         pos = (int(position[0]+self.tile_size//2), int(position[1]+self.tile_size//2))
         distances = {
             abs(math.hypot(int(tile.pos[0]+self.tile_size//2) - pos[0], int(tile.pos[1]+self.tile_size//2) - pos[1])) : tile 
-                           for tile in self.get_interactable_tiles_around(pos)
+                           for tile in self.get_interactable_only_tiles_around(pos)
         }
         # Return closest interactable tile
         items_collided = self.get_collided_items(pygame.Rect(position[0], position[1], self.tile_size, self.tile_size)) 
@@ -144,9 +156,10 @@ class Tilemap():
     def check_collisions(self, rect, *args):
         """Checks if the passed in rect is colliding with any tiles"""
         # Set rect to collide with
-        for tile in self.get_interactable_tiles(self.x, self.y):
-            if pygame.Rect(tile.pos[0], tile.pos[1], self.tile_size, self.tile_size).colliderect(rect):
-                tile.on_collision(*args)
+        for tile in self.get_interactable_tiles_around((rect.x, rect.y)):
+            if pygame.Rect(tile.pos[0]*self.tile_size, tile.pos[1]*self.tile_size, self.tile_size, self.tile_size).colliderect(rect):
+                tile.on_collision(tile, *args)
+                print("collide with tile")
 
     def add_tile(self, pos, tile):
         """Adds or overwrites tile at location"""

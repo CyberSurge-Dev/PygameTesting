@@ -11,7 +11,7 @@
         "3;0" : {"id":"wall", "variant":0},
         "4;0" : {"id":"wall", "variant":0},
         "5;0" : {"id":"note-wall", "meta" : {"text":["The world is collapsing around us, there", "are not many of us left", "We can only hope for a rebirth", "-Unknown"]}},
-        "6;0" : {"id":"wall", "variant":0},
+        "6;0" : {"id":"door", "variant":0, "meta" : {"id":"0"}},
         "7;0" : {"id":"wall", "variant":0},
         "8;0" : {"id":"wall", "variant":0},
         "9;0" : {"id":"wall", "variant":0},
@@ -84,7 +84,6 @@
      }, "items" : {
         "5;4" : {"id":"crushed-can", "interactable-type":"item"},
         "9;2" : {"id":"crumbled-paper", "interactable-type":"item"}
-        
     }, "decor" : {
     },
     "meta": {

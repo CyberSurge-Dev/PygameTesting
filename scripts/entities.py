@@ -204,16 +204,12 @@ class Player(PhysicsEntity):
         inter = 0
         if self.itembar.items[self.itembar.slot_selected][0] != None:
             self.itembar.items[self.itembar.slot_selected][0].update()
-        for tile in self.tilemap.get_interactable_tiles_around((self.pos[0], self.pos[1])):
-            if tile != None:
-                inter += 1
-        for item in self.tilemap.get_collided_items(self.rect()):
-            if item != None:
-                inter += 1
-        if inter > 0 and not self.inventory_open:
+        if self.tilemap.closest_interactable(self.pos) != None:
             self.interaction = True
         else:
-            self.interaction = False            
+            self.interaction = False
+        
+        self.tilemap.check_collisions(self.rect(), self)  
         
     def render(self, disp, offset=(0, 0)):
         """Render player and HUD elements."""

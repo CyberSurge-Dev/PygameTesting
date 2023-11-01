@@ -24,12 +24,8 @@ class AssetMap():
         'wall' : Tile(load_images('tiles/walls'), True), 
         'floor' : Tile(load_images('tiles/floors')),
         'note-wall' : InteractableTile(load_images('tiles/note_walls'), True, {}, show_text_box),
-        'door' : {'type':'door', 'variants':load_images('tiles/doors'), 'increments' : {
-            0: (0,1),
-            1: (-1, 0),
-            2: (0, -1),
-            3: (1, 0)
-        }},
+        'door' : InteractableTile(load_images('tiles/doors'), False, {}, interactable=False, on_collision=lambda tile, *args: 
+            args[0].gameManager.set_room_from_id(args[0].tilemap.get_tile(tile.pos).meta.get('id', 0))),
         'recycling-bin' : {'variants': [load_image("tiles/recycling_bin.png")], 'onRender':render_recycle, 'interaction': on_interact_recycle},
         'trash-bin' : {'variants': [load_image("tiles/trash_bin.png")], 'onRender':render_trash, 'interaction': on_interact_trash},
         'bed' : {'variants': [load_image("tiles/bed.png")]},

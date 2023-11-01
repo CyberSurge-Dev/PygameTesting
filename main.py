@@ -75,7 +75,6 @@ class Game():
         self.gameManager = GameManager('data/saves/test_save', self.tilemap)
         self.player = Player(self, (128, 128), (32, 32), self.gameManager)
         
-        
         self.clock = pygame.time.Clock() # Create the game clock
 
     def test(self):
