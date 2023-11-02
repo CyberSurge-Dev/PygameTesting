@@ -54,3 +54,6 @@ def on_off(tile, *args):
         tile.variant = 1
     else:
         tile.variant = 0
+
+def spike_tick(tile, *args):
+    pass

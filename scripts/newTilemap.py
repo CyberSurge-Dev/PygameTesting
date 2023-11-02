@@ -12,9 +12,8 @@ Tilemap() - Tilemap class manages, loads, and renders the tiles for the game
 """
 # --------------------------------------------------------------------------------
 # Internal imports
-from code import interact
 from scripts.utils import blit
-from scripts.tiles import Tile, InteractableTile
+from scripts.tiles import Tile, InteractableTile, TileGroup
 
 # External imports
 import pygame
@@ -38,6 +37,7 @@ class Tilemap():
         self.decor = {}  # Just images, can have floating point positions
         self.items = {}  # Item objects to be rendered on the tilemap
         self.size = (0, 0)
+        self.tile_groups = {}
 
     def load(self, filename):
         """Load the tilemap from a provided dictionary"""
@@ -47,16 +47,41 @@ class Tilemap():
         self.tilemap = {}
         self.decor = {}  # Just images, can have floating point positions
         self.items = {}  # Item objects to be rendered on the tilemap
-
+        self.tile_groups = {}
+        
         # Load information from Tilemap
         for k, v in tile_data.get('tilemap', {}).items():
-            # Load tile information from fle and assetMap
+            # Load tile information from file and assetMap
             tile = self.assetMap.tiles[v.get('id', 'NaT')].copy()
             tile.pos = tuple([int(x) for x in k.split(";")])
             tile.variant = v.get('variant', 0)
             tile.meta.update(v.get('meta', {}))
             # Put the tile into the tilemap
             self.tilemap[tuple([int(x) for x in k.split(";")])] = tile
+
+        # Load TileGroups
+        for group_id, g in tile_data.get('tile-groups', {}).items():
+            group = TileGroup()
+            group.id = group_id
+            group.meta = tile_data['tile-groups'][group_id].get('meta', {})
+
+            # Load tiles into group
+            for pos, t in tile_data['tile-groups'][group_id].get('tiles', {}).items():
+                # Load tile information from file and assetMap
+                tile = self.assetMap.tiles[t.get('id', 'NaT')].copy()
+                tile.pos = tuple([int(x) for x in pos.split(";")])
+                tile.variant = t.get('variant', 0)
+                tile.meta.update(t.get('meta', {}))
+                tile.meta.update(g.get('meta', {}))
+                tile.tile_group = group_id # Group id reference 
+                # Put the tile into the tilemap
+                self.tilemap[tuple([int(x) for x in pos.split(";")])] = tile
+                # Add tile to group aswell
+                group.add(tile)
+
+            # Add group to dict
+            self.tile_groups[group_id] = group
+
         
         for k, v in tile_data.get('decor', {}).items():
             # Load decor from file, these are just images

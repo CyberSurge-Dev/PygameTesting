@@ -17,17 +17,12 @@
         "9;0" : {"id":"wall", "variant":0},
         "1;1" : {"id":"floor", "variant":0},
         "1;2" : {"id":"floor", "variant":0},
-        "1;3" : {"id":"floor", "variant":0},
         "1;4" : {"id":"floor", "variant":0},
         "1;5" : {"id":"floor", "variant":0},
         "2;1" : {"id":"floor", "variant":0},
         "2;2" : {"id":"floor", "variant":0},
-        "2;3" : {"id":"floor", "variant":0},
         "2;4" : {"id":"floor", "variant":0},
         "2;5" : {"id":"floor", "variant":0},
-        "3;1" : {"id":"floor", "variant":0},
-        "3;2" : {"id":"floor", "variant":0},
-        "3;3" : {"id":"floor", "variant":0},
         "3;4" : {"id":"floor", "variant":0},
         "3;5" : {"id":"floor", "variant":0},
         "4;1" : {"id":"floor", "variant":0},
@@ -77,14 +72,18 @@
         "10;2" : {"id":"wall", "variant":6},
         "10;1" : {"id":"wall", "variant":6},
         "10;0" : {"id":"wall", "variant":7}
-    }, "tile-groups" : [
-        {
-            "meta" : {},
+    }, "tile-groups" : {
+        "La" : {
+            "meta" : {"cooldown" : 2, "spike-time" : 5, "damage" : 5},
             "tiles" : {
-                
+                "1;3" : {"id":"spikes"},
+                "2;3" : {"id":"spikes"},
+                "3;3" : {"id":"spikes"},
+                "3;2" : {"id":"spikes"},
+                "3;1" : {"id":"spikes"}
             }
         }
-    ], "doors" : {
+    }, "doors" : {
         "6;0" : {"id":"door", "variant":0},
         "0;3" : {"id":"door", "variant":1},
         "10;3" : {"id":"door", "variant":3}

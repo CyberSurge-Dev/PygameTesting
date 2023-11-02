@@ -343,7 +343,41 @@ class Inventory(MenuItem):
                 self.inventory[x] = (item, self.inventory[x][1]+1)
                 return
 
-                                    
+class HealthBar(MenuItem):
+    """Class for the health bar. Each bar is 5 health"""
+    def __init__(self, pos, size, scale, events, health_emblem, empty_bar, filled_bar, max_health, health, center=True):
+        super().__init__(pos, size, scale, events, center)
+
+        self.max_health = max_health
+        self.health = health
+        self.emblem = health_emblem
+        self.empty_bar = empty_bar
+        self.filled_bar = filled_bar
+        self.health_per_bar = 10
+        self.step = 21
+
+    def render(self, disp):
+        if self.center:
+            for i in range(0, self.max_health // self.health_per_bar):
+                if self.health > i * self.health_per_bar:
+                    blit(
+                        disp, self.filled_bar, (
+                            20 + self.center_pos[0] + self.step * i,
+                            self.center_pos[1] + 5
+                        ))
+                else:
+                    blit(
+                    disp, self.empty_bar, (
+                        20 + self.center_pos[0] + self.step * i,
+                        self.center_pos[1] + 5
+                    ))
+            blit(disp, self.emblem, self.center_pos)
+                    
+                
+                
+        
+        
+    
         
 
         

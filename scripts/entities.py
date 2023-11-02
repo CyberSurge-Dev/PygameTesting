@@ -17,7 +17,7 @@ import pygame
 import math
 
 # Internal imports
-from scripts.guiElements import ItemBar, ClosableTextBox, Inventory
+from scripts.guiElements import ItemBar, ClosableTextBox, Inventory, HealthBar
 from scripts.guiManager import GUIManager
 from scripts.utils import blit
 # --------------------------------------------------------------------------------
@@ -166,6 +166,12 @@ class Player(PhysicsEntity):
         self.itembar = self.hud.menu_items['itembar']
         self.hud.add('inventory', Inventory(self.game.dPos.CENTER, (81, 95), self.game.scale, self.assetMap.gui['inventory'], self.assetMap.gui['itembar_selected'], self.itembar, self.game))
         self.hud.ignore('inventory')
+        self.hud.add('health-bar', HealthBar((2,2), (0, 0), self.game.scale, [], 
+                                             self.assetMap.gui['health-emblem'],
+                                             self.assetMap.gui["empty-health-bar"], 
+                                             self.assetMap.gui['filled-health-bar'], 
+                                             40, 29))
+        
         self.inventory = self.hud.menu_items['inventory']
         self.inventory_open = False
         self.interaction = False
