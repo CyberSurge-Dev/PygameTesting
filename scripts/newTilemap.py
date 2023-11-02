@@ -56,6 +56,7 @@ class Tilemap():
             tile.pos = tuple([int(x) for x in k.split(";")])
             tile.variant = v.get('variant', 0)
             tile.meta.update(v.get('meta', {}))
+            tile.meta = tile.meta.copy()
             # Put the tile into the tilemap
             self.tilemap[tuple([int(x) for x in k.split(";")])] = tile
 
@@ -73,6 +74,7 @@ class Tilemap():
                 tile.variant = t.get('variant', 0)
                 tile.meta.update(t.get('meta', {}))
                 tile.meta.update(g.get('meta', {}))
+                tile.meta = tile.meta.copy()
                 tile.tile_group = group_id # Group id reference 
                 # Put the tile into the tilemap
                 self.tilemap[tuple([int(x) for x in pos.split(";")])] = tile
@@ -204,7 +206,7 @@ class Tilemap():
     def add_item(self, pos, item):
         """Adds item to be rendered on Tilemap (Note: input should be a copy)"""
         self.items[pos] = item
-    
+
     def render(self, disp, offset):
         """Render the tilemap"""
         for tile in self.tilemap.values():

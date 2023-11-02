@@ -73,7 +73,7 @@ class Game():
         self.dPos = DisplayPositions((self.display.get_width(), self.display.get_height()))
         
         self.gameManager = GameManager('data/saves/test_save', self.tilemap)
-        self.player = Player(self, (128, 128), (32, 32), self.gameManager)
+        self.player = Player(self, (128, 128), (28, 28), self.gameManager)
         
         self.clock = pygame.time.Clock() # Create the game clock
 

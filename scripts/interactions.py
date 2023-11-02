@@ -62,6 +62,7 @@ def spike_damage(tile, *args):
 
 
 def spike_tick(tile, disp, offset, tilesize, *args):
+    print("Spike_Tick", tile.pos)
     if tile.collision_interactable == False:
         if tile.meta['tick'] >= tile.meta['cooldown']:
             tile.meta['tick'] = 0
@@ -73,7 +74,7 @@ def spike_tick(tile, disp, offset, tilesize, *args):
             tile.meta['tick'] += 1
             tile.variant = 0
             print(tile, "cooldown", tile.meta['tick'])
-    else:
+    elif tile.collision_interactable:
         if tile.meta['tick'] >= tile.meta['spike-time']:
             tile.meta['tick'] = 0
             tile.collision_interactable = False

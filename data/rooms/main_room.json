@@ -74,7 +74,7 @@
         "10;0" : {"id":"wall", "variant":7}
     }, "tile-groups" : {
         "La" : {
-            "meta" : {"cooldown":240, "spike-time":480, "damage":10, "offset":60},
+            "meta" : {"cooldown":70, "spike-time":60, "damage":10, "offset":60},
             "tiles" : {
                 "1;3" : {"id":"spikes"},
                 "2;3" : {"id":"spikes"},
