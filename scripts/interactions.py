@@ -55,5 +55,34 @@ def on_off(tile, *args):
     else:
         tile.variant = 0
 
-def spike_tick(tile, *args):
-    pass
+def spike_damage(tile, *args):
+    if tile.collision_interactable:
+        args[0].health_bar.damage(tile.meta['damage'])
+    args[0].game.telemetry.add(tile.pos, f"Variant: {tile.variant}, meta: {tile.meta}")
+
+
+def spike_tick(tile, disp, offset, tilesize, *args):
+    if tile.collision_interactable == False:
+        if tile.meta['tick'] >= tile.meta['cooldown']:
+            tile.meta['tick'] = 0
+            tile.collision_interactable = True
+            tile.variant = 1
+            print(tile, "Changed phase", tile.meta['tick'])
+        else:
+            tile.collision_interactable = False
+            tile.meta['tick'] += 1
+            tile.variant = 0
+            print(tile, "cooldown", tile.meta['tick'])
+    else:
+        if tile.meta['tick'] >= tile.meta['spike-time']:
+            tile.meta['tick'] = 0
+            tile.collision_interactable = False
+            tile.variant = 0
+        else:
+            tile.collision_interactable = True
+            tile.meta['tick'] += 1
+            tile.variant = 1
+            print(tile, "spikes", tile.meta['tick'])
+            
+        
+    

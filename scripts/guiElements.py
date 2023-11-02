@@ -355,6 +355,10 @@ class HealthBar(MenuItem):
         self.filled_bar = filled_bar
         self.health_per_bar = 10
         self.step = 21
+        self.immunity_frames = 20
+        self.tick = 0
+        self.damaged = False
+        self.dead = False
 
     def render(self, disp):
         if self.center:
@@ -372,6 +376,22 @@ class HealthBar(MenuItem):
                         self.center_pos[1] + 5
                     ))
             blit(disp, self.emblem, self.center_pos)
+        if self.damaged:
+            if self.tick >= self.immunity_frames:
+                self.tick = 0
+                self.damaged = False
+            else:
+                self.tick += 1
+                
+    def damage(self, damage_amount):
+        if not self.damaged:
+            self.health -= damage_amount
+            self.damaged = True
+            
+        
+        
+
+        
                     
                 
                 

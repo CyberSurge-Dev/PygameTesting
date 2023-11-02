@@ -188,7 +188,6 @@ class Tilemap():
         for tile in self.get_interactable_tiles_around((rect.x, rect.y)):
             if pygame.Rect(tile.pos[0]*self.tile_size, tile.pos[1]*self.tile_size, self.tile_size, self.tile_size).colliderect(rect):
                 tile.on_collision(tile, *args)
-                print("collide with tile")
 
     def add_tile(self, pos, tile):
         """Adds or overwrites tile at location"""

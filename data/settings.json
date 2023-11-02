@@ -12,6 +12,6 @@
     },
     "developer": {
         "developer": true,
-        "telemetry": false
+        "telemetry": true
     }
 }

@@ -157,9 +157,6 @@ class Player(PhysicsEntity):
         self.tilemap = self.game.tilemap
         self.assetMap = self.game.assetMap
         self.inventory = {}
-        # Create variables specific to the player
-        self.health = 3
-        self.max_health = 3
         # Create HUD items
         self.hud = GUIManager()
         self.hud.add('itembar', ItemBar(self.game.dPos.BOTTOM_CENTER, (81, 24), self.game.scale, self.assetMap.gui['itembar'], self.assetMap.gui['itembar_selected']))
@@ -171,7 +168,7 @@ class Player(PhysicsEntity):
                                              self.assetMap.gui["empty-health-bar"], 
                                              self.assetMap.gui['filled-health-bar'], 
                                              40, 29))
-        
+        self.health_bar = self.hud.menu_items['health-bar']
         self.inventory = self.hud.menu_items['inventory']
         self.inventory_open = False
         self.interaction = False
