@@ -42,7 +42,7 @@ class GameManager():
     def __init__(self, save_file, tilemap, game):
         """Initialize GameManager variables"""
         global screen
-        screen = game.screen
+        screen = game.font_screen
         
         self.tilemap = tilemap
         with open(save_file+'/rooms.json') as f:
@@ -165,8 +165,7 @@ def render_font(font, scale, pos):
     """Poorly made hack to fix the low resolution font rendering"""
     print(screen)
     print((pos[0]*scale[0], pos[1]*scale[1]))
-    blit()
-    blit(screen, font, (pos[0]/scale[0], pos[1]/scale[1]))
+    blit(screen, font, (pos[0]*scale[0], pos[1]*scale[1]))
 
 def load_images(path):
     """Loads all images in given path and returns them as a list of pygame surface objects (can also be Animation objects)."""

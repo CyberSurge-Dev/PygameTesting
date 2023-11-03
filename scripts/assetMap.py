@@ -51,7 +51,9 @@ class AssetMap():
         "inventory" : load_image("gui/inventory.png"),
         "health-emblem" : load_image("gui/health_bar/emblem.png"),
         "empty-health-bar" : load_image("gui/health_bar/empty_bar.png"),
-        "filled-health-bar" : load_image("gui/health_bar/filled_bar.png")
+        "filled-health-bar" : load_image("gui/health_bar/filled_bar.png"),
+        "game-over-image" : load_image("gui/game_over/game_over_text.png"),
+        "respawn-button" : load_image("gui/game_over/respawn_button.png")
     }
     items = {
         "bucket" : Item("Bucket", 4, load_image('items/bucket.png'), {}, pickup_item),

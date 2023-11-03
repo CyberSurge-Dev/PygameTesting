@@ -36,6 +36,7 @@ class Game():
         self.keybinds = self.settings.keybinds # gets a dictionary for game keybinds
         self.sWidth = pygame.display.get_window_size()[0]
         self.sHeight = pygame.display.get_window_size()[1]
+        self.font_screen = pygame.Surface(self.settings.screen_size, pygame.SRCALPHA)
 
         self.assetMap = AssetMap()
 
@@ -120,6 +121,8 @@ class Game():
 
             self.screen.fill((20, 20, 20))
             self.display.fill((30, 30, 30))
+            self.font_screen.fill((0, 0, 0, 0))
+            self.font_screen.convert_alpha()
 
             # Render the tilemap
             self.tilemap.render(self.display, render_scroll)
@@ -128,9 +131,12 @@ class Game():
             self.player.update(**self.movement)
             self.player.render(self.display, render_scroll)
 
+            
+
             # Scale the display surface to best fit the screen
             self.screen.blit(pygame.transform.scale( self.display, (self.dWidth, self.dHeight) ), 
                              ((self.sWidth/2)-(self.dWidth/2) , (self.sHeight/2)-(self.dHeight/2)))
+            self.screen.blit(self.font_screen, (0, 0))
 
             # Update Telemetry data
             self.telemetry.update() # update telemetry data

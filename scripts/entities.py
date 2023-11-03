@@ -13,11 +13,12 @@ Enemey()
 """
 # --------------------------------------------------------------------------------
 # External imports
+from cgitb import reset
 import pygame
 import math
 
 # Internal imports
-from scripts.guiElements import ItemBar, ClosableTextBox, Inventory, HealthBar
+from scripts.guiElements import ItemBar, Inventory, HealthBar, GameOver
 from scripts.guiManager import GUIManager
 from scripts.utils import blit
 # --------------------------------------------------------------------------------
@@ -171,12 +172,25 @@ class Player(PhysicsEntity):
                                              self.assetMap.gui["empty-health-bar"], 
                                              self.assetMap.gui['filled-health-bar'], 
                                              40, 40))
+        self.hud.add('game-over', GameOver((self.game.dPos.CENTER[0], self.game.dPos.CENTER[1]-30), (0,0), self.game.scale, self.assetMap.gui["game-over-image"], self.assetMap.gui["respawn-button"], self.reset))
+        self.hud.ignore('game-over')
         self.health_bar = self.hud.menu_items['health-bar']
         self.inventory = self.hud.menu_items['inventory']
         self.inventory_open = False
         self.interaction = False
 
         super().__init__(game, pos, size, self.assetMap.entities['player'], multiplier, exceptions)
+        
+    def reset(self):
+        """Function that handles what is done when game over"""
+        print("clicked!")
+        self.gameManager.set_room(0)
+        self.health_bar.health = self.health_bar.max_health
+        self.hud.background_tint = False
+        self.hud.ignore('game-over')
+        self.hud.unignore('itembar')
+        self.stunned = False
+        self.pos = (self.tilemap.maxx//2, self.tilemap.maxy//2)
 
     def check_events(self, event):
         """Check events for the player"""
@@ -218,9 +232,14 @@ class Player(PhysicsEntity):
         else:
             self.interaction = False
         if self.health_bar.dead:
-            self.gameManager.set_room(0)
-            self.health_bar.health = self.health_bar.max_health
-            self.health_bar.dead = False
+            self.hud.background_tint = True
+            self.stunned = True
+            try:
+                self.hud.ignore('itembar')
+                self.hud.unignore('game-over')
+            except: pass
+            
+            
         
         self.tilemap.check_collisions(self.rect(), self)
         

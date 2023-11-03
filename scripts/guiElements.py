@@ -171,7 +171,7 @@ class TextBox(MenuItem):
     """Class to create a text-box on the screen"""
     def __init__(self, pos, scale, image, text, center=True):
         super().__init__(pos, (160, 40), scale, [], center)
-        self.font = pygame.font.Font('freesansbold.ttf', 30)
+        self.font = pygame.font.Font('freesansbold.ttf', 12)
         self.padding = 4
         self.text = []
         self.image = image
@@ -190,8 +190,8 @@ class ClosableTextBox(MenuItem):
     """Class to create a text-box on the screen"""
     def __init__(self, pos, scale, box_image, button_image, text, center=True):
         super().__init__(pos, (box_image.get_width(), box_image.get_height()), scale, [pygame.MOUSEBUTTONDOWN], center)
-        self.font = pygame.font.Font('freesansbold.ttf', 20)
-        self.padding = 4
+        self.font = pygame.font.Font('freesansbold.ttf', 12)
+        self.padding = 2
         self.image = box_image
         self.text = []
         if self.center:
@@ -209,10 +209,10 @@ class ClosableTextBox(MenuItem):
     def render(self, disp):
         super().render(disp)
         if self.center:
-            temp_pos = [self.center_pos[0]+self.padding, self.center_pos[1]+self.padding]
+            temp_pos = [self.center_pos[0]+self.padding*4, self.center_pos[1]+self.padding]
             for font in self.text:
                 render_font(font, self.scale, temp_pos)
-                temp_pos[1] += self.font.get_height()
+                temp_pos[1] += self.font.get_height()-4
         self.button.render(disp)
                 
             
@@ -390,6 +390,29 @@ class HealthBar(MenuItem):
             self.health -= damage_amount
             self.damaged = True
             
+class GameOver(MenuItem):
+    """Class for GameOver Screen"""
+    def __init__(self, pos, size, scale, game_over_image, respawn_button, func, center=True):
+        super().__init__(pos, size, scale, [pygame.MOUSEBUTTONDOWN], center)
+        self.image = game_over_image
+        self.respawn_button = respawn_button
+        self.button = Button(
+           (self.center_pos[0], self.center_pos[1]+self.image.get_height()+40),
+           (self.respawn_button.get_width(), self.respawn_button.get_height()),
+           self.scale,
+           self.respawn_button,
+           "", func
+        )
+        
+    def render(self, disp):
+        """Render the images"""
+        blit(disp, self.image, (self.center_pos[0]-self.respawn_button.get_width()//4, self.center_pos[1]))
+        self.button.render(disp)
+        
+    def check_events(self, event):
+        """Checks the event for the object"""
+        self.button.check_events(event)
+        
         
         
 
