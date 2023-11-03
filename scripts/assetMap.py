@@ -23,7 +23,7 @@ class AssetMap():
         'NaT' : Tile(load_image('tiles/not_a_tile.png')),
         'wall' : Tile(load_images('tiles/walls'), True), 
         'floor' : Tile(load_images('tiles/floors')),
-        'note-wall' : InteractableTile(load_images('tiles/note_walls'), True, {}, show_text_box),
+        'note-wall' : InteractableTile(load_images('tiles/note_walls'), True, {}, show_text_box, collision_interactable=False),
         'door' : InteractableTile(load_images('tiles/doors'), False, {}, interactable=False, on_collision=set_room),
         'chest' : InteractableTile(load_images("tiles/")),
         'spikes' : InteractableTile(load_images('tiles/spikes'), False, {'tick':0, 'cooldown':0, 'spike-time':0, "damage":0, "offset":0}, interactable=False, on_collision=spike_damage, on_render=spike_tick, collision_interactable=False)

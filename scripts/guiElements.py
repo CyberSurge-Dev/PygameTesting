@@ -14,7 +14,7 @@ This program contains base classes to create gui objects eaily throughout the pr
 import pygame
 
 # Internal imports
-from scripts.utils import blit
+from scripts.utils import blit, render_font
 
 # --------------------------------------------------------------------------------
 
@@ -171,7 +171,7 @@ class TextBox(MenuItem):
     """Class to create a text-box on the screen"""
     def __init__(self, pos, scale, image, text, center=True):
         super().__init__(pos, (160, 40), scale, [], center)
-        self.font = pygame.font.Font('freesansbold.ttf', 10)
+        self.font = pygame.font.Font('freesansbold.ttf', 30)
         self.padding = 4
         self.text = []
         self.image = image
@@ -183,14 +183,14 @@ class TextBox(MenuItem):
         if self.center:
             temp_pos = [self.center_pos[0]+self.padding, self.center_pos[1]+self.padding]
             for font in self.text:
-                blit(disp, font, (temp_pos[0], temp_pos[1]))
+                render_font(font, self.scale, temp_pos)
                 temp_pos[1] += self.font.get_height()
 
 class ClosableTextBox(MenuItem):
     """Class to create a text-box on the screen"""
     def __init__(self, pos, scale, box_image, button_image, text, center=True):
         super().__init__(pos, (box_image.get_width(), box_image.get_height()), scale, [pygame.MOUSEBUTTONDOWN], center)
-        self.font = pygame.font.Font('freesansbold.ttf', 8)
+        self.font = pygame.font.Font('freesansbold.ttf', 20)
         self.padding = 4
         self.image = box_image
         self.text = []
@@ -211,7 +211,7 @@ class ClosableTextBox(MenuItem):
         if self.center:
             temp_pos = [self.center_pos[0]+self.padding, self.center_pos[1]+self.padding]
             for font in self.text:
-                blit(disp, font, (temp_pos[0], temp_pos[1]))
+                render_font(font, self.scale, temp_pos)
                 temp_pos[1] += self.font.get_height()
         self.button.render(disp)
                 
@@ -382,6 +382,8 @@ class HealthBar(MenuItem):
                 self.damaged = False
             else:
                 self.tick += 1
+        if self.health <= 0:
+            self.dead = True
                 
     def damage(self, damage_amount):
         if not self.damaged:

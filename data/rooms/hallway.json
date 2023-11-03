@@ -57,7 +57,7 @@
         "0;6" : {"id":"wall", "variant":8},
         "1;6" : {"id":"wall", "variant":9},
         "2;6" : {"id":"wall", "variant":9},
-        "3;6" : {"id":"wall", "variant":9},
+        "3;6" : {"id":"door", "variant":2, "meta": {"id":"0"}},
         "4;6" : {"id":"wall", "variant":9},
         "5;6" : {"id":"wall", "variant":9},
         "6;6" : {"id":"wall", "variant":9},

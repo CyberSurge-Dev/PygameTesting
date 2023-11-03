@@ -33,14 +33,17 @@ import os
 # Global variables
 BASE_IMAGE_PATH = "data/images/"
 clear = lambda: os.system('clear' if os.name == 'posix' else 'cls')
-
+screen = None
 # --------------------------------------------------------------------------------
 
 
 class GameManager():
     """The game manager class is used to manage and load save files."""
-    def __init__(self, save_file, tilemap):
+    def __init__(self, save_file, tilemap, game):
         """Initialize GameManager variables"""
+        global screen
+        screen = game.screen
+        
         self.tilemap = tilemap
         with open(save_file+'/rooms.json') as f:
             self.rooms = {int(k): v for k, v in json.load(f).items()}
@@ -52,12 +55,13 @@ class GameManager():
         
     def set_room_from_id(self, door_id):
         self.tilemap.load(self.rooms[ int(self.rooms[self.current_room]['doors'][str(door_id)]) ] ['room'])
+        self.current_room = int(self.rooms[self.current_room]['doors'][str(door_id)])
 
 class Settings():
 
     def __init__(self):
         """Initialize variables with information relevent throughout the program, as well as manage the settings file"""
-
+        
         settingsJSON = open("data/settings.json",
                             "r")  # open the JSON file for settings
         self.settings_data = json.load(
@@ -74,6 +78,7 @@ class Settings():
             self.screen_size = (self.settings_data['display']['resolution'][0],
                                 self.settings_data['display']['resolution'][1]
                                 )  # Set screen to size from settings.json
+            
 
         # Assign keybinds from settings
         self.keybinds = {}  # Create an empty dictionary for keybinds
@@ -156,6 +161,12 @@ def blit(surface, image, pos):
     else:
         surface.blit(image, pos)
 
+def render_font(font, scale, pos):
+    """Poorly made hack to fix the low resolution font rendering"""
+    print(screen)
+    print((pos[0]*scale[0], pos[1]*scale[1]))
+    blit()
+    blit(screen, font, (pos[0]/scale[0], pos[1]/scale[1]))
 
 def load_images(path):
     """Loads all images in given path and returns them as a list of pygame surface objects (can also be Animation objects)."""

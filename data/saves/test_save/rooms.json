@@ -8,6 +8,9 @@
         } 
     },
     "1" : {
-        "room" : "hallway.json"
+        "room" : "hallway.json",
+        "doors" : {
+            "0" : "0"
+        }
     }
 }

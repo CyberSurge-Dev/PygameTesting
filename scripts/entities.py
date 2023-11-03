@@ -33,7 +33,8 @@ class PhysicsEntity:
         self.tilemap = self.game.tilemap
         self.exceptions = exceptions
         self.sprite = sprite # Can be a dictionary or just a pygame surface
-
+        self.stunned = False
+        
         # Create a dictionary to store colisions, and velocity
         self.colisions = {
             'forward': False,
@@ -63,12 +64,14 @@ class PhysicsEntity:
             'left': False,
             'right': False
         }
-        
-        # Calculate movement for the frame
-        frame_movement = (
-            ((movement['right']-movement['left']) + self.velocity[0]) * self.multiplier,
-            ((movement['down']-movement['up']) + self.velocity[1]) * self.multiplier
-        )
+        if not self.stunned:
+            # Calculate movement for the frame
+            frame_movement = (
+                ((movement['right']-movement['left']) + self.velocity[0]) * self.multiplier,
+                ((movement['down']-movement['up']) + self.velocity[1]) * self.multiplier
+            )
+        else:
+            frame_movement = [0, 0]
 
         self.game.telemetry.add('movement[0]', frame_movement[0])
         self.game.telemetry.add('movement[1]', frame_movement[1])
@@ -167,7 +170,7 @@ class Player(PhysicsEntity):
                                              self.assetMap.gui['health-emblem'],
                                              self.assetMap.gui["empty-health-bar"], 
                                              self.assetMap.gui['filled-health-bar'], 
-                                             40, 29))
+                                             40, 40))
         self.health_bar = self.hud.menu_items['health-bar']
         self.inventory = self.hud.menu_items['inventory']
         self.inventory_open = False
@@ -185,11 +188,15 @@ class Player(PhysicsEntity):
         elif event.type == pygame.KEYDOWN:
             if event.key == self.game.keybinds['inventory']:
                 if self.inventory_open:
+                    self.hud.background_tint = False
+                    self.stunned = False
                     self.hud.unignore('itembar')
                     self.hud.ignore('inventory')
                     self.inventory_open = False
                 else:
+                    self.hud.background_tint = True
                     self.interaction = False
+                    self.stunned = True
                     self.hud.ignore('itembar')
                     self.hud.unignore('inventory')
                     self.inventory_open = True
@@ -204,15 +211,18 @@ class Player(PhysicsEntity):
         """Updates the player"""
         super().update(**movement)
         # Update currently held items attributes 
-        inter = 0
         if self.itembar.items[self.itembar.slot_selected][0] != None:
             self.itembar.items[self.itembar.slot_selected][0].update()
         if self.tilemap.closest_interactable(self.pos) != None:
             self.interaction = True
         else:
             self.interaction = False
+        if self.health_bar.dead:
+            self.gameManager.set_room(0)
+            self.health_bar.health = self.health_bar.max_health
+            self.health_bar.dead = False
         
-        self.tilemap.check_collisions(self.rect(), self)  
+        self.tilemap.check_collisions(self.rect(), self)
         
     def render(self, disp, offset=(0, 0)):
         """Render player and HUD elements."""

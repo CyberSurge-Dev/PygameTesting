@@ -140,11 +140,15 @@ class Tilemap():
     
     def get_interactable_only_tiles_around(self, pos):
         """Returns a list of interactable tiles around pos"""
-        return [x for x in self.get_interactable_tiles_around(pos) if x.collision_interactable == False or x.interactable]
+        return [x for x in self.get_interactable_tiles_around(pos) if x.collision_interactable == False and x.interactable]
+
+    def get_select_interactable_tiles_around(self, pos):
+        """Returns a list of tiles that either have on_collision set to false, or interactable set to interactable set to true."""
+        return [x for x in self.get_interactable_tiles_around(pos) if x.collision_interactable == False and x.interactable]
     
     def get_collide_only_tiles_around(self, pos):
         """Returns a list of interactable tiles around pos that are collision only."""
-        return [x for x in self.get_interactable_tiles_around(pos) if type(x) == InteractableTile and x.interactable == False and x.collision_interactable]
+        return [x for x in self.get_interactable_tiles_around(pos) if type(x) == InteractableTile and x.interactable == False or x.collision_interactable]
     
     def get_collided_items(self, rect):
         """Returns a list of Item objects that collide with the passed in Rect"""

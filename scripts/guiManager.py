@@ -10,15 +10,21 @@ GUIManager() - Gui object, acts as a way to group GUI objects together
 
 """
 # --------------------------------------------------------------------------------
+# External imports 
+import pygame
+
 
 class GUIManager():
     """Class to manager all menu items"""
     def __init__(self):
         self.menu_items = {}
         self.ignore_events = []
+        self.background_tint = False
 
     def render(self, disp):
         """Render all menu items"""
+        if self.background_tint:
+            disp.fill((10, 10, 10, 250), special_flags=pygame.BLEND_SUB)
         for key, item in self.menu_items.items():
             if key not in self.ignore_events:
                 item.render(disp)
