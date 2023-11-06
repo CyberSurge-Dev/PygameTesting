@@ -5,7 +5,12 @@
             "0" : "1",
             "1" : "2",
             "2" : "3"
-        } 
+        } ,
+        "entities" : {
+            "0" : true,
+            "1" : true,
+            "2" : true
+        }
     },
     "1" : {
         "room" : "hallway.json",

@@ -129,9 +129,11 @@ class Game():
 
             # Update movement and render player (and HUD elements)
             self.player.update(**self.movement)
+            # Update enemies
+            self.tilemap.enemyManager.update(self.player.pos)
+            # Render enemies
+            self.tilemap.enemyManager.render(self.display, render_scroll)
             self.player.render(self.display, render_scroll)
-
-            
 
             # Scale the display surface to best fit the screen
             self.screen.blit(pygame.transform.scale( self.display, (self.dWidth, self.dHeight) ), 
@@ -143,6 +145,6 @@ class Game():
             # Update the display with data
             pygame.display.update() # Refresh the display
             
-            self.clock.tick(60) # Limit FPS to 60 
+            self.clock.tick(60) # Limit FPS to 60
 
 Game().run() # Initialize and run the game

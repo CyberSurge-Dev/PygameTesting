@@ -25,13 +25,12 @@ from scripts.utils import blit
 class PhysicsEntity:
     """Class object used for creating objects that interact with physics"""
 
-    def __init__ (self, game, pos, size, sprite=None, multiplier=1, *exceptions):
+    def __init__ (self, tilemap, pos, size, sprite=None, multiplier=1, *exceptions):
         """Initialize the physics entity"""
         self.pos = list(pos) # Convert to list for mutability
-        self.game = game
         self.size = size
         self.multiplier = multiplier
-        self.tilemap = self.game.tilemap
+        self.tilemap = tilemap
         self.exceptions = exceptions
         self.sprite = sprite # Can be a dictionary or just a pygame surface
         self.stunned = False
@@ -73,10 +72,6 @@ class PhysicsEntity:
             )
         else:
             frame_movement = [0, 0]
-
-        self.game.telemetry.add('movement[0]', frame_movement[0])
-        self.game.telemetry.add('movement[1]', frame_movement[1])
-        
         # Check for collionions in left and right movement
         self.pos[0] += frame_movement[0]
         entity_rect = self.rect()
@@ -88,14 +83,10 @@ class PhysicsEntity:
                 if frame_movement[0] > 0:
                     entity_rect.right = rect.left
                     self.collisions['right'] = True
-                    self.game.telemetry.add('colision', 'right')
                 if frame_movement[0] < 0:
                     entity_rect.left = rect.right
                     self.collisions['left'] = True
-                    self.game.telemetry.add('colision', 'left')
                 self.pos[0] = entity_rect.x
-
-        self.game.telemetry.add((entity_rect.centerx, entity_rect.centery), rect_pos)
         
         # Check for collisions in up and down movement
         self.pos[1] += frame_movement[1]
@@ -156,9 +147,9 @@ class Player(PhysicsEntity):
     def __init__ (self, game, pos, size, gameManager, multiplier=1, *exceptions):
         """Initialize the player and physics entity"""""
         # Create variables for reference to other elements
-        self.game = game
         self.gameManager = gameManager
-        self.tilemap = self.game.tilemap
+        self.tilemap = game.tilemap
+        self.game = game
         self.assetMap = self.game.assetMap
         self.inventory = {}
         # Create HUD items
@@ -179,18 +170,19 @@ class Player(PhysicsEntity):
         self.inventory_open = False
         self.interaction = False
 
-        super().__init__(game, pos, size, self.assetMap.entities['player'], multiplier, exceptions)
+        super().__init__(game.tilemap, pos, size, self.assetMap.entities['player'], multiplier, exceptions)
         
     def reset(self):
         """Function that handles what is done when game over"""
         print("clicked!")
         self.gameManager.set_room(0)
         self.health_bar.health = self.health_bar.max_health
+        self.health_bar.dead = False
         self.hud.background_tint = False
         self.hud.ignore('game-over')
         self.hud.unignore('itembar')
         self.stunned = False
-        self.pos = (self.tilemap.maxx//2, self.tilemap.maxy//2)
+        self.pos = [(self.tilemap.size[0]//2)*self.tilemap.tile_size, self.tilemap.size[1]//2*self.tilemap.tile_size]
 
     def check_events(self, event):
         """Check events for the player"""
@@ -238,6 +230,10 @@ class Player(PhysicsEntity):
                 self.hud.ignore('itembar')
                 self.hud.unignore('game-over')
             except: pass
+        else:
+            try:
+                self.hud.unignore('itembar')
+            except: pass
             
             
         
@@ -250,4 +246,41 @@ class Player(PhysicsEntity):
         self.hud.render(disp)
         if self.interaction:
             blit(disp, self.assetMap.gui['interaction'], (self.pos[0]-offset[0], self.pos[1]-offset[1]))
+    
+class Enemy(PhysicsEntity):
+    """Class for enemies"""
+    def __init__ (self, sprite, damage=5, health=10, multiplier=1, size=(32,32), meta={}):
+        """Initialize the enemy entity"""
+        # Infromation to be set appon tilemap instilization
+        self.pos = [0, 0]
+        self.damage = damage
+        self.health = health
+        self.meta = meta
+        
+        super().__init__(None, self.pos, size, sprite, multiplier, [])
+        
+    def update(self, pos):
+        """Determine what direction the enemy needs to move in to go toward player"""
+        movement = {
+            'up' : 0,
+            'down': 0,
+            'left': 0,
+            'right': 0
+        }
+        # Check horizontal movement
+        if (self.pos[0]-pos[0] > 0):
+            movement['left'] = True
+        else:
+            movement['right'] = True
+           
+        # Check vertical movement 
+        if (self.pos[1]-pos[1] > 0):
+            movement['down'] = True
+        else:
+            movement['up'] = True
+            
+        super().update(**movement)
+        
+        
+    
             

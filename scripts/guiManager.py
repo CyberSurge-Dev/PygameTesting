@@ -52,12 +52,14 @@ class GUIManager():
     def ignore(self, *keys):
         """Add keys to ignore check_events() list"""
         for key in keys:
+            
             self.ignore_events.append(key)
 
     def unignore(self, *keys):
         for key in keys:
-            print(key)
-            self.ignore_events.remove(key)
+            try:
+                self.ignore_events.remove(key)
+            except: pass
 
     def reset_ignore(self):
         """Remove keys from ignore check_events() list"""
