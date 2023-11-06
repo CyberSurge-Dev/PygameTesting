@@ -14,10 +14,10 @@ Game() - The game class is the main object in the program, managing the update, 
 import pygame, sys, math
 
 # Internal imports
-from scripts.utils import Settings, Telemetry, DisplayPositions
+from scripts.utils import Settings, Telemetry, DisplayPositions, GameManager
 from scripts.entities import Player
 from scripts.assetMap import AssetMap
-from scripts.tilemap import Tilemap
+from scripts.newTilemap import Tilemap
 # --------------------------------------------------------------------------------
 
 class Game():
@@ -36,11 +36,19 @@ class Game():
         self.keybinds = self.settings.keybinds # gets a dictionary for game keybinds
         self.sWidth = pygame.display.get_window_size()[0]
         self.sHeight = pygame.display.get_window_size()[1]
+        self.font_screen = pygame.Surface(self.settings.screen_size, pygame.SRCALPHA)
 
         self.assetMap = AssetMap()
 
-        self.tilemap = Tilemap(self, 32)
-        self.tilemap.load('test_room.json')
+        self.tilemap = Tilemap(self.assetMap, 32)
+        self.trash_collected = 0
+        self.recyclables_collected = 0
+        self.total_trash = 10
+        self.total_recyclables = 10
+        self.font = pygame.font.Font('freesansbold.ttf', 12)
+        self.trash_font = self.font.render(f"0", True, (255, 250, 250))
+        self.recyclables_text = self.font.render(f"0", True, (255, 250, 250))
+        
 
         self.telemetry = Telemetry(self.settings.telemetry)
 
@@ -65,13 +73,18 @@ class Game():
         self.scale = (self.sWidth / self.display.get_width(), self.sHeight / self.display.get_height())
         self.dPos = DisplayPositions((self.display.get_width(), self.display.get_height()))
         
-        self.player = Player(self, (128, 128), (32, 32))
+        self.gameManager = GameManager('data/saves/test_save', self.tilemap, self)
+        self.player = Player(self, (128, 128), (28, 28), self.gameManager)
         
         self.clock = pygame.time.Clock() # Create the game clock
 
     def test(self):
         pass
-    
+
+    def update_trash(self):
+        self.trash_font = self.font.render(f"{self.trash_collected}", True, (255, 250, 250))
+        self.recyclables_text = self.font.render(f"{self.recyclables_collected}", True, (255, 250, 250))
+
     def run(self):
         """Main game loop, handels updates and most game processes"""  
         while True:
@@ -108,6 +121,8 @@ class Game():
 
             self.screen.fill((20, 20, 20))
             self.display.fill((30, 30, 30))
+            self.font_screen.fill((0, 0, 0, 0))
+            self.font_screen.convert_alpha()
 
             # Render the tilemap
             self.tilemap.render(self.display, render_scroll)
@@ -116,9 +131,12 @@ class Game():
             self.player.update(**self.movement)
             self.player.render(self.display, render_scroll)
 
+            
+
             # Scale the display surface to best fit the screen
             self.screen.blit(pygame.transform.scale( self.display, (self.dWidth, self.dHeight) ), 
                              ((self.sWidth/2)-(self.dWidth/2) , (self.sHeight/2)-(self.dHeight/2)))
+            self.screen.blit(self.font_screen, (0, 0))
 
             # Update Telemetry data
             self.telemetry.update() # update telemetry data

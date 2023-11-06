@@ -16,4 +16,8 @@ class Attribute():
     def update(self, item):
         """Updates the attribute"""
 
+class Recyclable(Attribute):
+    pass
 
+class Trash(Attribute):
+    pass

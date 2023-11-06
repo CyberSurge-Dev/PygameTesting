@@ -12,12 +12,21 @@ AssetMap() - Simple class to store the asset map
 
 """
 from scripts.utils import load_image, load_images, Animation
+from scripts.interactions import *
+from scripts.gameItems import Item
+from scripts.itemAttributes import Trash, Recyclable
+from scripts.tiles import Tile, InteractableTile
 
 class AssetMap():
     """Simple class to store the asset map"""
     tiles = {
-        'wall' : {'type':'solid', 'variants' : load_images('tiles/walls')}, 
-        'floor' : {'type':'floor', 'variants' : load_images('tiles/floors')}
+        'NaT' : Tile(load_image('tiles/not_a_tile.png')),
+        'wall' : Tile(load_images('tiles/walls'), True), 
+        'floor' : Tile(load_images('tiles/floors')),
+        'note-wall' : InteractableTile(load_images('tiles/note_walls'), True, {}, show_text_box, collision_interactable=False),
+        'door' : InteractableTile(load_images('tiles/doors'), False, {}, interactable=False, on_collision=set_room),
+        'chest' : InteractableTile(load_images("tiles/")),
+        'spikes' : InteractableTile(load_images('tiles/spikes'), False, {'tick':0, 'cooldown':0, 'spike-time':0, "damage":0, "offset":0}, interactable=False, on_collision=spike_damage, on_render=spike_tick, collision_interactable=False)
     }
     entities = {
         'player': {
@@ -34,10 +43,28 @@ class AssetMap():
         'skeleton': {}
     }
     gui = {
-        "itembar" : load_image(r"gui/hud/itembar.png"),
-        "itembar_selected" : load_image(r"gui/hud/selected.png"),
+        "itembar" : load_image("gui/hud/itembar.png"),
+        "itembar_selected" : load_image("gui/hud/selected.png"),
+        "interaction" : Animation(load_images("gui/icons/interaction"), 2),
+        "text-box" : load_image("gui/text_box.png"),
+        "close" : load_image("gui/icons/close.png"),
+        "inventory" : load_image("gui/inventory.png"),
+        "health-emblem" : load_image("gui/health_bar/emblem.png"),
+        "empty-health-bar" : load_image("gui/health_bar/empty_bar.png"),
+        "filled-health-bar" : load_image("gui/health_bar/filled_bar.png"),
+        "game-over-image" : load_image("gui/game_over/game_over_text.png"),
+        "respawn-button" : load_image("gui/game_over/respawn_button.png")
     }
     items = {
-        "sample" : load_image('items/test/sample.png')
+        "bucket" : Item("Bucket", 4, load_image('items/bucket.png'), {}, pickup_item),
+        "crushed-can" : Item("Crushed Can", 64, load_image('items/crushed_can.png'), {}, pickup_item, Recyclable()),
+        "crumbled-paper" : Item("Crumbled Paper", 64, load_image('items/crumpled_paper.png'), {}, pickup_item, Recyclable()),
+        "paper-cup" : Item("Paper Cup", 64, load_image('items/paper_cup.png'), {}, pickup_item, Recyclable()),
+        "rotton-apple" : Item("Rotton Apple", 64, load_image('items/rotton_apple.png'), {}, pickup_item, Trash()),
     }
+    decor = {
+        'desk' : {'variants': [load_image("tiles/desk.png")]},
+        'bookshelf' : {'variants': [load_image("tiles/bookshelf.png")]},
+    }
+    
     

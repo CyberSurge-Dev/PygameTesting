@@ -7,31 +7,22 @@
         "0;3" : {"id":"wall", "variant":2},
         "0;4" : {"id":"wall", "variant":2},
         "0;5" : {"id":"wall", "variant":2},
-        "19;0" : {"id":"wall", "variant":0},
-        "19;1" : {"id":"wall", "variant":0},
-        "19;2" : {"id":"wall", "variant":0},
-        "19;3" : {"id":"wall", "variant":0},
         "2;0" : {"id":"wall", "variant":0},
         "3;0" : {"id":"wall", "variant":0},
         "4;0" : {"id":"wall", "variant":0},
-        "5;0" : {"id":"wall", "variant":0},
-        "6;0" : {"id":"wall", "variant":0},
+        "5;0" : {"id":"note-wall", "meta" : {"text":["The world is collapsing around us, there", "are not many of us left", "We can only hope for a rebirth", "-Unknown"]}},
+        "6;0" : {"id":"door", "variant":0, "meta" : {"id":"0"}},
         "7;0" : {"id":"wall", "variant":0},
         "8;0" : {"id":"wall", "variant":0},
         "9;0" : {"id":"wall", "variant":0},
         "1;1" : {"id":"floor", "variant":0},
         "1;2" : {"id":"floor", "variant":0},
-        "1;3" : {"id":"floor", "variant":0},
         "1;4" : {"id":"floor", "variant":0},
         "1;5" : {"id":"floor", "variant":0},
         "2;1" : {"id":"floor", "variant":0},
         "2;2" : {"id":"floor", "variant":0},
-        "2;3" : {"id":"floor", "variant":0},
         "2;4" : {"id":"floor", "variant":0},
         "2;5" : {"id":"floor", "variant":0},
-        "3;1" : {"id":"floor", "variant":0},
-        "3;2" : {"id":"floor", "variant":0},
-        "3;3" : {"id":"floor", "variant":0},
         "3;4" : {"id":"floor", "variant":0},
         "3;5" : {"id":"floor", "variant":0},
         "4;1" : {"id":"floor", "variant":0},
@@ -81,10 +72,25 @@
         "10;2" : {"id":"wall", "variant":6},
         "10;1" : {"id":"wall", "variant":6},
         "10;0" : {"id":"wall", "variant":7}
-    }, "items" : {
-        
+    }, "tile-groups" : {
+        "La" : {
+            "meta" : {"cooldown":70, "spike-time":60, "damage":20, "offset":60},
+            "tiles" : {
+                "1;3" : {"id":"spikes"},
+                "2;3" : {"id":"spikes"},
+                "3;3" : {"id":"spikes"},
+                "3;2" : {"id":"spikes"},
+                "3;1" : {"id":"spikes"}
+            }
+        }
     }, "doors" : {
-        
+        "6;0" : {"id":"door", "variant":0},
+        "0;3" : {"id":"door", "variant":1},
+        "10;3" : {"id":"door", "variant":3}
+     }, "items" : {
+        "5;4" : {"id":"crushed-can", "interactable-type":"item"},
+        "9;2" : {"id":"crumbled-paper", "interactable-type":"item"}
+    }, "decor" : {
     },
     "meta": {
         "type":"misc"

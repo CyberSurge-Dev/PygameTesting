@@ -8,10 +8,10 @@
         "down": "s",
         "left": "a",
         "right": "d",
-        "inventory" : "e"
+        "inventory" : "i"
     },
     "developer": {
         "developer": true,
-        "telemetry": false
+        "telemetry": true
     }
 }
