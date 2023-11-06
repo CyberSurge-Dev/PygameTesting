@@ -12,8 +12,10 @@ Tilemap() - Tilemap class manages, loads, and renders the tiles for the game
 """
 # --------------------------------------------------------------------------------
 # Internal imports
+from scripts.entities import Player
 from scripts.utils import blit
 from scripts.tiles import Tile, InteractableTile, TileGroup
+from scripts.enemyManager import EnemyManager
 
 # External imports
 import pygame
@@ -38,6 +40,7 @@ class Tilemap():
         self.items = {}  # Item objects to be rendered on the tilemap
         self.size = (0, 0)
         self.tile_groups = {}
+        self.enemyManager = EnemyManager()
 
     def load(self, filename):
         """Load the tilemap from a provided dictionary"""
@@ -83,8 +86,7 @@ class Tilemap():
 
             # Add group to dict
             self.tile_groups[group_id] = group
-
-        
+            
         for k, v in tile_data.get('decor', {}).items():
             # Load decor from file, these are just images
             self.decor[tuple([float(x) for x in k.split(";")
@@ -94,6 +96,17 @@ class Tilemap():
             # Load items from tilemap (these are objects derived from the Item class)
             self.items[tuple([float(x) for x in k.split(";")
                               ])] = self.assetMap.items[v.get('id', 'NaI')]
+            
+        # Load enemies from tilemap
+        for k, v in tile_data.get('entities', {}).items():
+            # Load decor from file, these are just images
+            entity = self.assetMap.entities[v.get('id', 'NaN')]
+            tpos = list([float(x) for x in k.split(";")])
+            entity.pos = [tpos[0] * self.tile_size, tpos[1] * self.tile_size]
+            entity.tilemap = self
+            
+            self.enemyManager.add(entity)
+
             
         # Set size variable
         self.size = (max([x[0] for x in self.tilemap]), max([y[1] for y in self.tilemap]))

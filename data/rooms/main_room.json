@@ -91,6 +91,8 @@
         "5;4" : {"id":"crushed-can", "interactable-type":"item"},
         "9;2" : {"id":"crumbled-paper", "interactable-type":"item"}
     }, "decor" : {
+    }, "entities" : {
+        "4.5;2" : {"id":"skeleton"}
     },
     "meta": {
         "type":"misc"

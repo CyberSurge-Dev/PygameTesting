@@ -16,6 +16,7 @@ from scripts.interactions import *
 from scripts.gameItems import Item
 from scripts.itemAttributes import Trash, Recyclable
 from scripts.tiles import Tile, InteractableTile
+from scripts.entities import Enemy
 
 class AssetMap():
     """Simple class to store the asset map"""
@@ -40,7 +41,17 @@ class AssetMap():
             'up-right' : Animation(load_images('entities/player/right'), 7),
             'idle' : load_image('entities/player/player.png')
         },
-        'skeleton': {}
+        'skeleton': Enemy({
+            'left' : Animation(load_images('entities/player/left'), 7),
+            'right' : Animation(load_images('entities/player/right'), 7),
+            'up' : Animation(load_images('entities/player/up'), 7),
+            'down' : Animation(load_images('entities/player/down'), 7),
+            'down-left' : Animation(load_images('entities/player/left'), 7),
+            'down-right' : Animation(load_images('entities/player/right'), 7),
+            'up-left' : Animation(load_images('entities/player/left'), 7),
+            'up-right' : Animation(load_images('entities/player/right'), 7),
+            'idle' : load_image('entities/player/player.png')
+        })
     }
     gui = {
         "itembar" : load_image("gui/hud/itembar.png"),
