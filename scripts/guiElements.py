@@ -201,7 +201,6 @@ class ClosableTextBox(MenuItem):
         
     def close(self):
         self.delete = True
-        print("removed.")
 
     def check_events(self, event):
         self.button.check_events(event)
@@ -209,7 +208,7 @@ class ClosableTextBox(MenuItem):
     def render(self, disp):
         super().render(disp)
         if self.center:
-            temp_pos = [self.center_pos[0]+self.padding, self.center_pos[1]+self.padding//2]
+            temp_pos = [self.center_pos[0]+self.padding, self.center_pos[1]+self.padding-2]
             for font in self.text:
                 render_font(font, self.scale, temp_pos)
                 temp_pos[1] += self.font.get_height()//self.scale[1]+2

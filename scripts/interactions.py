@@ -24,8 +24,12 @@ def open_chest(tile, player):
         tile.meta['opened'] = True
         player.gameManager.add_meta(tile.pos, {'opened' : True})
         tile.variant = 1
+        # Display a message fro the player
+        player.hud.add(str(tile.pos), ClosableTextBox((player.game.dPos.TOP_CENTER[0], 42), player.game.scale, player.assetMap.gui['text-box'], player.assetMap.gui['close'], 
+                                                      [f"I got a {player.tilemap.assetMap.items[tile.meta.get('item', 'NaI')].display_name}!"]))
     else:
-        player.hud.add(str(tile.pos), ClosableTextBox(player.game.dPos.BOTTOM_CENTER, player.game.scale, player.assetMap.gui['text-box'], player.assetMap.gui['close'], ["This chest is empty!"]))
+        # Display a message fro the player
+        player.hud.add(str(tile.pos), ClosableTextBox((player.game.dPos.TOP_CENTER[0], 42), player.game.scale, player.assetMap.gui['text-box'], player.assetMap.gui['close'], ["This chest is empty!"]))
 
 def check_chest_state(tile, *args):
     """Check the state of the chest, set variant"""
@@ -52,7 +56,7 @@ def arrow_hit(arrow, entity):
 def show_text_box(item, player):
     """Shows a textbox to the screen with the text passed in"""
     print("Text-Box")
-    player.hud.add(str(item.pos), ClosableTextBox(player.game.dPos.BOTTOM_CENTER, player.game.scale, player.assetMap.gui['text-box'], player.assetMap.gui['close'], item.meta['text']))
+    player.hud.add(str(item.pos), ClosableTextBox((player.game.dPos.TOP_CENTER[0], 42), player.game.scale, player.assetMap.gui['text-box'], player.assetMap.gui['close'], item.meta['text']))
     print("CALLED RENDER")
 
 def on_interact_trash(item, player):
