@@ -51,6 +51,7 @@ class Tilemap():
         self.decor = {}  # Just images, can have floating point positions
         self.items = {}  # Item objects to be rendered on the tilemap
         self.tile_groups = {}
+        self.enemyManager = EnemyManager()
         
         # Load information from Tilemap
         for k, v in tile_data.get('tilemap', {}).items():
@@ -100,7 +101,7 @@ class Tilemap():
         # Load enemies from tilemap
         for k, v in tile_data.get('entities', {}).items():
             # Load decor from file, these are just images
-            entity = self.assetMap.entities[v.get('id', 'NaN')]
+            entity = self.assetMap.entities[v.get('id', 'NaN')].copy()
             tpos = list([float(x) for x in k.split(";")])
             entity.pos = [tpos[0] * self.tile_size, tpos[1] * self.tile_size]
             entity.tilemap = self
@@ -206,7 +207,8 @@ class Tilemap():
         # Set rect to collide with
         for tile in self.get_interactable_tiles_around((rect.x, rect.y)):
             if pygame.Rect(tile.pos[0]*self.tile_size, tile.pos[1]*self.tile_size, self.tile_size, self.tile_size).colliderect(rect):
-                tile.on_collision(tile, *args)
+                print(tile)
+                tile.collision(tile, *args)
 
     def add_tile(self, pos, tile):
         """Adds or overwrites tile at location"""

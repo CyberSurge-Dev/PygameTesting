@@ -74,7 +74,7 @@ class Game():
         self.dPos = DisplayPositions((self.display.get_width(), self.display.get_height()))
         
         self.gameManager = GameManager('data/saves/test_save', self.tilemap, self)
-        self.player = Player(self, (128, 128), (28, 28), self.gameManager)
+        self.player = Player(self, (128, 128), (32, 32), (12, 20), self.gameManager)
         
         self.clock = pygame.time.Clock() # Create the game clock
 
@@ -130,15 +130,15 @@ class Game():
             # Update movement and render player (and HUD elements)
             self.player.update(**self.movement)
             # Update enemies
-            self.tilemap.enemyManager.update(self.player.pos)
+            self.tilemap.enemyManager.update(self.player)
             # Render enemies
             self.tilemap.enemyManager.render(self.display, render_scroll)
             self.player.render(self.display, render_scroll)
 
-            # Scale the display surface to best fit the screen
+            # Scale the display surface to best fit the screen *TODO This system does not work for taller displays* 
             self.screen.blit(pygame.transform.scale( self.display, (self.dWidth, self.dHeight) ), 
                              ((self.sWidth/2)-(self.dWidth/2) , (self.sHeight/2)-(self.dHeight/2)))
-            self.screen.blit(self.font_screen, (0, 0))
+            self.screen.blit(self.font_screen, (0, 0)) # Render any font ontop at full resolution
 
             # Update Telemetry data
             self.telemetry.update() # update telemetry data

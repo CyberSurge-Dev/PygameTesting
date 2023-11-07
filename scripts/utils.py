@@ -36,7 +36,6 @@ clear = lambda: os.system('clear' if os.name == 'posix' else 'cls')
 screen = None
 # --------------------------------------------------------------------------------
 
-
 class GameManager():
     """The game manager class is used to manage and load save files."""
     def __init__(self, save_file, tilemap, game):

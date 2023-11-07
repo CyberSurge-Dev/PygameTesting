@@ -15,7 +15,7 @@ import pygame
 
 class Item():
     """Simple class to store all attributes of a Item"""
-    def __init__(self, display_name, max_stack, icon, meta, interaction=None, left_button=None, right_button=None, *attributes):
+    def __init__(self, display_name, max_stack, icon, interaction=None, left_button=None, right_button=None, show_when_held=False, meta={}, *attributes):
         """Initialize game Item"""
         self.attributes = attributes
         self.icon = icon
@@ -24,6 +24,7 @@ class Item():
         self.r_button = right_button
         self.max_stack = max_stack
         self.interaction = interaction
+        self.show_when_held = show_when_held
         self.meta = meta
 
     def update(self):
@@ -44,6 +45,7 @@ class Item():
 
     def left_button(self, *args):
         """Handles the event for the left mouse button."""
+        print(self.l_button)
         if self.l_button != None:
             self.l_button(self, *args)
         
@@ -53,4 +55,4 @@ class Item():
             self.r_button(self, *args)
             
     def copy(self):
-        return Item(self.display_name, self.max_stack, self.icon, self.meta, self.interaction, *self.attributes)
+        return Item(self.display_name, self.max_stack, self.icon, self.interaction, self.l_button, self.r_button, self.show_when_held, self.meta.copy(), *self.attributes)
