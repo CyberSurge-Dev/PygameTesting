@@ -86,8 +86,8 @@ class ItemBar(MenuItem):
         self.padding = 4
         self.spacing = 3
         self.counts = []
-        self.font = pygame.font.Font('freesansbold.ttf', 8)
-        self.font_small = pygame.font.Font('freesansbold.ttf', 4)
+        self.font = pygame.font.Font('freesansbold.ttf', int(8*self.scale[1]))
+        self.font_small = pygame.font.Font('freesansbold.ttf', int(5*self.scale[1]))
         self.items = [(None, 0)] * self.max_items
         self.image = image
         self.selected_image = selected_image
@@ -145,7 +145,7 @@ class ItemBar(MenuItem):
                          (self.padding + self.icon_size * i + self.spacing * i),
                          self.center_pos[1] + self.padding)
                     blit(disp, self.items[i][0].icon, pos)
-                    blit(disp, self.counts[i], pos)
+                    render_font(self.counts[i], self.scale, (pos[0]+2, pos[1]+2))
                     
                 else:
                     disp.blit(
@@ -165,7 +165,7 @@ class ItemBar(MenuItem):
 
         # Display current items name above the item bar
         if self.items[self.slot_selected][0] != None:
-            disp.blit(self.text, ((self.center_pos[0]+(self.size[0]/2))-self.text.get_width()/2, self.center_pos[1]-self.text.get_height()))
+            render_font(self.text, self.scale, ((self.center_pos[0]+(self.size[0]/2))-(self.text.get_width()//self.scale[1])/2, self.center_pos[1]-self.text.get_height()//self.scale[1]))
 
 class TextBox(MenuItem):
     """Class to create a text-box on the screen"""
@@ -190,8 +190,8 @@ class ClosableTextBox(MenuItem):
     """Class to create a text-box on the screen"""
     def __init__(self, pos, scale, box_image, button_image, text, center=True):
         super().__init__(pos, (box_image.get_width(), box_image.get_height()), scale, [pygame.MOUSEBUTTONDOWN], center)
-        self.font = pygame.font.Font('freesansbold.ttf', 12)
-        self.padding = 2
+        self.font = pygame.font.Font('freesansbold.ttf', int(7*self.scale[1]))
+        self.padding = 8
         self.image = box_image
         self.text = []
         if self.center:
@@ -209,10 +209,10 @@ class ClosableTextBox(MenuItem):
     def render(self, disp):
         super().render(disp)
         if self.center:
-            temp_pos = [self.center_pos[0]+self.padding*4, self.center_pos[1]+self.padding]
+            temp_pos = [self.center_pos[0]+self.padding, self.center_pos[1]+self.padding//2]
             for font in self.text:
                 render_font(font, self.scale, temp_pos)
-                temp_pos[1] += self.font.get_height()-4
+                temp_pos[1] += self.font.get_height()//self.scale[1]+2
         self.button.render(disp)
                 
             
@@ -222,7 +222,7 @@ class Inventory(MenuItem):
         self.image = inventory_image
         self.selected_image = selected_image
         self.font_title = pygame.font.Font('freesansbold.ttf', 8)
-        self.font_count = pygame.font.Font('freesansbold.ttf', 4)
+        self.font_count = pygame.font.Font('freesansbold.ttf', int(4*self.scale[1]))
         self.columns = 4
         self.rows = 3
         self.padding = 3
@@ -316,7 +316,7 @@ class Inventory(MenuItem):
                     self.center_pos[1]+11+loc[1]*(self.icon_size+2)+loc[1]+1
                 )
                 blit(disp, self.inventory[loc][0].icon, pos)
-                blit(disp, self.counts[loc], pos)
+                render_font(self.counts[loc], self.scale, (pos[0]+2, pos[1]+2))
         # Render ItemBar items
         for loc in range(0, self.itembar.max_items):
             if self.itembar.items[loc][0] != None:
@@ -324,8 +324,8 @@ class Inventory(MenuItem):
                     self.center_pos[0]+self.padding+loc*(self.icon_size+2)+loc+1,
                     self.center_pos[1]+75
                 )
-                blit(disp, self.itembar.items[loc][0].icon, pos)
-                blit(disp, self.itembar.counts[loc], pos)
+                blit(disp, self.itembar.items[loc][0].icon, (pos))
+                render_font(self.itembar.counts[loc], self.scale, (pos[0]+2, pos[1]+2))
         
         if self.held and self.selcted != None and self.selcted[2][0] != None:
             mx, my = pygame.mouse.get_pos()

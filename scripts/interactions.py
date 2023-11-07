@@ -15,6 +15,23 @@ from scripts.guiElements import ClosableTextBox
 from scripts.entities import Projectile
 import math
 
+def open_chest(tile, player):
+    """Handles what will happen when a chest is interacted with"""
+    if not tile.meta['opened']:
+        # add items in chest to player inventory
+        for i in range(0, tile.meta.get('ammount', 1)):
+            player.inventory.add(player.tilemap.assetMap.items[tile.meta.get('item', 'NaI')].copy())
+        tile.meta['opened'] = True
+        player.gameManager.add_meta(tile.pos, {'opened' : True})
+        tile.variant = 1
+    else:
+        player.hud.add(str(tile.pos), ClosableTextBox(player.game.dPos.BOTTOM_CENTER, player.game.scale, player.assetMap.gui['text-box'], player.assetMap.gui['close'], ["This chest is empty!"]))
+
+def check_chest_state(tile, *args):
+    """Check the state of the chest, set variant"""
+    if tile.meta['opened']:
+        tile.variant = 1
+
 def fire_arrow(item, event, player):
     """Fire an arrow at event position, using metadata from item"""
     if item.meta['tick'] == 0:
@@ -23,7 +40,8 @@ def fire_arrow(item, event, player):
         print("player: ", pos, " Mouse:", event.pos)
         arrow = player.tilemap.assetMap.entities['arrow'].copy()
         tPos = player.pos.copy()
-        arrow.set([tPos[0], tPos[1]+15], math.atan2((event.pos[1]-pos[1]), (event.pos[0]-pos[0]))) # Set arrow information
+        arrow.set([tPos[0]+16, tPos[1]+13], math.atan2((event.pos[1]-pos[1]), (event.pos[0]-pos[0]))) # Set arrow information, shift arrow start pos in a stupid way
+        print(arrow, "has been added to projectiles")
         player.projectiles.append(arrow)
         item.meta['tick'] = 1 # set to one to activate cooldown
 
@@ -36,12 +54,6 @@ def show_text_box(item, player):
     print("Text-Box")
     player.hud.add(str(item.pos), ClosableTextBox(player.game.dPos.BOTTOM_CENTER, player.game.scale, player.assetMap.gui['text-box'], player.assetMap.gui['close'], item.meta['text']))
     print("CALLED RENDER")
-
-def render_trash(disp, offset, game, loc):
-    blit(disp, game.trash_font, (loc[0]*game.tilemap.tile_size-offset[0], loc[1]*game.tilemap.tile_size-offset[1]))
-
-def render_recycle(disp, offset, game, loc):
-    blit(disp, game.recyclables_text, (loc[0]*game.tilemap.tile_size-offset[0], loc[1]*game.tilemap.tile_size-offset[1]))
 
 def on_interact_trash(item, player):
     for attribute in player.itembar.items[player.itembar.slot_selected][0].attributes:
@@ -81,7 +93,7 @@ def spike_damage(tile, *args):
     if tile.collision_interactable:
         args[1].health_bar.damage(tile.meta['damage'])
 
-def spike_tick(tile, disp, offset, tilesize, *args):
+def spike_tick(tile, *args):
     """Increment spike ticks"""
     # Check offset
     if tile.meta['offset'] >= 0:

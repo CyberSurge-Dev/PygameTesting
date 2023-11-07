@@ -15,7 +15,7 @@
         "7;0" : {"id":"wall", "variant":0},
         "8;0" : {"id":"wall", "variant":0},
         "9;0" : {"id":"wall", "variant":0},
-        "1;1" : {"id":"floor", "variant":0},
+        "1;1" : {"id":"chest", "meta":{"item":"wooden-bow", "ammount":1}},
         "1;2" : {"id":"floor", "variant":0},
         "1;4" : {"id":"floor", "variant":0},
         "1;5" : {"id":"floor", "variant":0},

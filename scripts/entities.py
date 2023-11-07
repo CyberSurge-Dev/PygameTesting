@@ -353,9 +353,18 @@ class Projectile(PhysicsEntity):
 
     def update(self, player):
         """Update the arrow"""
+        # Check for impacts with enemies
         for enemy in player.tilemap.enemyManager.check_collisions(self.rect()):
             enemy.do_damage(self.damage)
             player.projectiles.remove(self)
+            
+        # Check for impacts with the wall
+        for tile in player.tilemap.get_solid_rects_around(self.pos):
+            if self.rect().colliderect(tile):
+                print(self, "is going to be deleted")
+                try: # Use try-except block to avoide having to fix a critical issue with collisions
+                    player.projectiles.remove(self)
+                except: pass
         self.pos[0] += math.cos(self.angle) * self.multiplier
         self.pos[1] += math.sin(self.angle) * self.multiplier
 
