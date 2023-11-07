@@ -42,7 +42,7 @@ class Tilemap():
         self.tile_groups = {}
         self.enemyManager = EnemyManager()
 
-    def load(self, filename):
+    def load(self, filename, gameManager):
         """Load the tilemap from a provided dictionary"""
         with open(BASE_TILEMAP_PATH + filename, "r") as f:
             tile_data = json.load(f) 
@@ -52,6 +52,7 @@ class Tilemap():
         self.items = {}  # Item objects to be rendered on the tilemap
         self.tile_groups = {}
         self.enemyManager = EnemyManager()
+        print(gameManager.rooms)
         
         # Load information from Tilemap
         for k, v in tile_data.get('tilemap', {}).items():
@@ -60,6 +61,8 @@ class Tilemap():
             tile.pos = tuple([int(x) for x in k.split(";")])
             tile.variant = v.get('variant', 0)
             tile.meta.update(v.get('meta', {}))
+            tile.meta.update(gameManager.get_meta(tile.pos)) # Update with data from rooms.json
+            
             tile.meta = tile.meta.copy()
             # Put the tile into the tilemap
             self.tilemap[tuple([int(x) for x in k.split(";")])] = tile
@@ -207,7 +210,6 @@ class Tilemap():
         # Set rect to collide with
         for tile in self.get_interactable_tiles_around((rect.x, rect.y)):
             if pygame.Rect(tile.pos[0]*self.tile_size, tile.pos[1]*self.tile_size, self.tile_size, self.tile_size).colliderect(rect):
-                print(tile)
                 tile.collision(tile, *args)
 
     def add_tile(self, pos, tile):

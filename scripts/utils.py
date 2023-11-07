@@ -46,15 +46,25 @@ class GameManager():
         self.tilemap = tilemap
         with open(save_file+'/rooms.json') as f:
             self.rooms = {int(k): v for k, v in json.load(f).items()}
-        self.tilemap.load(self.rooms[0]['room'])
         self.current_room = 0
+        self.tilemap.load(self.rooms[0]['room'], self) # Load tilemap
+        
 
     def set_room(self, room):
-        self.tilemap.load(self.rooms[room]['room'])
+        self.tilemap.load(self.rooms[room]['room'], self)
         
     def set_room_from_id(self, door_id):
-        self.tilemap.load(self.rooms[ int(self.rooms[self.current_room]['doors'][str(door_id)]) ] ['room'])
         self.current_room = int(self.rooms[self.current_room]['doors'][str(door_id)])
+        self.tilemap.load(self.rooms[ self.current_room ] ['room'], self)
+
+    def add_meta(self, key, value):
+        """Add a key-value pair to room meta-data"""
+        self.rooms[self.current_room].get('meta', {})[key] = value
+
+    def get_meta(self, key):
+        """Get value from room meta-deta"""
+        # print(self.current_room, key, self.rooms[self.current_room].get('meta', {}).get(key, {}))
+        return self.rooms[self.current_room].get('meta', {}).get(key, {})
 
 class Settings():
 

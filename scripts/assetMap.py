@@ -27,7 +27,9 @@ class AssetMap():
         'note-wall' : InteractableTile(load_images('tiles/note_walls'), True, {}, show_text_box, collision_interactable=False),
         'door' : InteractableTile(load_images('tiles/doors'), False, {}, interactable=False, on_collision=set_room),
         'chest' : InteractableTile(load_images("tiles/")),
-        'spikes' : InteractableTile(load_images('tiles/spikes'), False, {'tick':0, 'cooldown':0, 'spike-time':0, "damage":0, "offset":0}, interactable=False, on_collision=spike_damage, on_render=spike_tick, collision_interactable=False)
+        'spikes' : InteractableTile(load_images('tiles/spikes'), False, {'tick':0, 'cooldown':0, 'spike-time':0, "damage":0, "offset":0}, interactable=False, on_collision=spike_damage, on_render=spike_tick, collision_interactable=False),
+        'chest' : InteractableTile([load_image('tiles/chest/chest.png'), load_image('tiles/chest/open_chest.png')], True, {'item':"NaI", "ammount":1, 'opened':False}, open_chest, None, None, True, False, check_chest_state)
+    
     }
     entities = {
         'player': {
@@ -68,6 +70,7 @@ class AssetMap():
         "respawn-button" : load_image("gui/game_over/respawn_button.png")
     }
     items = {
+        "NaI" : Item("NaI", 1, load_image("items/not_a_item.png")),
         "bucket" : Item("Bucket", 4, load_image('items/bucket.png'), interaction=pickup_item),
         "crushed-can" : Item("Crushed Can", 64, load_image('items/crushed_can.png'), interaction=pickup_item),
         "crumbled-paper" : Item("Crumbled Paper", 64, load_image('items/crumpled_paper.png'), interaction=pickup_item),
