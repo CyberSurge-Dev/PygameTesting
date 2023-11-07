@@ -12,6 +12,24 @@ from scripts.guiElements import ClosableTextBox
 from scripts.utils import blit
 from scripts.itemAttributes import Trash, Recyclable
 from scripts.guiElements import ClosableTextBox
+from scripts.entities import Projectile
+import math
+
+def fire_arrow(item, event, player):
+    """Fire an arrow at event position, using metadata from item"""
+    if item.meta['tick'] == 0:
+        # Create an arrow, set trjectory and pos, append to render list
+        pos = (player.game.sWidth//2, player.game.sHeight//2) # Base player position as center of screen
+        print("player: ", pos, " Mouse:", event.pos)
+        arrow = player.tilemap.assetMap.entities['arrow'].copy()
+        tPos = player.pos.copy()
+        arrow.set([tPos[0], tPos[1]+15], math.atan2((event.pos[1]-pos[1]), (event.pos[0]-pos[0]))) # Set arrow information
+        player.projectiles.append(arrow)
+        item.meta['tick'] = 1 # set to one to activate cooldown
+
+def arrow_hit(arrow, entity):
+    """Logic for when an arrow hits an entity"""
+    entity.damage(arrow.damage)
 
 def show_text_box(item, player):
     """Shows a textbox to the screen with the text passed in"""
@@ -34,8 +52,12 @@ def on_interact_trash(item, player):
             player.itembar.items[player.itembar.slot_selected] = (None, 0)
 
 def set_room(tile, *args):
-    args[0].gameManager.set_room_from_id(args[0].tilemap.get_tile(tile.pos).meta.get('id', 0))
-    args[0].pos = [(args[0].tilemap.size[0]//2)*args[0].tilemap.tile_size+args[0].tilemap.tile_size//2, (args[0].tilemap.size[1]//2)*args[0].tilemap.tile_size]
+    args[1].gameManager.set_room_from_id(args[1].tilemap.get_tile(tile.pos).meta.get('id', 0))
+    # Set x and y postion, using an offset if the room is of an odd width
+    if args[1].tilemap.size[0] % 2 == 0:
+        args[1].pos = [(args[1].tilemap.size[0]//2)*args[1].tilemap.tile_size, (args[1].tilemap.size[1]//2)*args[1].tilemap.tile_size]
+    else:
+        args[1].pos = [(args[1].tilemap.size[0]//2)*args[1].tilemap.tile_size+args[1].tilemap.tile_size//2, (args[1].tilemap.size[1]//2)*args[1].tilemap.tile_size]
 
 def on_interact_recycle(item, player):
     for attribute in player.itembar.items[player.itembar.slot_selected][0].attributes:
@@ -57,10 +79,18 @@ def on_off(tile, *args):
 
 def spike_damage(tile, *args):
     if tile.collision_interactable:
-        args[0].health_bar.damage(tile.meta['damage'])
+        args[1].health_bar.damage(tile.meta['damage'])
 
 def spike_tick(tile, disp, offset, tilesize, *args):
-    if tile.collision_interactable == False:
+    """Increment spike ticks"""
+    # Check offset
+    if tile.meta['offset'] >= 0:
+        tile.meta['offset'] -= 1
+        if tile.meta['offset'] < 0:
+            tile.collision_interactable = True
+            tile.variant = 1
+
+    if not tile.collision_interactable:
         if tile.meta['tick'] >= tile.meta['cooldown']:
             tile.meta['tick'] = 0
             tile.collision_interactable = True

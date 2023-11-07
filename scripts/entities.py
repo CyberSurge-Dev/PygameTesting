@@ -13,19 +13,19 @@ Enemey()
 """
 # --------------------------------------------------------------------------------
 # External imports
-from cgitb import reset
 import pygame
-import math
+import random
 
 # Internal imports
 from scripts.guiElements import ItemBar, Inventory, HealthBar, GameOver
 from scripts.guiManager import GUIManager
 from scripts.utils import blit
+import math
 # --------------------------------------------------------------------------------
 class PhysicsEntity:
     """Class object used for creating objects that interact with physics"""
 
-    def __init__ (self, tilemap, pos, size, sprite=None, multiplier=1, *exceptions):
+    def __init__ (self, tilemap, pos, size, hitbox, sprite=None, multiplier=1, *exceptions):
         """Initialize the physics entity"""
         self.pos = list(pos) # Convert to list for mutability
         self.size = size
@@ -34,6 +34,7 @@ class PhysicsEntity:
         self.exceptions = exceptions
         self.sprite = sprite # Can be a dictionary or just a pygame surface
         self.stunned = False
+        self.hitbox = hitbox
         
         # Create a dictionary to store colisions, and velocity
         self.colisions = {
@@ -49,7 +50,7 @@ class PhysicsEntity:
 
     def rect(self):
         """Returns a pygame Rect onject at the location of the player"""
-        return pygame.Rect(self.pos[0], self.pos[1], self.size[0], self.size[1])
+        return pygame.Rect(self.pos[0]+((self.size[0]-self.hitbox[0])//2), self.pos[1]+((self.size[1]-self.hitbox[1])//2), self.hitbox[0], self.hitbox[1])
 
     def update(self, **movement):
         """
@@ -86,7 +87,7 @@ class PhysicsEntity:
                 if frame_movement[0] < 0:
                     entity_rect.left = rect.right
                     self.collisions['left'] = True
-                self.pos[0] = entity_rect.x
+                self.pos[0] = entity_rect.x-(self.size[0]-self.hitbox[0])//2
         
         # Check for collisions in up and down movement
         self.pos[1] += frame_movement[1]
@@ -99,7 +100,7 @@ class PhysicsEntity:
                 if frame_movement[1] < 0:
                     entity_rect.top = rect.bottom
                     self.collisions['up'] = True
-                self.pos[1] = entity_rect.y
+                self.pos[1] = entity_rect.y-(self.size[1]-self.hitbox[1])//2
 
         if self.collisions['down'] or self.collisions['up']:
             self.velocity[0] = 0
@@ -144,7 +145,7 @@ class PhysicsEntity:
 class Player(PhysicsEntity):
     """Class for all player related physics, and interactions."""
 
-    def __init__ (self, game, pos, size, gameManager, multiplier=1, *exceptions):
+    def __init__ (self, game, pos, size, hitbox, gameManager, multiplier=1, *exceptions):
         """Initialize the player and physics entity"""""
         # Create variables for reference to other elements
         self.gameManager = gameManager
@@ -170,7 +171,9 @@ class Player(PhysicsEntity):
         self.inventory_open = False
         self.interaction = False
 
-        super().__init__(game.tilemap, pos, size, self.assetMap.entities['player'], multiplier, exceptions)
+        self.projectiles = []
+
+        super().__init__(game.tilemap, pos, size, hitbox, self.assetMap.entities['player'], multiplier, exceptions)
         
     def reset(self):
         """Function that handles what is done when game over"""
@@ -182,15 +185,16 @@ class Player(PhysicsEntity):
         self.hud.ignore('game-over')
         self.hud.unignore('itembar')
         self.stunned = False
+        self.arrows = []
         self.pos = [(self.tilemap.size[0]//2)*self.tilemap.tile_size, self.tilemap.size[1]//2*self.tilemap.tile_size]
 
     def check_events(self, event):
         """Check events for the player"""
         if event.type == pygame.MOUSEBUTTONDOWN and self.itembar.items[self.itembar.slot_selected][0] != None:
             if event.button == 1:  # Left mouse button.
-                self.itembar.items[self.itembar.slot_selected][0].left_button(event)
+                self.itembar.items[self.itembar.slot_selected][0].left_button(event, self)
             elif event.button == 3:  # Right mouse button.
-                self.itembar.items[self.itembar.slot_selected][0].right_button(event)
+                self.itembar.items[self.itembar.slot_selected][0].right_button(event, self)
         elif event.type == pygame.KEYDOWN:
             if event.key == self.game.keybinds['inventory']:
                 if self.inventory_open:
@@ -234,10 +238,11 @@ class Player(PhysicsEntity):
             try:
                 self.hud.unignore('itembar')
             except: pass
-            
-            
-        
+             
         self.tilemap.check_collisions(self.rect(), self)
+
+        for projectile in self.projectiles:
+            projectile.update(self)
         
     def render(self, disp, offset=(0, 0)):
         """Render player and HUD elements."""
@@ -246,40 +251,124 @@ class Player(PhysicsEntity):
         self.hud.render(disp)
         if self.interaction:
             blit(disp, self.assetMap.gui['interaction'], (self.pos[0]-offset[0], self.pos[1]-offset[1]))
+
+        # Render the projectiles
+        for projectile in self.projectiles:
+            projectile.render(disp, offset)
     
 class Enemy(PhysicsEntity):
     """Class for enemies"""
-    def __init__ (self, sprite, damage=5, health=10, multiplier=1, size=(32,32), meta={}):
+    def __init__ (self, sprite, damage=5, health=10, multiplier=0.25, distance_from_target=1, size=(32,32), hitbox=(24,24), meta={}, onDeath=None):
         """Initialize the enemy entity"""
         # Infromation to be set appon tilemap instilization
         self.pos = [0, 0]
         self.damage = damage
         self.health = health
         self.meta = meta
+        self.distance_from_target=distance_from_target
+        self.onDeath = onDeath
+        self.damaged = False
+        self.immunity_frames = 20
+        self.tick = 21
         
-        super().__init__(None, self.pos, size, sprite, multiplier, [])
+        super().__init__(None, self.pos, size, hitbox, sprite, multiplier, [])
+    
+    def do_damage(self, damage_amount):
+        if not self.damaged:
+            self.health -= damage_amount
+            self.damaged = True
         
-    def update(self, pos):
+    def update(self, physicsEntity):
         """Determine what direction the enemy needs to move in to go toward player"""
+        # Dictionary for enemy movement
+        pos = physicsEntity.pos
+
+        # Increment ticks for immunity frames 
+        if self.damaged:
+            if self.tick >= self.immunity_frames:
+                self.tick = 0
+                self.damaged = False
+            else:
+                self.tick += 1
+
         movement = {
-            'up' : 0,
-            'down': 0,
-            'left': 0,
-            'right': 0
+            'up' : False,
+            'down': False,
+            'left': False,
+            'right': False
         }
+
         # Check horizontal movement
-        if (self.pos[0]-pos[0] > 0):
+        if (self.pos[0]-pos[0]-self.distance_from_target > 15):
             movement['left'] = True
-        else:
+        elif (self.pos[0]-pos[0]+self.distance_from_target < -15):
             movement['right'] = True
+        else:
+            movement['right'] = False
+            movement['left'] = False
            
         # Check vertical movement 
-        if (self.pos[1]-pos[1] > 0):
+        if (self.pos[1]-pos[1]-self.distance_from_target < -15):
             movement['down'] = True
-        else:
+        elif (self.pos[1]-pos[1]+self.distance_from_target > 15):
             movement['up'] = True
-            
+        else:
+            movement['up'] = False
+            movement['down'] = False
+
+        # Check for collision with passed entity
+        if self.rect().colliderect(physicsEntity.rect()):
+            physicsEntity.health_bar.damage(self.damage)
+
         super().update(**movement)
+    
+    def on_death(self, *args):
+        """What happends on the death of the entity"""
+        if self.onDeath != None:
+            self.onDeath(self, args)
+
+    def copy(self):
+        """Return a copy of self"""
+        return Enemy(self.sprite, self.damage, self.health, self.multiplier, self.distance_from_target, self.size, self.hitbox, self.meta, self.onDeath)
+
+class Projectile(PhysicsEntity):
+    """Class for projectiles"""
+    def __init__(self, sprite, damage=5, multiplier=10, onHit=None):
+        self.damage = damage
+        self.multiplier = 10
+        self.onHit = onHit
+        self.sprite = sprite
+        self.multiplier
+        # Set on release
+        self.pos = [0, 0]
+        self.angle = 0 # Angle of projectile
+
+    def set(self, pos, angle):
+        self.pos = pos
+        self.angle = angle
+        self.sprite = pygame.transform.rotate(self.sprite, -math.degrees(self.angle))
+
+    def rect(self):
+        return pygame.Rect(self.pos[0], self.pos[1], self.sprite.get_width(), self.sprite.get_height())
+
+    def update(self, player):
+        """Update the arrow"""
+        for enemy in player.tilemap.enemyManager.check_collisions(self.rect()):
+            enemy.do_damage(self.damage)
+            player.projectiles.remove(self)
+        self.pos[0] += math.cos(self.angle) * self.multiplier
+        self.pos[1] += math.sin(self.angle) * self.multiplier
+
+    def render(self, disp, offset):
+        """Redner the arrow"""
+        
+        blit(disp, self.sprite, (self.pos[0]-offset[0], self.pos[1]-offset[1]))
+
+    def copy(self):
+        return Projectile(self.sprite, self.damage, self.onHit)
+
+        
+
         
         
     
