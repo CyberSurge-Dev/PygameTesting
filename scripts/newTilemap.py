@@ -171,7 +171,7 @@ class Tilemap():
         """Returns a list of Item objects that collide with the passed in Rect"""
         return [
             item for pos, item in self.items.items() 
-            if pygame.Rect(pos[0]*self.tile_size, pos[1]*self.tile_size, item.icon.get_width(), item.icon.get_height()).colliderect(rect)
+            if pygame.Rect(pos[0]*self.tile_size, pos[1]*self.tile_size, item.icon.get_width(), item.icon.get_height()).colliderect(rect) and not item.hidden
         ]
     
     def closest_interactable_tile(self, pos):
@@ -236,5 +236,6 @@ class Tilemap():
             blit(disp, dec, (pos[0] * self.tile_size - offset[0],
                              pos[1] * self.tile_size - offset[1]))
         for pos, item in self.items.items():
-            blit(disp, item.icon, (pos[0] * self.tile_size - offset[0],
-                                   pos[1] * self.tile_size - offset[1]))
+            if not item.hidden:
+                blit(disp, item.icon, (pos[0] * self.tile_size - offset[0],
+                                    pos[1] * self.tile_size - offset[1]))

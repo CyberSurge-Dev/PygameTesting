@@ -247,14 +247,15 @@ class Player(PhysicsEntity):
     def render(self, disp, offset=(0, 0)):
         """Render player and HUD elements."""
         super().render(disp, offset)
-        # Render the HUD items
-        self.hud.render(disp)
         if self.interaction:
             blit(disp, self.assetMap.gui['interaction'], (self.pos[0]-offset[0], self.pos[1]-offset[1]))
 
         # Render the projectiles
         for projectile in self.projectiles:
             projectile.render(disp, offset)
+
+        # Render the HUD items
+        self.hud.render(disp)
     
 class Enemy(PhysicsEntity):
     """Class for enemies"""

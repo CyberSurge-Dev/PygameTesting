@@ -27,6 +27,8 @@ class Item():
         self.show_when_held = show_when_held
         self.meta = meta
 
+        self.hidden = False
+
     def update(self):
         """Updates the items attributes (ex: Give holder health boost)."""
         for attribute in self.attributes:
@@ -38,7 +40,7 @@ class Item():
             self.interaction(self, *args)
 
     def hide(self):
-        self.icon = pygame.Surface((0, 0))
+        self.hidden = True
 
     def is_interactable(self):
         return self.interaction != None
