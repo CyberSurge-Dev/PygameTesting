@@ -17,6 +17,8 @@ import math
 
 def open_chest(tile, player):
     """Handles what will happen when a chest is interacted with"""
+    # Remove old text-box, if there is one
+    player.hud.remove("text-box")
     if not tile.meta['opened']:
         # add items in chest to player inventory
         for i in range(0, tile.meta.get('ammount', 1)):
@@ -25,11 +27,11 @@ def open_chest(tile, player):
         player.gameManager.add_meta(tile.pos, {'opened' : True})
         tile.variant = 1
         # Display a message fro the player
-        player.hud.add(str(tile.pos), ClosableTextBox((player.game.dPos.TOP_CENTER[0], 42), player.game.scale, player.assetMap.gui['text-box'], player.assetMap.gui['close'], 
+        player.hud.add("text-box", ClosableTextBox((player.game.dPos.TOP_CENTER[0], 42), player.game.scale, player.assetMap.gui['text-box'], player.assetMap.gui['close'], 
                                                       [f"I got a {player.tilemap.assetMap.items[tile.meta.get('item', 'NaI')].display_name}!"]))
     else:
         # Display a message fro the player
-        player.hud.add(str(tile.pos), ClosableTextBox((player.game.dPos.TOP_CENTER[0], 42), player.game.scale, player.assetMap.gui['text-box'], player.assetMap.gui['close'], ["This chest is empty!"]))
+        player.hud.add("text-box", ClosableTextBox((player.game.dPos.TOP_CENTER[0], 42), player.game.scale, player.assetMap.gui['text-box'], player.assetMap.gui['close'], ["This chest is empty!"]))
 
 def check_chest_state(tile, *args):
     """Check the state of the chest, set variant"""
@@ -55,8 +57,9 @@ def arrow_hit(arrow, entity):
 
 def show_text_box(item, player):
     """Shows a textbox to the screen with the text passed in"""
-    print("Text-Box")
-    player.hud.add(str(item.pos), ClosableTextBox((player.game.dPos.TOP_CENTER[0], 42), player.game.scale, player.assetMap.gui['text-box'], player.assetMap.gui['close'], item.meta['text']))
+    # Remove old text-box, if there is one
+    player.hud.remove("text-box")
+    player.hud.add("text-box", ClosableTextBox((player.game.dPos.TOP_CENTER[0], 42), player.game.scale, player.assetMap.gui['text-box'], player.assetMap.gui['close'], item.meta['text']))
     print("CALLED RENDER")
 
 def on_interact_trash(item, player):
@@ -68,12 +71,18 @@ def on_interact_trash(item, player):
             player.itembar.items[player.itembar.slot_selected] = (None, 0)
 
 def set_room(tile, *args):
+    # Remove old text-box, if there is one
+    args[1].hud.remove("text-box")
     args[1].gameManager.set_room_from_id(args[1].tilemap.get_tile(tile.pos).meta.get('id', 0))
     # Set x and y postion, using an offset if the room is of an odd width
     if args[1].tilemap.size[0] % 2 == 0:
         args[1].pos = [(args[1].tilemap.size[0]//2)*args[1].tilemap.tile_size, (args[1].tilemap.size[1]//2)*args[1].tilemap.tile_size]
     else:
         args[1].pos = [(args[1].tilemap.size[0]//2)*args[1].tilemap.tile_size+args[1].tilemap.tile_size//2, (args[1].tilemap.size[1]//2)*args[1].tilemap.tile_size]
+
+    if args[1].gameManager.get_meta("text") != {}:
+        args[1].hud.add("text-box", ClosableTextBox((args[1].game.dPos.TOP_CENTER[0], 42), args[1].game.scale, args[1].assetMap.gui['text-box'], args[1].assetMap.gui['close'], args[1].gameManager.get_meta("text")))
+   
 
 def on_interact_recycle(item, player):
     for attribute in player.itembar.items[player.itembar.slot_selected][0].attributes:

@@ -21,6 +21,10 @@
         },
         "0;4": {
             "id": "wall",
+            "variant": 2
+        },
+        "0;5": {
+            "id": "wall",
             "variant": 8
         },
         "1;0": {
@@ -37,12 +41,18 @@
             "id": "floor"
         },
         "1;4": {
+            "id": "floor"
+        },
+        "1;5": {
             "id": "wall",
             "variant": 9
         },
         "2;0": {
-            "id": "wall",
-            "variant": 0
+            "id": "door",
+            "variant": 0,
+            "meta": {
+                "id": "1"
+            }
         },
         "2;1": {
             "id": "floor"
@@ -54,6 +64,9 @@
             "id": "floor"
         },
         "2;4": {
+            "id": "floor"
+        },
+        "2;5": {
             "id": "wall",
             "variant": 9
         },
@@ -71,6 +84,9 @@
             "id": "floor"
         },
         "3;4": {
+            "id": "floor"
+        },
+        "3;5": {
             "id": "wall",
             "variant": 9
         },
@@ -88,6 +104,9 @@
             "id": "floor"
         },
         "4;4": {
+            "id": "floor"
+        },
+        "4;5": {
             "id": "wall",
             "variant": 9
         },
@@ -105,29 +124,53 @@
             "id": "floor"
         },
         "5;4": {
+            "id": "floor"
+        },
+        "5;5": {
             "id": "wall",
             "variant": 9
         },
         "6;0": {
             "id": "wall",
-            "variant": 7
+            "variant": 0
         },
         "6;1": {
-            "id": "wall",
-            "variant": 6
+            "id": "floor"
         },
         "6;2": {
-            "id": "door",
-            "variant": 3,
-            "meta": {
-                "id": "1"
-            }
+            "id": "floor"
         },
         "6;3": {
+            "id": "floor"
+        },
+        "6;4": {
+            "id": "floor"
+        },
+        "6;5": {
+            "id": "wall",
+            "variant": 9
+        },
+        "7;0": {
+            "id": "wall",
+            "variant": 7
+        },
+        "7;1": {
             "id": "wall",
             "variant": 6
         },
-        "6;4": {
+        "7;2": {
+            "id": "wall",
+            "variant": 6
+        },
+        "7;3": {
+            "id": "wall",
+            "variant": 6
+        },
+        "7;4": {
+            "id": "wall",
+            "variant": 6
+        },
+        "7;5": {
             "id": "wall",
             "variant": 10
         }

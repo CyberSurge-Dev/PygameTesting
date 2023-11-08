@@ -14,10 +14,10 @@ Enemey()
 # --------------------------------------------------------------------------------
 # External imports
 import pygame
-import random
+from scripts.utils import render_font
 
 # Internal imports
-from scripts.guiElements import ItemBar, Inventory, HealthBar, GameOver
+from scripts.guiElements import ItemBar, Inventory, HealthBar, GameOver, ClosableTextBox
 from scripts.guiManager import GUIManager
 from scripts.utils import blit
 import math
@@ -178,6 +178,10 @@ class Player(PhysicsEntity):
         self.inventory_open = False
         self.interaction = False
 
+        if self.gameManager.get_meta("text") != {}:
+            self.hud.add("text-box", ClosableTextBox((self.game.dPos.TOP_CENTER[0], 42), self.game.scale, self.assetMap.gui['text-box'], self.assetMap.gui['close'], self.gameManager.get_meta("text")))
+ 
+
         self.projectiles = []
 
         super().__init__(game.tilemap, pos, size, hitbox, self.assetMap.entities['player'], multiplier, True, exceptions)
@@ -259,6 +263,9 @@ class Player(PhysicsEntity):
         # Render the projectiles
         for projectile in self.projectiles:
             projectile.render(disp, offset)
+
+        print((0, self.game.dHeight-(self.gameManager.room_font.get_height()//self.game.scale[1]-2)))
+        render_font(self.gameManager.room_font, self.game.scale, (0, self.game.display.get_height()-(self.gameManager.room_font.get_height()//self.game.scale[1]-2)))
 
         # Render the HUD items
         self.hud.render(disp)
