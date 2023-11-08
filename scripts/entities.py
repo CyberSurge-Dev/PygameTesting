@@ -20,6 +20,7 @@ from scripts.utils import render_font
 from scripts.guiElements import ItemBar, Inventory, HealthBar, GameOver, ClosableTextBox
 from scripts.guiManager import GUIManager
 from scripts.utils import blit
+from scripts.itemAttributes import Accessory
 import math
 # --------------------------------------------------------------------------------
 class PhysicsEntity:
@@ -164,13 +165,14 @@ class Player(PhysicsEntity):
         self.hud = GUIManager()
         self.hud.add('itembar', ItemBar(self.game.dPos.BOTTOM_CENTER, (81, 24), self.game.scale, self.assetMap.gui['itembar'], self.assetMap.gui['itembar_selected']))
         self.itembar = self.hud.menu_items['itembar']
-        self.hud.add('inventory', Inventory(self.game.dPos.CENTER, (81, 95), self.game.scale, self.assetMap.gui['inventory'], self.assetMap.gui['itembar_selected'], self.itembar, self.game))
+        self.hud.add('inventory', Inventory((self.game.dPos.CENTER[0]-13, self.game.dPos.CENTER[0]-30), (81, 95), self.game.scale, self.assetMap.gui['inventory'], self.assetMap.gui['itembar_selected'], self.itembar, self.game))
         self.hud.ignore('inventory')
+        self.base_health = 30
         self.hud.add('health-bar', HealthBar((2,2), (0, 0), self.game.scale, [], 
                                              self.assetMap.gui['health-emblem'],
                                              self.assetMap.gui["empty-health-bar"], 
                                              self.assetMap.gui['filled-health-bar'], 
-                                             40, 40))
+                                             self.base_health, self.base_health))
         self.hud.add('game-over', GameOver((self.game.dPos.CENTER[0], self.game.dPos.CENTER[1]-30), (0,0), self.game.scale, self.assetMap.gui["game-over-image"], self.assetMap.gui["respawn-button"], self.reset))
         self.hud.ignore('game-over')
         self.health_bar = self.hud.menu_items['health-bar']
@@ -181,7 +183,6 @@ class Player(PhysicsEntity):
         if self.gameManager.get_meta("text") != {}:
             self.hud.add("text-box", ClosableTextBox((self.game.dPos.TOP_CENTER[0], 42), self.game.scale, self.assetMap.gui['text-box'], self.assetMap.gui['close'], self.gameManager.get_meta("text")))
  
-
         self.projectiles = []
 
         super().__init__(game.tilemap, pos, size, hitbox, self.assetMap.entities['player'], multiplier, True, exceptions)
@@ -232,7 +233,18 @@ class Player(PhysicsEntity):
         super().update(**movement)
         # Update currently held items attributes 
         if self.itembar.items[self.itembar.slot_selected][0] != None:
-            self.itembar.items[self.itembar.slot_selected][0].update()
+            flag = True
+            # Check to make sure the item is not an accessory
+            for attribute in self.itembar.items[self.itembar.slot_selected][0].attributes:
+                if isinstance(attribute, Accessory):
+                    flag = False
+            
+            if flag:
+                self.itembar.items[self.itembar.slot_selected][0].update(self)
+
+        # Update accessories
+        self.inventory.update_accessories(self)
+
         if self.tilemap.closest_interactable(self.pos) != None:
             self.interaction = True
         else:

@@ -110,7 +110,6 @@ class Tilemap():
             
             self.enemyManager.add(entity)
 
-        print(self.tilemap)
             
         # Set size variable
         self.size = (max([x[0] for x in self.tilemap]), max([y[1] for y in self.tilemap]))

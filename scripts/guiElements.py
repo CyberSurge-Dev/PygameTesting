@@ -15,6 +15,7 @@ import pygame
 
 # Internal imports
 from scripts.utils import blit, render_font
+from scripts.itemAttributes import Accessory
 
 # --------------------------------------------------------------------------------
 
@@ -231,6 +232,8 @@ class Inventory(MenuItem):
         self.held = False
         self.counts = {}
         self.itembar = itembar
+        self.max_accessories = 3
+        self.accsessories = [(None, 0)] * self.max_accessories
         self.game = game
         self.mouse_pos = (0,0)
         for x in range(0, self.columns):
@@ -245,6 +248,12 @@ class Inventory(MenuItem):
         for loc in self.inventory:
             self.counts[loc] = self.font_count.render(str(self.inventory[loc][1]), True, (255, 250, 250))
 
+    def update_accessories(self, *args):
+        """Update each accessory"""
+        for accessory in self.accsessories:
+            if accessory[0] != None:
+                accessory[0].update(*args)
+
     def check_events(self, event):
         if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
             self.held = True
@@ -256,12 +265,25 @@ class Inventory(MenuItem):
                                        (int(18*self.scale[0]), int(18*self.scale[1])))
                     if rect.collidepoint(event.pos):
                         self.selcted = (loc, 'inventory', self.inventory.get(loc, None))
+
                 for loc in range(0, self.itembar.max_items):
                     rect = pygame.Rect((int((self.center_pos[0]+self.padding+loc*(self.icon_size+2)+loc)*self.scale[0]),
                                         int((self.center_pos[1]+74)*self.scale[1])
                                         ), (int(18*self.scale[0]), int(18*self.scale[1])))
                     if rect.collidepoint(event.pos):
                         self.selcted = (loc, 'itembar', self.itembar.items[loc])
+
+                for loc in range(0, self.max_accessories):
+                    rect = pygame.Rect(
+                        (
+                         (self.center_pos[0]+86)*self.scale[0],
+                         int((self.center_pos[1]+3+loc*(self.icon_size+2)+loc)*self.scale[1])
+                         ),
+                        (int(18*self.scale[0]), int(18*self.scale[1]))
+                    )
+                    if rect.collidepoint(event.pos):
+                        self.selcted = (loc, 'accesories', self.accsessories[loc])
+                print(self.selcted)
             
         elif event.type == pygame.MOUSEBUTTONUP and event.button == 1:
             self.held = False
@@ -273,9 +295,18 @@ class Inventory(MenuItem):
                     if self.selcted[1] == 'inventory':
                         self.inventory[self.selcted[0]] = self.inventory[loc]
                         self.inventory[loc] = self.selcted[2]
-                    else:
+                    elif self.selcted[1] == 'itembar':
                         self.itembar.items[self.selcted[0]] = self.inventory[loc]
                         self.inventory[loc] = self.selcted[2]
+                    else:
+                        if self.selcted[2][0] != None:
+                            for attribute in self.selcted[2][0].attributes:
+                                if isinstance(attribute, Accessory):
+                                    self.accsessories[self.selcted[0]] = self.inventory[loc]
+                                    self.inventory[loc] = self.selcted[2]
+                                    for attribute in self.selcted[2][0].attributes:
+                                        attribute.remove()
+                                
                     self.selcted = (loc, 'inventory', self.inventory.get(loc, None))
 
             for loc in range(0, self.itembar.max_items):
@@ -286,10 +317,41 @@ class Inventory(MenuItem):
                     if self.selcted[1] == 'inventory':
                         self.inventory[self.selcted[0]] = self.itembar.items[loc]
                         self.itembar.items[loc] = self.selcted[2]
-                    else:
+                    elif self.selcted[1] == 'itembar':
                         self.itembar.items[self.selcted[0]] = self.itembar.items[loc]
                         self.itembar.items[loc] = self.selcted[2]
+                    else:
+                        if self.selcted[2][0] != None:
+                            for attribute in self.selcted[2][0].attributes:
+                                if isinstance(attribute, Accessory):
+                                    self.accsessories[self.selcted[0]] = self.itembar.items[loc]
+                                    self.itembar.items[loc] = self.selcted[2]
                     self.selcted = (loc, 'itembar', self.itembar.items[loc])
+
+            for loc in range(0, self.max_accessories):
+                    rect = pygame.Rect(
+                        (
+                         (self.center_pos[0]+86)*self.scale[0],
+                         int((self.center_pos[1]+3+loc*(self.icon_size+2)+loc)*self.scale[1])
+                         ),
+                        (int(18*self.scale[0]), int(18*self.scale[1]))
+                    )
+                    if rect.collidepoint(event.pos) and self.selcted[2][0] != None:
+                        print(f"\n{self.accsessories[loc][0]}\n")
+                        if self.selcted[2][0] != None:
+                            for attribute in self.selcted[2][0].attributes:
+                                if isinstance(attribute, Accessory):
+                                    if self.selcted[1] == 'inventory':
+                                        self.inventory[self.selcted[0]] = self.accsessories[loc]
+                                        self.accsessories[loc] = self.selcted[2]
+                                    elif self.selcted[1] == 'itembar':
+                                        self.itembar.items[self.selcted[0]] = self.accsessories[loc]
+                                        self.accsessories[loc] = self.selcted[2]
+                                    else:
+                                        self.accsessories[self.selcted[0]] = self.accsessories[loc]
+                                        self.accsessories[loc] = self.selcted[2]
+                                    self.selcted = (loc, 'accesories', self.accsessories[loc])
+
         self.update_count_fonts()
                         
     def render(self, disp):
@@ -306,6 +368,11 @@ class Inventory(MenuItem):
                 self.center_pos[0]+self.padding+self.selcted[0]*(self.icon_size+2)+self.selcted[0],
                 self.center_pos[1]+74
             ))
+        elif self.selcted != None and self.selcted[1] == 'accesories':
+            blit(disp, self.selected_image, 
+                 ((self.center_pos[0]+86),
+                  int((self.center_pos[0]+3+self.selcted[0]*(self.icon_size+2)+self.selcted[0]))-72)
+                )
 
         # Render inventory items
         for loc in self.inventory:
@@ -325,7 +392,16 @@ class Inventory(MenuItem):
                 )
                 blit(disp, self.itembar.items[loc][0].icon, (pos))
                 render_font(self.itembar.counts[loc], self.scale, (pos[0]+2, pos[1]+2))
+
+        # Display Accessory icons
+        for loc in range(0, self.max_accessories):
+            if self.accsessories[loc][0] != None:
+                blit(disp, self.accsessories[loc][0].icon, 
+                 ((self.center_pos[0]+87),
+                  int((self.center_pos[0]+3+loc*(self.icon_size+2)+loc))-71)
+                )
         
+        # Display icon at mouse cursor when held
         if self.held and self.selcted != None and self.selcted[2][0] != None:
             mx, my = pygame.mouse.get_pos()
             icon = self.selcted[2][0].icon
@@ -352,6 +428,8 @@ class HealthBar(MenuItem):
         self.emblem = health_emblem
         self.empty_bar = empty_bar
         self.filled_bar = filled_bar
+        self.font = pygame.font.Font('freesansbold.ttf', int(8*self.scale[1]))
+        self.health_font = self.font.render(str(self.max_health)+"/"+str(self.max_health), True, (255, 250, 250))
         self.health_per_bar = 10
         self.step = 21
         self.immunity_frames = 20
@@ -375,6 +453,9 @@ class HealthBar(MenuItem):
                         self.center_pos[1] + 5
                     ))
             blit(disp, self.emblem, self.center_pos)
+            render_font(self.font.render(str(self.health)+"/"+str(self.max_health), True, (255, 250, 250)), self.scale, 
+                        (self.center_pos[0]+30 ,self.center_pos[1] + 19))
+            
         if self.damaged:
             if self.tick >= self.immunity_frames:
                 self.tick = 0
@@ -388,6 +469,7 @@ class HealthBar(MenuItem):
         if not self.damaged:
             self.health -= damage_amount
             self.damaged = True
+        
             
 class GameOver(MenuItem):
     """Class for GameOver Screen"""

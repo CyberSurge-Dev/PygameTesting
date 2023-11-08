@@ -38,7 +38,8 @@
             "id": "floor"
         },
         "1;4": {
-            "id": "chest"
+            "id": "chest",
+            "meta" : {"item":"heart-sigil", "ammount":1}
         },
         "1;5": {
             "id": "wall",
