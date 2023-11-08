@@ -154,8 +154,9 @@
             "variant": 9
         },
         "7;0": {
-            "id": "wall",
-            "variant": 0
+            "id": "note-wall",
+            "variant": 0,
+            "meta" : {"text" : ["This big meanie stole my thing, go", "get it for me NOW", "- Little sis AKA your favorite"]}
         },
         "7;1": {
             "id": "floor"
@@ -203,7 +204,10 @@
     },
     "tile-groups": {},
     "items": {},
-    "decor": {},
+    "decor": {
+        "2.4;1.5" : "large-rug",
+        "1.6;1" : "skull"
+    },
     "entities": {},
     "meta": {}
 }

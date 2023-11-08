@@ -93,7 +93,7 @@ class Tilemap():
         for k, v in tile_data.get('decor', {}).items():
             # Load decor from file, these are just images
             self.decor[tuple([float(x) for x in k.split(";")
-                              ])] = self.assetMap.decor[v.get('id', 'NaD')]
+                              ])] = self.assetMap.decor[v]
 
         for k, v in tile_data.get('items', {}).items():
             # Load items from tilemap (these are objects derived from the Item class)
@@ -110,6 +110,7 @@ class Tilemap():
             
             self.enemyManager.add(entity)
 
+        print(self.tilemap)
             
         # Set size variable
         self.size = (max([x[0] for x in self.tilemap]), max([y[1] for y in self.tilemap]))

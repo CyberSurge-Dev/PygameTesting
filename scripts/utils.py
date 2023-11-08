@@ -52,6 +52,7 @@ class GameManager():
         self.room_font = self.font.render(str(self.current_room), True, (255, 250, 250))
 
     def set_room(self, room):
+        self.current_room = room
         self.tilemap.load(self.rooms[room]['room'], self)
         self.room_font = self.font.render(str(self.current_room), True, (255, 250, 250))
 

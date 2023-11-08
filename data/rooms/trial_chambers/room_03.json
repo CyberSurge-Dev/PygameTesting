@@ -58,8 +58,9 @@
             "variant": 9
         },
         "3;0": {
-            "id": "wall",
-            "variant": 0
+            "id": "note-wall", 
+            "variant": 0,
+            "meta" : {"text":["beWr of Dnger", "- The Dungeon Master"]}
         },
         "3;1": {
             "id": "floor"
@@ -68,7 +69,7 @@
             "id": "floor"
         },
         "3;3": {
-            "id": "floor"
+            "id" : "floor"
         },
         "3;4": {
             "id": "wall",
@@ -134,7 +135,11 @@
     },
     "tile-groups": {},
     "items": {},
-    "decor": {},
+    "decor": {
+        "1;1" : "rug",
+        "1;0.3" : "bookshelf",
+        "4;3" : "cobweb"
+    },
     "entities": {},
     "meta": {}
 }
