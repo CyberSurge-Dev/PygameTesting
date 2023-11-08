@@ -29,10 +29,10 @@ class Item():
 
         self.hidden = False
 
-    def update(self):
+    def update(self, *args):
         """Updates the items attributes (ex: Give holder health boost)."""
         for attribute in self.attributes:
-            attribute.update(self)
+            attribute.update(self, *args)
 
     def interact(self, *args):
         """Interaction with object (When out of inventory)"""

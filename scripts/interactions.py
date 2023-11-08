@@ -60,7 +60,6 @@ def show_text_box(item, player):
     # Remove old text-box, if there is one
     player.hud.remove("text-box")
     player.hud.add("text-box", ClosableTextBox((player.game.dPos.TOP_CENTER[0], 42), player.game.scale, player.assetMap.gui['text-box'], player.assetMap.gui['close'], item.meta['text']))
-    print("CALLED RENDER")
 
 def on_interact_trash(item, player):
     for attribute in player.itembar.items[player.itembar.slot_selected][0].attributes:
