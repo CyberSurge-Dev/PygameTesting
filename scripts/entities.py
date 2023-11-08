@@ -25,7 +25,7 @@ import math
 class PhysicsEntity:
     """Class object used for creating objects that interact with physics"""
 
-    def __init__ (self, tilemap, pos, size, hitbox, sprite=None, multiplier=1, *exceptions):
+    def __init__ (self, tilemap, pos, size, hitbox, sprite=None, multiplier=1, hitbox_on_bottom=True, *exceptions):
         """Initialize the physics entity"""
         self.pos = list(pos) # Convert to list for mutability
         self.size = size
@@ -35,6 +35,7 @@ class PhysicsEntity:
         self.sprite = sprite # Can be a dictionary or just a pygame surface
         self.stunned = False
         self.hitbox = hitbox
+        self.hitbox_on_bottom = hitbox_on_bottom
         
         # Create a dictionary to store colisions, and velocity
         self.colisions = {
@@ -50,7 +51,10 @@ class PhysicsEntity:
 
     def rect(self):
         """Returns a pygame Rect onject at the location of the player"""
-        return pygame.Rect(self.pos[0]+((self.size[0]-self.hitbox[0])//2), self.pos[1]+((self.size[1]-self.hitbox[1])//2), self.hitbox[0], self.hitbox[1])
+        if not self.hitbox_on_bottom:
+            return pygame.Rect(self.pos[0]+((self.size[0]-self.hitbox[0])//2), self.pos[1]+((self.size[1]-self.hitbox[1])//2), self.hitbox[0], self.hitbox[1])
+        else:
+            return pygame.Rect(self.pos[0]+((self.size[0]-self.hitbox[0])//2), self.pos[1]+((self.size[1]-self.hitbox[1])), self.hitbox[0], self.hitbox[1])
 
     def update(self, **movement):
         """
@@ -100,7 +104,10 @@ class PhysicsEntity:
                 if frame_movement[1] < 0:
                     entity_rect.top = rect.bottom
                     self.collisions['up'] = True
-                self.pos[1] = entity_rect.y-(self.size[1]-self.hitbox[1])//2
+                if self.hitbox_on_bottom:
+                    self.pos[1] = entity_rect.y-(self.size[1]-self.hitbox[1])
+                else:
+                    self.pos[1] = entity_rect.y-(self.size[1]-self.hitbox[1])//2
 
         if self.collisions['down'] or self.collisions['up']:
             self.velocity[0] = 0
@@ -146,7 +153,7 @@ class Player(PhysicsEntity):
     """Class for all player related physics, and interactions."""
 
     def __init__ (self, game, pos, size, hitbox, gameManager, multiplier=1, *exceptions):
-        """Initialize the player and physics entity"""""
+        """Initialize the player and physics entity."""
         # Create variables for reference to other elements
         self.gameManager = gameManager
         self.tilemap = game.tilemap
@@ -173,11 +180,10 @@ class Player(PhysicsEntity):
 
         self.projectiles = []
 
-        super().__init__(game.tilemap, pos, size, hitbox, self.assetMap.entities['player'], multiplier, exceptions)
+        super().__init__(game.tilemap, pos, size, hitbox, self.assetMap.entities['player'], multiplier, True, exceptions)
         
     def reset(self):
-        """Function that handles what is done when game over"""
-        print("clicked!")
+        """Function that handles what is done when game over."""
         self.gameManager.set_room(0)
         self.health_bar.health = self.health_bar.max_health
         self.health_bar.dead = False
@@ -189,7 +195,7 @@ class Player(PhysicsEntity):
         self.pos = [(self.tilemap.size[0]//2)*self.tilemap.tile_size, self.tilemap.size[1]//2*self.tilemap.tile_size]
 
     def check_events(self, event):
-        """Check events for the player"""
+        """Check events for the player."""
         if event.type == pygame.MOUSEBUTTONDOWN and self.itembar.items[self.itembar.slot_selected][0] != None:
             if event.button == 1:  # Left mouse button.
                 self.itembar.items[self.itembar.slot_selected][0].left_button(event, self)
@@ -218,7 +224,7 @@ class Player(PhysicsEntity):
         self.hud.check_events(event)
 
     def update(self, **movement):
-        """Updates the player"""
+        """Updates the player."""
         super().update(**movement)
         # Update currently held items attributes 
         if self.itembar.items[self.itembar.slot_selected][0] != None:
@@ -258,9 +264,9 @@ class Player(PhysicsEntity):
         self.hud.render(disp)
     
 class Enemy(PhysicsEntity):
-    """Class for enemies"""
+    """Class for enemies."""
     def __init__ (self, sprite, damage=5, health=10, multiplier=0.25, distance_from_target=1, size=(32,32), hitbox=(24,24), meta={}, onDeath=None):
-        """Initialize the enemy entity"""
+        """Initialize the enemy entity."""
         # Infromation to be set appon tilemap instilization
         self.pos = [0, 0]
         self.damage = damage
@@ -280,7 +286,7 @@ class Enemy(PhysicsEntity):
             self.damaged = True
         
     def update(self, physicsEntity):
-        """Determine what direction the enemy needs to move in to go toward player"""
+        """Determine what direction the enemy needs to move in to go toward player."""
         # Dictionary for enemy movement
         pos = physicsEntity.pos
 
@@ -324,16 +330,16 @@ class Enemy(PhysicsEntity):
         super().update(**movement)
     
     def on_death(self, *args):
-        """What happends on the death of the entity"""
+        """What happends on the death of the entity."""
         if self.onDeath != None:
             self.onDeath(self, args)
 
     def copy(self):
-        """Return a copy of self"""
+        """Return a copy of self."""
         return Enemy(self.sprite, self.damage, self.health, self.multiplier, self.distance_from_target, self.size, self.hitbox, self.meta, self.onDeath)
 
 class Projectile(PhysicsEntity):
-    """Class for projectiles"""
+    """Class for projectiles."""
     def __init__(self, sprite, damage=5, multiplier=10, onHit=None):
         self.damage = damage
         self.multiplier = 10
@@ -353,7 +359,7 @@ class Projectile(PhysicsEntity):
         return pygame.Rect(self.pos[0], self.pos[1], self.sprite.get_width(), self.sprite.get_height())
 
     def update(self, player):
-        """Update the arrow"""
+        """Update the arrow."""
         # Check for impacts with enemies
         for enemy in player.tilemap.enemyManager.check_collisions(self.rect()):
             enemy.do_damage(self.damage)
@@ -362,7 +368,6 @@ class Projectile(PhysicsEntity):
         # Check for impacts with the wall
         for tile in player.tilemap.get_solid_rects_around(self.pos):
             if self.rect().colliderect(tile):
-                print(self, "is going to be deleted")
                 try: # Use try-except block to avoide having to fix a critical issue with collisions
                     player.projectiles.remove(self)
                 except: pass
@@ -370,7 +375,7 @@ class Projectile(PhysicsEntity):
         self.pos[1] += math.sin(self.angle) * self.multiplier
 
     def render(self, disp, offset):
-        """Redner the arrow"""
+        """Redner the arrow."""
         
         blit(disp, self.sprite, (self.pos[0]-offset[0], self.pos[1]-offset[1]))
 

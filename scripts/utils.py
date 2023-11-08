@@ -172,8 +172,6 @@ def blit(surface, image, pos):
 
 def render_font(font, scale, pos):
     """Poorly made hack to fix the low resolution font rendering"""
-    print(screen)
-    print((pos[0]*scale[0], pos[1]*scale[1]))
     blit(screen, font, (pos[0]*scale[0], pos[1]*scale[1]))
 
 def load_images(path):

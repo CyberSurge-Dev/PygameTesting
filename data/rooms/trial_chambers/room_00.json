@@ -1,0 +1,95 @@
+{
+    "tilemap": {
+        "0;0" : {"id":"wall", "variant":1},
+        "1;0" : {"id":"wall", "variant":0},
+        "0;1" : {"id":"wall", "variant":2},
+        "0;2" : {"id":"wall", "variant":2},
+        "0;3" : {"id":"wall", "variant":2},
+        "0;4" : {"id":"wall", "variant":2},
+        "0;5" : {"id":"wall", "variant":2},
+        "2;0" : {"id":"wall", "variant":0},
+        "3;0" : {"id":"wall", "variant":0},
+        "4;0" : {"id":"wall", "variant":0},
+        "5;0" : {"id":"note-wall", "meta" : {"text":["The world is collapsing around us, there", "are not many of us left", "We can only hope for a rebirth", "-Unknown"]}},
+        "6;0" : {"id":"door", "variant":0, "meta" : {"id":"0"}},
+        "7;0" : {"id":"wall", "variant":0},
+        "8;0" : {"id":"wall", "variant":0},
+        "9;0" : {"id":"wall", "variant":0},
+        "1;1" : {"id":"chest", "meta":{"item":"wooden-bow", "ammount":1}},
+        "1;2" : {"id":"floor", "variant":0},
+        "1;4" : {"id":"floor", "variant":0},
+        "1;5" : {"id":"floor", "variant":0},
+        "2;1" : {"id":"floor", "variant":0},
+        "2;2" : {"id":"floor", "variant":0},
+        "2;4" : {"id":"floor", "variant":0},
+        "2;5" : {"id":"floor", "variant":0},
+        "3;4" : {"id":"floor", "variant":0},
+        "3;5" : {"id":"floor", "variant":0},
+        "4;1" : {"id":"floor", "variant":0},
+        "4;2" : {"id":"floor", "variant":0},
+        "4;3" : {"id":"floor", "variant":0},
+        "4;4" : {"id":"floor", "variant":0},
+        "4;5" : {"id":"floor", "variant":0},
+        "5;1" : {"id":"floor", "variant":0},
+        "5;2" : {"id":"floor", "variant":0},
+        "5;3" : {"id":"floor", "variant":0},
+        "5;4" : {"id":"floor", "variant":0},
+        "5;5" : {"id":"floor", "variant":0},
+        "6;1" : {"id":"floor", "variant":0},
+        "6;2" : {"id":"floor", "variant":0},
+        "6;3" : {"id":"floor", "variant":0},
+        "6;4" : {"id":"floor", "variant":0},
+        "6;5" : {"id":"floor", "variant":0},
+        "7;1" : {"id":"floor", "variant":0},
+        "7;2" : {"id":"floor", "variant":0},
+        "7;3" : {"id":"floor", "variant":0},
+        "7;4" : {"id":"floor", "variant":0},
+        "7;5" : {"id":"floor", "variant":0},
+        "8;1" : {"id":"floor", "variant":0},
+        "8;2" : {"id":"floor", "variant":0},
+        "8;3" : {"id":"floor", "variant":0},
+        "8;4" : {"id":"floor", "variant":0},
+        "8;5" : {"id":"floor", "variant":0},
+        "9;1" : {"id":"floor", "variant":0},
+        "9;2" : {"id":"floor", "variant":0},
+        "9;3" : {"id":"floor", "variant":0},
+        "9;4" : {"id":"floor", "variant":0},
+        "9;5" : {"id":"floor", "variant":0},
+        "0;6" : {"id":"wall", "variant":8},
+        "1;6" : {"id":"wall", "variant":9},
+        "2;6" : {"id":"wall", "variant":9},
+        "3;6" : {"id":"wall", "variant":9},
+        "4;6" : {"id":"wall", "variant":9},
+        "5;6" : {"id":"wall", "variant":9},
+        "6;6" : {"id":"wall", "variant":9},
+        "7;6" : {"id":"wall", "variant":9},
+        "8;6" : {"id":"wall", "variant":9},
+        "9;6" : {"id":"wall", "variant":9},
+        "10;6" : {"id":"wall", "variant":10},
+        "10;5" : {"id":"wall", "variant":6},
+        "10;4" : {"id":"wall", "variant":6},
+        "10;3" : {"id":"wall", "variant":6},
+        "10;2" : {"id":"wall", "variant":6},
+        "10;1" : {"id":"wall", "variant":6},
+        "10;0" : {"id":"wall", "variant":7}
+    }, "tile-groups" : {
+        "spike_group_1" : {
+            "meta" : {"cooldown":70, "spike-time":60, "damage":5, "offset":10},
+            "tiles" : {
+                "1;3" : {"id":"spikes"},
+                "2;3" : {"id":"spikes"},
+                "3;3" : {"id":"spikes"},
+                "3;2" : {"id":"spikes"},
+                "3;1" : {"id":"spikes"}
+            }
+        }
+    }, "items" : {
+        "5;4" : {"id":"wooden-bow"}
+    }, "decor" : {
+    }, "entities" : {
+        
+    },
+    "meta": {
+        "type":"misc"
+    }
+}
