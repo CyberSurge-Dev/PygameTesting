@@ -2,21 +2,32 @@
     "0" : {
         "room" : "trial_chambers/room_00.json",
         "doors" : {
-            "0" : "1",
-            "1" : "2",
-            "2" : "3"
+            "0" : "2",
+            "1" : "3",
+            "2" : "1",
+            "3" : "2"
         } ,
-        "meta" : {
-            
-        }
+        "meta" : {}
     },
     "1" : {
-        "room" : "trial_chambers/test_tilemap.json",
+        "room" : "trial_chambers/room_01.json",
         "doors" : {
             "0" : "0"
         },
-        "meta" : {
-            
-        }
+        "meta" : {}
+    },
+    "2" : {
+        "room" : "trial_chambers/room_02.json",
+        "doors" : {
+            "0" : "0"
+        },
+        "meta" : {}
+    },
+    "3" : {
+        "room" : "trial_chambers/room_03.json",
+        "doors" : {
+            "0" : "0"
+        },
+        "meta" : {}
     }
 }

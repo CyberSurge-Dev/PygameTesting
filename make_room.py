@@ -13,14 +13,14 @@ import json
 
 # --------------------------------------------------------------------------------
 # Change these variables to create empty room files
-filename = "test_tilemap.json"
+filename = "room_01.json"
 width = 7
 height = 5
 # Set how many doors you want on each side
 doors = {
-    "left" : 1,
-    "right" : 1,
-    "bottom" : 1,
+    "left" : 0,
+    "right" : 0,
+    "bottom" : 0,
     "top" : 1
 }
 path = "C:/Users/Zhoov/OneDrive/Documents/HackathonPygame/data/rooms/trial_chambers/"
