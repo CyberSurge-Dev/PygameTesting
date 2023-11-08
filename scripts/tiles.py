@@ -86,7 +86,7 @@ class InteractableTile(Tile):
         return InteractableTile(
             self.image,
             self.solid,
-            self.meta,
+            self.meta.copy(),
             self.interaction,
             self.first_interaction,
             self.on_collision,

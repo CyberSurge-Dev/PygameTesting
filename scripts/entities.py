@@ -263,9 +263,7 @@ class Player(PhysicsEntity):
         # Render the projectiles
         for projectile in self.projectiles:
             projectile.render(disp, offset)
-
-        print((0, self.game.dHeight-(self.gameManager.room_font.get_height()//self.game.scale[1]-2)))
-        render_font(self.gameManager.room_font, self.game.scale, (0, self.game.display.get_height()-(self.gameManager.room_font.get_height()//self.game.scale[1]-2)))
+        render_font(self.gameManager.room_font, self.game.scale, (5, self.game.display.get_height()-(self.gameManager.room_font.get_height()//self.game.scale[1]+5)))
 
         # Render the HUD items
         self.hud.render(disp)
@@ -370,7 +368,10 @@ class Projectile(PhysicsEntity):
         # Check for impacts with enemies
         for enemy in player.tilemap.enemyManager.check_collisions(self.rect()):
             enemy.do_damage(self.damage)
-            player.projectiles.remove(self)
+            try: # Try-except to avoid having to fix a critical issue
+                player.projectiles.remove(self)
+            except: pass
+            break
             
         # Check for impacts with the wall
         for tile in player.tilemap.get_solid_rects_around(self.pos):

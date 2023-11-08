@@ -195,6 +195,10 @@
     "tile-groups": {},
     "items": {},
     "decor": {},
-    "entities": {},
+    "entities": {
+        "2;2" : {"id":"skeleton"},
+        "4;3" : {"id":"skeleton"},
+        "3;2" : {"id":"skeleton"}
+    },
     "meta": {}
 }

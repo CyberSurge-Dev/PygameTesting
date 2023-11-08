@@ -11,6 +11,7 @@ interacions of each asset.
 AssetMap() - Simple class to store the asset map
 
 """
+from json import load
 from scripts.utils import load_image, load_images, Animation
 from scripts.interactions import *
 from scripts.gameItems import Item
@@ -54,7 +55,7 @@ class AssetMap():
             'up-right' : Animation(load_images('entities/skeleton/right'), 5),
             'idle' : load_image('entities/skeleton/skeleton.png'),
         }),
-        'arrow' : Projectile(load_image('entities/arrows/wooden_arrow.png'), 5, 10, arrow_hit)
+        'arrow' : Projectile(load_image('entities/arrows/wooden_arrow.png'), 5, 7, arrow_hit)
     }
     gui = {
         "itembar" : load_image("gui/hud/itembar.png"),
@@ -76,11 +77,17 @@ class AssetMap():
         "crumbled-paper" : Item("Crumbled Paper", 64, load_image('items/crumpled_paper.png'), interaction=pickup_item),
         "paper-cup" : Item("Paper Cup", 64, load_image('items/paper_cup.png'), interaction=pickup_item),
         "rotton-apple" : Item("Rotton Apple", 64, load_image('items/rotton_apple.png'), interaction=pickup_item),
-        "wooden-bow" : Item("Wooden Bow", 1, load_image("items/bows/wooden_bow.png"), pickup_item, fire_arrow, None, True, {'cooldown':10, 'tick':0}, Cooldown())
+        "wooden-bow" : Item("Wooden Bow", 1, load_image("items/bows/wooden_bow.png"), pickup_item, fire_arrow, None, True, {'cooldown':100, 'tick':0}, Cooldown()),
+        "emerald-bow" :  Item("Wooden Bow", 1, load_image("items/bows/emerald_bow.png"), pickup_item, fire_arrow, None, True, {'cooldown':20, 'tick':0}, Cooldown()),
+        "pink-spoon" : Item("Pink Spoon", 1, load_image("items/pink_spoon.png"), pickup_item)
     }
     decor = {
-        'desk' : {'variants': [load_image("tiles/desk.png")]},
-        'bookshelf' : {'variants': [load_image("tiles/bookshelf.png")]},
+        'rug' : load_image("decor/rug.png"),
+        'skull' : load_image("decor/skull.png"),
+        'large-rug' : load_image("decor/large_rug.png"),
+        'bookshelf' : load_image("decor/bookshelf.png"),
+        "cobweb" : load_image("decor/cobweb.png"),
+        "danger" : load_image("decor/danger.png")
     }
     
     
