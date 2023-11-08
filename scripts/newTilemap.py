@@ -52,7 +52,6 @@ class Tilemap():
         self.items = {}  # Item objects to be rendered on the tilemap
         self.tile_groups = {}
         self.enemyManager = EnemyManager()
-        print(gameManager.rooms)
         
         # Load information from Tilemap
         for k, v in tile_data.get('tilemap', {}).items():

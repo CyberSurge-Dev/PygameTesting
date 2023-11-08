@@ -48,14 +48,17 @@ class GameManager():
             self.rooms = {int(k): v for k, v in json.load(f).items()}
         self.current_room = 0
         self.tilemap.load(self.rooms[0]['room'], self) # Load tilemap
-        
+        self.font = pygame.font.Font('freesansbold.ttf', int(12*game.scale[1]))
+        self.room_font = self.font.render(str(self.current_room), True, (255, 250, 250))
 
     def set_room(self, room):
         self.tilemap.load(self.rooms[room]['room'], self)
-        
+        self.room_font = self.font.render(str(self.current_room), True, (255, 250, 250))
+
     def set_room_from_id(self, door_id):
         self.current_room = int(self.rooms[self.current_room]['doors'][str(door_id)])
         self.tilemap.load(self.rooms[ self.current_room ] ['room'], self)
+        self.room_font = self.font.render(str(self.current_room), True, (255, 250, 250))
 
     def add_meta(self, key, value):
         """Add a key-value pair to room meta-data"""

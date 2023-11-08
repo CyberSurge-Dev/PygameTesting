@@ -47,7 +47,9 @@ class GUIManager():
 
     def remove(self, key):
         """Removes passed in item from menu"""
-        del self.menu_items[key]
+        try:
+            del self.menu_items[key]
+        except: pass
 
     def ignore(self, *keys):
         """Add keys to ignore check_events() list"""

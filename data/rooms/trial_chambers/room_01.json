@@ -68,7 +68,11 @@
             "id": "floor"
         },
         "3;3": {
-            "id": "floor"
+            "id": "chest",
+            "meta" : {
+                "item" : "wooden-bow",
+                "ammount" : 1
+            }
         },
         "3;4": {
             "id": "wall",
