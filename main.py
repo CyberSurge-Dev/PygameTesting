@@ -34,8 +34,8 @@ class Game():
         self.screen = pygame.display.set_mode(self.settings.screen_size) # Set screen size
 
         self.keybinds = self.settings.keybinds # gets a dictionary for game keybinds
-        self.sWidth = pygame.display.get_window_size()[0]
-        self.sHeight = pygame.display.get_window_size()[1]
+        self.sWidth = self.screen.get_width()
+        self.sHeight = self.screen.get_height()
         self.font_screen = pygame.Surface(self.settings.screen_size, pygame.SRCALPHA)
 
         self.assetMap = AssetMap()
@@ -70,7 +70,7 @@ class Game():
             self.dHeight = self.sHeight - (self.sHeight % 9)
             self.dWidth = math.trunc(self.dHeight * (16/9)) 
 
-        self.scale = (self.sWidth / self.display.get_width(), self.sHeight / self.display.get_height())
+        self.scale = ((self.screen.get_width() / self.display.get_width()), self.screen.get_height() / self.display.get_height())
         self.dPos = DisplayPositions((self.display.get_width(), self.display.get_height()))
         
         self.gameManager = GameManager('data/saves/trial_chambers', self.tilemap, self)

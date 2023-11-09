@@ -13,6 +13,7 @@ from scripts.utils import blit
 from scripts.itemAttributes import Trash, Recyclable
 from scripts.guiElements import ClosableTextBox
 from scripts.entities import Projectile
+from scripts.itemAttributes import Accessory
 import math
 
 def open_chest(tile, player):
@@ -27,7 +28,17 @@ def open_chest(tile, player):
         player.gameManager.add_meta(tile.pos, {'opened' : True})
         tile.variant = 1
         # Display a message fro the player
-        player.hud.add("text-box", ClosableTextBox((player.game.dPos.TOP_CENTER[0], 42), player.game.scale, player.assetMap.gui['text-box'], player.assetMap.gui['close'], 
+        
+        # Check if the item is an accessory (to display a seprate message)
+        isAccessory = False
+        for attribute in player.tilemap.assetMap.items[tile.meta.get('item', 'NaI')].attributes:
+            if isinstance(attribute, Accessory):
+                isAccessory = True
+        if isAccessory:
+            player.hud.add("text-box", ClosableTextBox((player.game.dPos.TOP_CENTER[0], 42), player.game.scale, player.assetMap.gui['text-box'], player.assetMap.gui['close'], 
+                                                      [f"I got a {player.tilemap.assetMap.items[tile.meta.get('item', 'NaI')].display_name} Accessory!", "", f"Press ' {player.game.settings.settings_data['keybinds'].get('inventory', 'NaK')} ' to open your inventory and equip it."]))
+        else:
+            player.hud.add("text-box", ClosableTextBox((player.game.dPos.TOP_CENTER[0], 42), player.game.scale, player.assetMap.gui['text-box'], player.assetMap.gui['close'], 
                                                       [f"I got a {player.tilemap.assetMap.items[tile.meta.get('item', 'NaI')].display_name}!"]))
     else:
         # Display a message fro the player
