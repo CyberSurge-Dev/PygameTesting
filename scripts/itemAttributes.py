@@ -62,5 +62,5 @@ class HealthBoost():
         if self.active:
             self.active = False
             if self.target.health_bar.health > (self.target.health_bar.max_health - self.boost):
-                self.target.health = self.target.health_bar.max_health - self.boost
+                self.target.health_bar.health = self.target.health_bar.max_health - self.boost
             self.target.health_bar.max_health -= self.boost

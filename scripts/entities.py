@@ -201,30 +201,31 @@ class Player(PhysicsEntity):
 
     def check_events(self, event):
         """Check events for the player."""
-        if event.type == pygame.MOUSEBUTTONDOWN and self.itembar.items[self.itembar.slot_selected][0] != None:
-            if event.button == 1:  # Left mouse button.
-                self.itembar.items[self.itembar.slot_selected][0].left_button(event, self)
-            elif event.button == 3:  # Right mouse button.
-                self.itembar.items[self.itembar.slot_selected][0].right_button(event, self)
-        elif event.type == pygame.KEYDOWN:
-            if event.key == self.game.keybinds['inventory']:
-                if self.inventory_open:
-                    self.hud.background_tint = False
-                    self.stunned = False
-                    self.hud.unignore('itembar')
-                    self.hud.ignore('inventory')
-                    self.inventory_open = False
-                else:
-                    self.hud.background_tint = True
-                    self.interaction = False
-                    self.stunned = True
-                    self.hud.ignore('itembar')
-                    self.hud.unignore('inventory')
-                    self.inventory_open = True
-            elif event.key == pygame.K_e and self.interaction:
-                thing = self.tilemap.closest_interactable(self.pos)
-                if thing != None:
-                    thing.interact(self)
+        if not self.health_bar.dead:
+            if event.type == pygame.MOUSEBUTTONDOWN and self.itembar.items[self.itembar.slot_selected][0] != None:
+                if event.button == 1:  # Left mouse button.
+                    self.itembar.items[self.itembar.slot_selected][0].left_button(event, self)
+                elif event.button == 3:  # Right mouse button.
+                    self.itembar.items[self.itembar.slot_selected][0].right_button(event, self)
+            elif event.type == pygame.KEYDOWN:
+                if event.key == self.game.keybinds['inventory']:
+                    if self.inventory_open:
+                        self.hud.background_tint = False
+                        self.stunned = False
+                        self.hud.unignore('itembar')
+                        self.hud.ignore('inventory')
+                        self.inventory_open = False
+                    else:
+                        self.hud.background_tint = True
+                        self.interaction = False
+                        self.stunned = True
+                        self.hud.ignore('itembar')
+                        self.hud.unignore('inventory')
+                        self.inventory_open = True
+                elif event.key == pygame.K_e and self.interaction:
+                    thing = self.tilemap.closest_interactable(self.pos)
+                    if thing != None:
+                        thing.interact(self)
             
         self.hud.check_events(event)
 
@@ -254,12 +255,11 @@ class Player(PhysicsEntity):
             self.stunned = True
             try:
                 self.hud.ignore('itembar')
+                self.hud.ignore('inventory')
+                self.hud.ignore('text-box')
                 self.hud.unignore('game-over')
             except: pass
-        else:
-            try:
-                self.hud.unignore('itembar')
-            except: pass
+
              
         self.tilemap.check_collisions(self.rect(), self)
 
