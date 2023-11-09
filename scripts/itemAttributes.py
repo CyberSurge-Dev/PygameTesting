@@ -138,3 +138,21 @@ class RegenerationBoost(Attribute):
         if self.active:
             self.active = False
             self.target.health_bar.ticks_between_healing /= self.multiplier
+
+class DamageBoost(Attribute):
+    """Multiplies the player speed by multiplier passed in."""
+    def __init__(self, multiplier):
+        self.active = False
+        self.multiplier = multiplier
+        self.target = None
+    def update(self, *args):
+        """Add effect."""
+        if not self.active:
+            self.target = args[1]
+            self.active = True
+            args[1].damage_multiplier *= self.multiplier
+    def remove(self, *args):
+        """Remove effect"""
+        if self.active:
+            self.active = False
+            self.target.damage_multiplier /= self.multiplier

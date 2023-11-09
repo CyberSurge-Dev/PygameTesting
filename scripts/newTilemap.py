@@ -40,6 +40,7 @@ class Tilemap():
         self.items = {}  # Item objects to be rendered on the tilemap
         self.size = (0, 0)
         self.tile_groups = {}
+        self.gameManager = None
         self.enemyManager = EnemyManager()
 
     def load(self, filename, gameManager):
@@ -51,6 +52,7 @@ class Tilemap():
         self.decor = {}  # Just images, can have floating point positions
         self.items = {}  # Item objects to be rendered on the tilemap
         self.tile_groups = {}
+        self.gameManager = gameManager
         self.enemyManager = EnemyManager()
         
         # Load information from Tilemap
@@ -230,7 +232,7 @@ class Tilemap():
     def render(self, disp, offset):
         """Render the tilemap"""
         for tile in self.tilemap.values():
-            tile.render(disp, offset, self.tile_size)
+            tile.render(disp, offset, self.tile_size, self)
         for pos, dec in self.decor.items():
             blit(disp, dec, (pos[0] * self.tile_size - offset[0],
                              pos[1] * self.tile_size - offset[1]))

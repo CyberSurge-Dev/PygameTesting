@@ -163,6 +163,7 @@ class Player(PhysicsEntity):
         self.inventory = {}
         # Create HUD items
         self.hud = GUIManager()
+        self.damage_multiplier = 1
         self.hud.add('itembar', ItemBar(self.game.dPos.BOTTOM_CENTER, (81, 24), self.game.scale, self.assetMap.gui['itembar'], self.assetMap.gui['itembar_selected']))
         self.itembar = self.hud.menu_items['itembar']
         self.hud.add('inventory', Inventory((self.game.dPos.CENTER[0]-13, self.game.dPos.CENTER[0]-30), (81, 95), self.game.scale, self.assetMap.gui['inventory'], self.assetMap.gui['itembar_selected'], self.itembar, self.game))
@@ -381,7 +382,7 @@ class Projectile(PhysicsEntity):
         """Update the arrow."""
         # Check for impacts with enemies
         for enemy in player.tilemap.enemyManager.check_collisions(self.rect()):
-            enemy.do_damage(self.damage)
+            enemy.do_damage(self.damage*player.damage_multiplier)
             try: # Try-except to avoid having to fix a critical issue
                 player.projectiles.remove(self)
             except: pass
