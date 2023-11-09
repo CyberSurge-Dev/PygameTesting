@@ -34,6 +34,7 @@ import os
 BASE_IMAGE_PATH = "data/images/"
 clear = lambda: os.system('clear' if os.name == 'posix' else 'cls')
 screen = None
+display = None
 # --------------------------------------------------------------------------------
 
 class GameManager():
@@ -41,7 +42,9 @@ class GameManager():
     def __init__(self, save_file, tilemap, game):
         """Initialize GameManager variables"""
         global screen
+        global display
         screen = game.font_screen
+        display = (game.dWidth, game.dHeight)
         
         self.tilemap = tilemap
         with open(save_file+'/rooms.json') as f:
@@ -176,7 +179,7 @@ def blit(surface, image, pos):
 
 def render_font(font, scale, pos):
     """Poorly made hack to fix the low resolution font rendering"""
-    blit(screen, font, (pos[0]*scale[0], pos[1]*scale[1]))
+    blit(screen, font, (pos[0]*scale[0] + ((screen.get_width()/2)-(display[0]/2)), pos[1]*scale[1] + ((screen.get_height()/2)-(display[1]/2))))
 
 def load_images(path):
     """Loads all images in given path and returns them as a list of pygame surface objects (can also be Animation objects)."""

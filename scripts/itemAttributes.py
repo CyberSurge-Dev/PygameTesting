@@ -47,12 +47,14 @@ class Cooldown(Attribute):
             else:
                 item.meta['tick'] = 0
 
-class HealthBoost():
+class HealthBoost(Attribute):
+    """Adds given ammount of health to players max_health."""
     def __init__(self, boost):
         self.active = False
         self.boost = boost
         self.target = None
     def update(self, *args):
+        """Add effect."""
         if not self.active:
             self.target = args[1]
             self.active = True
@@ -64,3 +66,75 @@ class HealthBoost():
             if self.target.health_bar.health > (self.target.health_bar.max_health - self.boost):
                 self.target.health_bar.health = self.target.health_bar.max_health - self.boost
             self.target.health_bar.max_health -= self.boost
+
+class IFrameBoost(Attribute):
+    """Adds number passed in to players IFrame count (ammount of time before damage can be dealt to the player again)."""
+    def __init__(self, boost):
+        self.active = False
+        self.boost = boost
+        self.target = None
+    def update(self, *args):
+        """Add effect."""
+        if not self.active:
+            self.target = args[1]
+            self.active = True
+            args[1].health_bar.immunity_frames += self.boost
+    def remove(self, *args):
+        """Remove effect"""
+        if self.active:
+            self.active = False
+            self.target.health_bar.immunity_frames -= self.boost
+
+class SpeedBoost(Attribute):
+    """Multiplies the player speed by multiplier passed in."""
+    def __init__(self, multiplier):
+        self.active = False
+        self.multiplier = multiplier
+        self.target = None
+    def update(self, *args):
+        """Add effect."""
+        if not self.active:
+            self.target = args[1]
+            self.active = True
+            args[1].multiplier *= self.multiplier
+    def remove(self, *args):
+        """Remove effect"""
+        if self.active:
+            self.active = False
+            self.target.multiplier /= self.multiplier
+
+class DeffenseBoost(Attribute):
+    """Multiplies the players damage_multiplier by multiplier passed in."""
+    def __init__(self, multiplier):
+        self.active = False
+        self.multiplier = multiplier
+        self.target = None
+    def update(self, *args):
+        """Add effect."""
+        if not self.active:
+            self.target = args[1]
+            self.active = True
+            args[1].health_bar.damage_multiplier *= self.multiplier
+    def remove(self, *args):
+        """Remove effect"""
+        if self.active:
+            self.active = False
+            self.target.health_bar.damage_multiplier /= self.multiplier
+
+class RegenerationBoost(Attribute):
+    """Multiplies the players ticks_between_healing by multiplier passed in."""
+    def __init__(self, multiplier):
+        self.active = False
+        self.multiplier = multiplier
+        self.target = None
+    def update(self, *args):
+        """Add effect."""
+        if not self.active:
+            self.target = args[1]
+            self.active = True
+            args[1].health_bar.ticks_between_healing *= self.multiplier
+    def remove(self, *args):
+        """Remove effect"""
+        if self.active:
+            self.active = False
+            self.target.health_bar.ticks_between_healing /= self.multiplier

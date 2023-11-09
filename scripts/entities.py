@@ -195,6 +195,7 @@ class Player(PhysicsEntity):
         self.hud.background_tint = False
         self.hud.ignore('game-over')
         self.hud.unignore('itembar')
+        self.hud.unignore('text-box')
         self.stunned = False
         self.arrows = []
         self.pos = [(self.tilemap.size[0]//2)*self.tilemap.tile_size, self.tilemap.size[1]//2*self.tilemap.tile_size]
@@ -202,7 +203,7 @@ class Player(PhysicsEntity):
     def check_events(self, event):
         """Check events for the player."""
         if not self.health_bar.dead:
-            if event.type == pygame.MOUSEBUTTONDOWN and self.itembar.items[self.itembar.slot_selected][0] != None:
+            if event.type == pygame.MOUSEBUTTONDOWN and self.itembar.items[self.itembar.slot_selected][0] != None and not (self.inventory_open or self.health_bar.dead):
                 if event.button == 1:  # Left mouse button.
                     self.itembar.items[self.itembar.slot_selected][0].left_button(event, self)
                 elif event.button == 3:  # Right mouse button.
@@ -222,7 +223,8 @@ class Player(PhysicsEntity):
                         self.hud.ignore('itembar')
                         self.hud.unignore('inventory')
                         self.inventory_open = True
-                elif event.key == pygame.K_e and self.interaction:
+                if event.key == pygame.K_e and self.interaction:
+                    print("Interaction!")
                     thing = self.tilemap.closest_interactable(self.pos)
                     if thing != None:
                         thing.interact(self)
@@ -391,6 +393,7 @@ class Projectile(PhysicsEntity):
                 try: # Use try-except block to avoide having to fix a critical issue with collisions
                     player.projectiles.remove(self)
                 except: pass
+        # Sets the arrow in direction toward the cursor
         self.pos[0] += math.cos(self.angle) * self.multiplier
         self.pos[1] += math.sin(self.angle) * self.multiplier
 

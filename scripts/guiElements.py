@@ -192,7 +192,7 @@ class ClosableTextBox(MenuItem):
     def __init__(self, pos, scale, box_image, button_image, text, center=True):
         super().__init__(pos, (box_image.get_width(), box_image.get_height()), scale, [pygame.MOUSEBUTTONDOWN], center)
         self.font = pygame.font.Font('freesansbold.ttf', int(7*self.scale[1]))
-        self.padding = 8
+        self.padding = 4
         self.image = box_image
         self.text = []
         if self.center:
@@ -209,7 +209,7 @@ class ClosableTextBox(MenuItem):
     def render(self, disp):
         super().render(disp)
         if self.center:
-            temp_pos = [self.center_pos[0]+self.padding, self.center_pos[1]+self.padding-2]
+            temp_pos = [self.center_pos[0], self.center_pos[1]+self.padding]
             for font in self.text:
                 render_font(font, self.scale, temp_pos)
                 temp_pos[1] += self.font.get_height()//self.scale[1]+2
@@ -326,6 +326,8 @@ class Inventory(MenuItem):
                                 if isinstance(attribute, Accessory):
                                     self.accsessories[self.selcted[0]] = self.itembar.items[loc]
                                     self.itembar.items[loc] = self.selcted[2]
+                                    for attribute in self.selcted[2][0].attributes:
+                                        attribute.remove()
                     self.selcted = (loc, 'itembar', self.itembar.items[loc])
 
             for loc in range(0, self.max_accessories):
@@ -432,7 +434,10 @@ class HealthBar(MenuItem):
         self.health_font = self.font.render(str(self.max_health)+"/"+str(self.max_health), True, (255, 250, 250))
         self.health_per_bar = 10
         self.step = 21
+        self.heal_tick = 0
+        self.ticks_between_healing = 390
         self.immunity_frames = 20
+        self.damage_multiplier = 1
         self.tick = 0
         self.damaged = False
         self.dead = False
@@ -454,8 +459,19 @@ class HealthBar(MenuItem):
                     ))
             blit(disp, self.emblem, self.center_pos)
             render_font(self.font.render(str(self.health)+"/"+str(self.max_health), True, (255, 250, 250)), self.scale, 
-                        (self.center_pos[0]+30 ,self.center_pos[1] + 19))
+                        (self.center_pos[0]+20 ,self.center_pos[1] + 19))
             
+        # Increment ticks between healing, if needed    
+        if self.health < self.max_health:
+            if self.heal_tick >= self.ticks_between_healing:
+                self.heal_tick = 0
+                self.health += 1
+            else:
+                self.heal_tick += 1
+        else:
+            self.heal_tick = 0
+
+        # Increment ticks between damage, if needed    
         if self.damaged:
             if self.tick >= self.immunity_frames:
                 self.tick = 0
@@ -466,8 +482,11 @@ class HealthBar(MenuItem):
             self.dead = True
                 
     def damage(self, damage_amount):
-        if not self.damaged:
-            self.health -= damage_amount
+        if not self.damaged and self.health > 0:
+            if damage_amount > self.health:
+                self.health = 0
+            else:
+                self.health -= (damage_amount*self.damage_multiplier)
             self.damaged = True
         
             
