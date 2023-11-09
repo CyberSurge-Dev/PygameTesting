@@ -16,6 +16,9 @@ from scripts.entities import Projectile
 from scripts.itemAttributes import Accessory
 import math
 
+def check_room_state(tile, disp, offset, tile_size, tilemap):
+    """Checks room metadata to figure out if tile should be converted to a chest."""
+
 def open_chest(tile, player):
     """Handles what will happen when a chest is interacted with"""
     # Remove old text-box, if there is one

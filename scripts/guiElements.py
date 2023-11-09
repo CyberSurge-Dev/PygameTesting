@@ -300,8 +300,20 @@ class Inventory(MenuItem):
                         self.inventory[loc] = self.selcted[2]
                     else:
                         if self.selcted[2][0] != None:
-                            for attribute in self.selcted[2][0].attributes:
-                                if isinstance(attribute, Accessory):
+                            if self.inventory[loc][0] == None:
+                                self.accsessories[self.selcted[0]] = self.inventory[loc]
+                                self.inventory[loc] = self.selcted[2]
+                                for attribute in self.selcted[2][0].attributes:
+                                    attribute.remove()
+                            else:
+                                flag = False
+                                for attribute in self.inventory[loc][0].attributes:
+                                    if isinstance(attribute, Accessory):
+                                        flag = True
+                                for attribute in self.selcted[2][0].attributes:
+                                    if isinstance(attribute, Accessory):
+                                        flag = True
+                                if not flag:
                                     self.accsessories[self.selcted[0]] = self.inventory[loc]
                                     self.inventory[loc] = self.selcted[2]
                                     for attribute in self.selcted[2][0].attributes:
@@ -322,8 +334,20 @@ class Inventory(MenuItem):
                         self.itembar.items[loc] = self.selcted[2]
                     else:
                         if self.selcted[2][0] != None:
-                            for attribute in self.selcted[2][0].attributes:
-                                if isinstance(attribute, Accessory):
+                            if self.itembar.items[loc][0] == None:
+                                self.accsessories[self.selcted[0]] = self.itembar.items[loc]
+                                self.itembar.items[loc] = self.selcted[2]
+                                for attribute in self.selcted[2][0].attributes:
+                                    attribute.remove()
+                            else:
+                                flag = False
+                                for attribute in self.itembar.items[loc][0].attributes:
+                                    if isinstance(attribute, Accessory):
+                                        flag = True
+                                for attribute in self.selcted[2][0].attributes:
+                                    if isinstance(attribute, Accessory):
+                                        flag = True
+                                if not flag:
                                     self.accsessories[self.selcted[0]] = self.itembar.items[loc]
                                     self.itembar.items[loc] = self.selcted[2]
                                     for attribute in self.selcted[2][0].attributes:
@@ -483,10 +507,10 @@ class HealthBar(MenuItem):
                 
     def damage(self, damage_amount):
         if not self.damaged and self.health > 0:
-            if damage_amount > self.health:
+            if int(damage_amount*self.damage_multiplier) > self.health:
                 self.health = 0
             else:
-                self.health -= (damage_amount*self.damage_multiplier)
+                self.health -= int(damage_amount*self.damage_multiplier)
             self.damaged = True
         
             
