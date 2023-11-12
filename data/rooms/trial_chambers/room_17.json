@@ -137,7 +137,8 @@
             "id": "floor"
         },
         "4;4": {
-            "id": "floor"
+            "id": "objective-chest",
+            "meta" : {"item":"emerald-bow"}
         },
         "4;5": {
             "id": "floor"
@@ -279,9 +280,33 @@
             "variant": 10
         }
     },
-    "tile-groups": {},
+    "tile-groups": {
+        "spike_group_1" : {
+            "meta" : {"cooldown":50, "spike-time":70, "damage":10, "offset":10},
+            "tiles" : {
+                "2;2" : {"id":"spikes"},
+                "2;3" : {"id":"spikes"},
+                "3;2" : {"id":"spikes"},
+
+                "5;2" : {"id":"spikes"},
+                "6;2" : {"id":"spikes"},
+                "6;3" : {"id":"spikes"},
+
+                "2;5" : {"id":"spikes"},
+                "2;6" : {"id":"spikes"},
+                "3;6" : {"id":"spikes"},
+
+                "6;5" : {"id":"spikes"},
+                "6;6" : {"id":"spikes"},
+                "5;6" : {"id":"spikes"}
+            }
+        }
+    },
     "items": {},
     "decor": {},
-    "entities": {},
+    "entities": {
+        "1;7" : {"id": "dark-skeleton"},
+        "7;1" : {"id": "dark-skeleton"}
+    },
     "meta": {}
 }

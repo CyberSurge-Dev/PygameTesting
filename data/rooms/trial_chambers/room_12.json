@@ -178,7 +178,7 @@
     "tile-groups": {},
     "items": {},
     "decor": {
-        "1.5;1" : "large-rug"
+        "2;1.5" : "large-rug"
     },
     "entities": {
         "1;1" : {"id" : "skeleton"},

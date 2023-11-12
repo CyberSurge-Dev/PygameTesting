@@ -90,7 +90,7 @@ class AssetMap():
         "paper-cup" : Item("Paper Cup", 64, load_image('items/paper_cup.png'), interaction=pickup_item),
         "rotton-apple" : Item("Rotton Apple", 64, load_image('items/rotton_apple.png'), interaction=pickup_item),
         "wooden-bow" : Item("Wooden Bow", 1, load_image("items/bows/wooden_bow.png"), pickup_item, fire_arrow, None, True, {'cooldown':100, 'tick':0}, Cooldown()),
-        "emerald-bow" :  Item("Wooden Bow", 1, load_image("items/bows/emerald_bow.png"), pickup_item, fire_arrow, None, True, {'cooldown':20, 'tick':0}, Cooldown()),
+        "emerald-bow" :  Item("Emerald Bow", 1, load_image("items/bows/emerald_bow.png"), pickup_item, fire_arrow, None, True, {'cooldown':35, 'tick':0}, Cooldown()),
         "pink-spoon" : Item("Pink Spoon", 1, load_image("items/pink_spoon.png"), pickup_item),
         "heart-sigil" : Item("Heart Sigil (+10 Health)", 1, load_image("items/not_a_item.png"), pickup_item, None, None, False, {}, HealthBoost(10), Accessory()),
         "anklet-of-the-wind" : Item("Anklet of the Wind (+10% Speed)", 1, load_image("items/not_a_item.png"), pickup_item, None, None, False, {}, SpeedBoost(1.1) , Accessory()),

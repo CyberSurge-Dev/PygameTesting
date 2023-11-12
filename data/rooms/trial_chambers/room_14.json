@@ -201,7 +201,8 @@
             "id": "floor"
         },
         "5;5": {
-            "id": "floor"
+            "id": "objective-chest",
+            "meta" : {"item":"pink-spoon", "text":["I did all of this for a Pink Spoon!!??", "I hate my little sister."]}
         },
         "5;6": {
             "id": "floor"
@@ -407,9 +408,53 @@
             "variant": 10
         }
     },
-    "tile-groups": {},
+    "tile-groups": {
+        "spike_group_1" : {
+            "meta" : {"cooldown":50, "spike-time":70, "damage":15, "offset":10},
+            "tiles" : {
+                "1;1" : {"id":"spikes"},
+                "1;2" : {"id":"spikes"},
+                "1;3" : {"id":"spikes"},
+                "1;4" : {"id":"spikes"},
+                "1;5" : {"id":"spikes"},
+                "1;6" : {"id":"spikes"},
+                "1;7" : {"id":"spikes"},
+                "1;8" : {"id":"spikes"},
+                "1;9" : {"id":"spikes"},
+
+                "2;1" : {"id":"spikes"},
+                "2;9" : {"id":"spikes"},
+                "3;1" : {"id":"spikes"},
+                "3;9" : {"id":"spikes"},
+                "4;1" : {"id":"spikes"},
+                "4;9" : {"id":"spikes"},
+                "5;1" : {"id":"spikes"},
+                "6;1" : {"id":"spikes"},
+                "6;9" : {"id":"spikes"},
+                "7;1" : {"id":"spikes"},
+                "7;9" : {"id":"spikes"},
+                "8;1" : {"id":"spikes"},
+                "8;9" : {"id":"spikes"},
+
+                "9;1" : {"id":"spikes"},
+                "9;2" : {"id":"spikes"},
+                "9;3" : {"id":"spikes"},
+                "9;4" : {"id":"spikes"},
+                "9;5" : {"id":"spikes"},
+                "9;6" : {"id":"spikes"},
+                "9;7" : {"id":"spikes"},
+                "9;8" : {"id":"spikes"},
+                "9;9" : {"id":"spikes"}
+            }
+        }
+    },
     "items": {},
     "decor": {},
-    "entities": {},
+    "entities": {
+        "1;1" : {"id":"dark-skeleton"},
+        "9;1" : {"id":"dark-skeleton"},
+        "1;9" : {"id":"dark-skeleton"},
+        "9;9" : {"id":"dark-skeleton"}
+    },
     "meta": {}
 }

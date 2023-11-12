@@ -169,7 +169,7 @@
         },
         "7;4": {
             "id": "chest",
-            "meta" : {"item" : "god-mode"}
+            "meta" : {"item" : "god-mode", "text":["This is a test of text-boxes"]}
         },
         "7;5": {
             "id": "wall",

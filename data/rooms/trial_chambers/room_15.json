@@ -195,9 +195,32 @@
             "variant": 10
         }
     },
-    "tile-groups": {},
+    "tile-groups": {
+        "spike_group_1" : {
+            "meta" : {"cooldown":50, "spike-time":70, "damage":10, "offset":10},
+            "tiles" : {
+                "1;1" : {"id":"spikes"},
+                "2;1" : {"id":"spikes"},
+                "3;1" : {"id":"spikes"},
+                "4;1" : {"id":"spikes"},
+                "5;1" : {"id":"spikes"},
+                "6;1" : {"id":"spikes"},
+                "7;1" : {"id":"spikes"},
+
+                "1;4" : {"id":"spikes"},
+                "2;4" : {"id":"spikes"},
+                "3;4" : {"id":"spikes"},
+                "4;4" : {"id":"spikes"},
+                "5;4" : {"id":"spikes"},
+                "6;4" : {"id":"spikes"},
+                "7;4" : {"id":"spikes"}
+            }
+        }
+    },
     "items": {},
-    "decor": {},
+    "decor": {
+        "3.5;2.5" : "rug"
+    },
     "entities": {},
     "meta": {}
 }
