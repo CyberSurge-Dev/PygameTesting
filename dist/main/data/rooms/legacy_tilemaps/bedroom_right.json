@@ -1,0 +1,55 @@
+{
+    "tilemap": {
+        "0;0" : {"id":"wall", "variant":1},
+        "1;0" : {"id":"wall", "variant":0},
+        "2;0" : {"id":"wall", "variant":0},
+        "3;0" : {"id":"wall", "variant":0},
+        "4;0" : {"id":"wall", "variant":0},
+        "5;0" : {"id":"wall", "variant":7},
+
+        "0;1" : {"id":"wall", "variant":2},
+        "1;1" : {"id":"floor", "variant":0},
+        "2;1" : {"id":"floor", "variant":0},
+        "3;1" : {"id":"floor", "variant":0},
+        "4;1" : {"id":"floor", "variant":0},
+        "5;1" : {"id":"wall", "variant":6},
+
+        "0;2" : {"id":"wall", "variant":2},
+        "1;2" : {"id":"floor", "variant":0},
+        "2;2" : {"id":"floor", "variant":0},
+        "3;2" : {"id":"floor", "variant":0},
+        "4;2" : {"id":"floor", "variant":0},
+        "5;2" : {"id":"wall", "variant":6},
+
+        "0;3" : {"id":"wall", "variant":2},
+        "1;3" : {"id":"floor", "variant":0},
+        "2;3" : {"id":"floor", "variant":0},
+        "3;3" : {"id":"floor", "variant":0},
+        "4;3" : {"id":"floor", "variant":0},
+        "5;3" : {"id":"wall", "variant":6},
+
+        "0;4" : {"id":"wall", "variant":2},
+        "1;4" : {"id":"floor", "variant":0},
+        "2;4" : {"id":"floor", "variant":0},
+        "3;4" : {"id":"floor", "variant":0},
+        "4;4" : {"id":"floor", "variant":0},
+        "5;4" : {"id":"wall", "variant":6},
+
+        "0;5" : {"id":"wall", "variant":8},
+        "1;5" : {"id":"wall", "variant":9},
+        "2;5" : {"id":"wall", "variant":9},
+        "3;5" : {"id":"wall", "variant":9},
+        "4;5" : {"id":"wall", "variant":9},
+        "5;5" : {"id":"wall", "variant":10}
+    }, "doors" : {
+        "0;2" : {"id":"door", "variant":1}
+    }, "interactables" : {
+        "1;0" : {"id":"note-wall", "variant":0, "interactable-type":"tile", "text":["I kept washing my clothes repeatedly just", "for them to smell good! How", " I wished water grew on trees.", "-Melanie"]},
+        "3;1" : {"id":"bed", "variant":0, "interactable-type" : "tile"}
+    }, "decor" : {
+        
+    },
+    "meta": {
+        "type":"misc"
+    }
+}

@@ -6,6 +6,9 @@
 This program contains the main running code for the program, as well as the Game object with the game loop.
 This program updates the other game objects and acts an event handler for the program.
 
+NOTE: directories 'dist' and 'build' are for executables, they are not part of the project directly. 
+To run this project, navigate to the dist folder, and double-click on main.py
+
 --+ Classes +--
 Game() - The game class is the main object in the program, managing the update, rendering, and events of game objects.
 """

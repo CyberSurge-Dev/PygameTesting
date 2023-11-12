@@ -1,0 +1,177 @@
+{
+    "0" : {
+        "room" : "trial_chambers/room_00.json",
+        "doors" : {
+            "0" : "2",
+            "1" : "3",
+            "2" : "1",
+            "3" : "4"
+        } ,
+        "meta" : {
+            "text" : ["This big meanie stole my favorite thing.", "go get it for me NOW!", "- Little Sister"]
+        }
+    },
+    "1" : {
+        "room" : "trial_chambers/room_01.json",
+        "doors" : {
+            "0" : "0",
+            "1" : "18"
+        },
+        "meta" : {
+            "text" : ["Wow! there's a chest in this room!", "I should go open it.", "- You, probably"]
+        }
+    },
+    "2" : {
+        "room" : "trial_chambers/room_02.json",
+        "doors" : {
+            "1" : "5",
+            "0" : "0"
+        },
+        "meta" : {}
+    },
+    "3" : {
+        "room" : "trial_chambers/room_03.json",
+        "doors" : {
+            "0" : "0",
+            "1" : "6"
+        },
+        "meta" : {}
+    }, 
+    "4" : {
+        "room" : "trial_chambers/room_04.json",
+        "doors" : {
+            "0" : "5",
+            "1" : "7",
+            "2" : "0",
+            "3" : "8"
+        },
+        "meta" : {}
+    }, 
+    "5" : {
+        "room" : "trial_chambers/room_05.json",
+        "doors" : {
+            "0" : "4",
+            "1" : "2"
+        },
+        "meta" : {}
+    },
+    "6" : {
+        "room" : "trial_chambers/room_06.json",
+        "doors" : {
+            "0" : "3"
+        },
+        "meta" : {
+            "completed-text" : ["Wow! a chest appeared, I should go open", "it.", "- You, probably"]
+        }
+    },
+    "7" : {
+        "room" : "trial_chambers/room_07.json",
+        "doors" : {
+            "0" : "4",
+            "1" : "9"
+        },
+        "meta" : {}
+    },
+    "8" : {
+        "room" : "trial_chambers/room_08.json",
+        "doors" : {
+            "0" : "4",
+            "1" : "10"
+        },
+        "meta" : {
+            "completed-text" : ["Phew, that was a close one."]
+        }
+    },
+    "9" : {
+        "room" : "trial_chambers/room_09.json",
+        "doors" : {
+            "0" : "7"
+        },
+        "meta" : {}
+    },
+    "10" : {
+        "room" : "trial_chambers/room_10.json",
+        "doors" : {
+            "0" : "11",
+            "1" : "15",
+            "2" : "8",
+            "3" : "14"
+        },
+        "meta" : {}
+    },
+    "11" : {
+        "room" : "trial_chambers/room_11.json",
+        "doors" : {
+            "0" : "10",
+            "1" : "12"
+        },
+        "meta" : {}
+    }, 
+    "12" : {
+        "room" : "trial_chambers/room_12.json",
+        "doors" : {
+            "0" : "13",
+            "1" : "11"
+        },
+        "meta" : {}
+    },
+    "13" : {
+        "room" : "trial_chambers/room_13.json",
+        "doors" : {
+            "0" : "12"
+        },
+        "meta" : {
+            "completed-text" : ["Congratulations on completing", "the impossible dungeon!"]
+        }
+    },
+    "14" : {
+        "room" : "trial_chambers/room_14.json",
+        "doors" : {
+            "0" : "10"
+        },
+        "meta" : {
+            "text" : ["You have entered the final chamber.", "Prepare to die!", "- The Dark Lord"],
+            "completed-text" : ["How?! This wasn's in the script!", "- The Dark Lord"]
+        }
+    },
+    "15" : {
+        "room" : "trial_chambers/room_15.json",
+        "doors" : {
+            "0" : "10",
+            "1" : "16"
+        },
+        "meta" : {}
+    }, 
+    "16" : {
+        "room" : "trial_chambers/room_16.json",
+        "doors" : {
+            "0" : "15",
+            "1" : "17"
+        },
+        "meta" : {}
+    },
+    "17" : {
+        "room" : "trial_chambers/room_17.json",
+        "doors" : {
+            "0" : "16"
+        },
+        "meta" : {}
+    },
+    "18" : {
+        "room" : "trial_chambers/room_18.json",
+        "doors" : {
+            "0" : "1",
+            "1" : "19"
+        },
+        "meta" : {
+            "completed-text" : ["dang, that skeleton was tough!"]
+        }
+    },
+    "19" : {
+        "room" : "trial_chambers/room_19.json",
+        "doors" : {
+            "0" : "18"
+        },
+        "meta" : {}
+    }
+}

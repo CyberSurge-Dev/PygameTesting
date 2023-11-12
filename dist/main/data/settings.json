@@ -1,0 +1,17 @@
+{
+    "display": {
+        "fullscreen": true,
+        "resolution": [854, 480]
+    },
+    "keybinds": {
+        "up": "w",
+        "down": "s",
+        "left": "a",
+        "right": "d",
+        "inventory" : "i"
+    },
+    "developer": {
+        "developer": true,
+        "telemetry": false
+    }
+}
