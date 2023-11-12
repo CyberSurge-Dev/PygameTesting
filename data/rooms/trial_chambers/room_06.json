@@ -95,7 +95,8 @@
             "id": "floor"
         },
         "4;2": {
-            "id": "chest"
+            "id": "objective-chest",
+            "meta" : {"item" : "ninja-gear", "ammount" : 1}
         },
         "4;3": {
             "id": "floor"
@@ -194,7 +195,8 @@
     },
     "tile-groups": {},
     "items": {},
-    "decor": {},
+    "decor": {
+    },
     "entities": {
         "2;2" : {"id":"skeleton"},
         "4;3" : {"id":"skeleton"},

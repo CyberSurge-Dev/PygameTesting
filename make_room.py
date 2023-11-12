@@ -13,17 +13,17 @@ import json
 
 # --------------------------------------------------------------------------------
 # Change these variables to create empty room files
-filename = "room_01.json"
-width = 7
-height = 5
+filename = "room_07.json"
+width = 13
+height = 13
 # Set how many doors you want on each side
 doors = {
-    "left" : 0,
+    "left" : 1,
     "right" : 0,
     "bottom" : 0,
     "top" : 1
 }
-path = "C:/Users/Zhoov/OneDrive/Documents/HackathonPygame/data/rooms/trial_chambers/"
+path = "C:/Users/Zachary Hoover/Documents/PygameTesting/data/rooms/trial_chambers/"
 
 # Create base dictionary to be written to the file
 output = {

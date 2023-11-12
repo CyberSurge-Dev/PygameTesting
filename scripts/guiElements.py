@@ -209,7 +209,7 @@ class ClosableTextBox(MenuItem):
     def render(self, disp):
         super().render(disp)
         if self.center:
-            temp_pos = [self.center_pos[0], self.center_pos[1]+self.padding]
+            temp_pos = [self.center_pos[0]+self.padding, self.center_pos[1]+self.padding]
             for font in self.text:
                 render_font(font, self.scale, temp_pos)
                 temp_pos[1] += self.font.get_height()//self.scale[1]+2
