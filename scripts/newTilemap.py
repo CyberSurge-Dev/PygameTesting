@@ -101,18 +101,18 @@ class Tilemap():
             # Load items from tilemap (these are objects derived from the Item class)
             self.items[tuple([float(x) for x in k.split(";")
                               ])] = self.assetMap.items[v.get('id', 'NaI')]
-            
+         
         # Load enemies from tilemap
-        for k, v in tile_data.get('entities', {}).items():
-            # Load decor from file, these are just images
-            entity = self.assetMap.entities[v.get('id', 'NaN')].copy()
-            tpos = list([float(x) for x in k.split(";")])
-            entity.pos = [tpos[0] * self.tile_size, tpos[1] * self.tile_size]
-            entity.tilemap = self
-            
-            self.enemyManager.add(entity)
+        if gameManager.get_meta('completed') != True: # Check if enemies have already been defeated
+            for k, v in tile_data.get('entities', {}).items():
+                # Load decor from file, these are just images
+                entity = self.assetMap.entities[v.get('id', 'NaN')].copy()
+                tpos = list([float(x) for x in k.split(";")])
+                entity.pos = [tpos[0] * self.tile_size, tpos[1] * self.tile_size]
+                entity.tilemap = self
+                
+                self.enemyManager.add(entity)
 
-            
         # Set size variable
         self.size = (max([x[0] for x in self.tilemap]), max([y[1] for y in self.tilemap]))
 
@@ -231,6 +231,7 @@ class Tilemap():
 
     def render(self, disp, offset):
         """Render the tilemap"""
+
         for tile in self.tilemap.values():
             tile.render(disp, offset, self.tile_size, self)
         for pos, dec in self.decor.items():

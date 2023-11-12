@@ -59,7 +59,9 @@
         "doors" : {
             "0" : "3"
         },
-        "meta" : {}
+        "meta" : {
+            "completed-text" : ["Wow! a chest appeared, I should go open", "it.", "- You, probably"]
+        }
     },
     "7" : {
         "room" : "trial_chambers/room_07.json",

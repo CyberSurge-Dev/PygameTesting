@@ -132,10 +132,14 @@
         "5;5": {
             "id": "wall",
             "variant": 9
-        },
-        "6;0": {
+        },"6;0": {
             "id": "wall",
             "variant": 0
+        },
+
+        "7;0": {
+            "id": "note-wall",
+            "meta" : {"text" : ["It only gets harder from here, Warrior!", "You'll never get your thing back!"]}
         },
         "6;1": {
             "id": "floor"
@@ -152,10 +156,6 @@
         "6;5": {
             "id": "wall",
             "variant": 9
-        },
-        "7;0": {
-            "id": "wall",
-            "variant": 0
         },
         "7;1": {
             "id": "floor"
@@ -201,9 +201,22 @@
             "variant": 10
         }
     },
-    "tile-groups": {},
+    "tile-groups": {
+        "spike_group_1" : {
+            "meta" : {"cooldown":70, "spike-time":60, "damage":5, "offset":10},
+            "tiles" : {
+                "1;1" : {"id":"spikes"},
+                "2;1" : {"id":"spikes"},
+                "3;1" : {"id":"spikes"}
+            }
+        }
+    },
     "items": {},
-    "decor": {},
+    "decor": {
+        "1.4;1.2" : "cobweb",
+        "1.1;1.2" : "skull",
+        "6;0.25" : "bookshelf"
+    },
     "entities": {},
     "meta": {}
 }

@@ -246,6 +246,16 @@ class Player(PhysicsEntity):
             if flag:
                 self.itembar.items[self.itembar.slot_selected][0].update(self)
 
+        # Check if all enemies in current room are dead
+        if len(self.tilemap.enemyManager.enemies) <= 0:
+            if self.gameManager.get_meta("completed") != True and self.gameManager.get_meta('completed-text') != {}: 
+                self.hud.add('text-box', 
+                ClosableTextBox((self.game.dPos.TOP_CENTER[0], 42), self.game.scale, self.assetMap.gui['text-box'], self.assetMap.gui['close'], self.gameManager.get_meta("completed-text"))
+                             )
+                # Check if this is the first run, and display a message, if there is one (this is to avoid creating multiple text-boxes)
+                
+            self.tilemap.gameManager.add_meta("completed", True)
+
         # Update accessories
         self.inventory.update_accessories(self)
 
@@ -262,7 +272,6 @@ class Player(PhysicsEntity):
                 self.hud.ignore('text-box')
                 self.hud.unignore('game-over')
             except: pass
-
              
         self.tilemap.check_collisions(self.rect(), self)
 
@@ -326,18 +335,18 @@ class Enemy(PhysicsEntity):
         }
 
         # Check horizontal movement
-        if (self.pos[0]-pos[0]-self.distance_from_target > 15):
+        if (self.pos[0]-pos[0]-self.distance_from_target > 10):
             movement['left'] = True
-        elif (self.pos[0]-pos[0]+self.distance_from_target < -15):
+        elif (self.pos[0]-pos[0]+self.distance_from_target < -10):
             movement['right'] = True
         else:
             movement['right'] = False
             movement['left'] = False
            
         # Check vertical movement 
-        if (self.pos[1]-pos[1]-self.distance_from_target < -15):
+        if (self.pos[1]-pos[1]-self.distance_from_target < -10):
             movement['down'] = True
-        elif (self.pos[1]-pos[1]+self.distance_from_target > 15):
+        elif (self.pos[1]-pos[1]+self.distance_from_target > 10):
             movement['up'] = True
         else:
             movement['up'] = False
