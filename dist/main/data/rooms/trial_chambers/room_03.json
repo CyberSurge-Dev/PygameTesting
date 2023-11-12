@@ -1,0 +1,145 @@
+{
+    "tilemap": {
+        "0;0": {
+            "id": "wall",
+            "variant": 1
+        },
+        "0;1": {
+            "id": "wall",
+            "variant": 2
+        },
+        "0;2": {
+            "id": "door",
+            "variant": 1,
+            "meta": {
+                "id": "0"
+            }
+        },
+        "0;3": {
+            "id": "wall",
+            "variant": 2
+        },
+        "0;4": {
+            "id": "wall",
+            "variant": 8
+        },
+        "1;0": {
+            "id": "wall",
+            "variant": 0
+        },
+        "1;1": {
+            "id": "floor"
+        },
+        "1;2": {
+            "id": "floor"
+        },
+        "1;3": {
+            "id": "floor"
+        },
+        "1;4": {
+            "id": "wall",
+            "variant": 9
+        },
+        "2;0": {
+            "id": "wall",
+            "variant": 0
+        },
+        "2;1": {
+            "id": "floor"
+        },
+        "2;2": {
+            "id": "floor"
+        },
+        "2;3": {
+            "id": "floor"
+        },
+        "2;4": {
+            "id": "wall",
+            "variant": 9
+        },
+        "3;0": {
+            "id": "note-wall", 
+            "variant": 0,
+            "meta" : {"text":["The enemies will only grow stronger.", "If you ever wish to see your prize,", "you must watch your every step.", "- The Dark Lord"]}
+        },
+        "3;1": {
+            "id": "floor"
+        },
+        "3;2": {
+            "id": "floor"
+        },
+        "3;3": {
+            "id" : "floor"
+        },
+        "3;4": {
+            "id": "wall",
+            "variant": 9
+        },
+        "4;0": {
+            "id": "wall",
+            "variant": 0
+        },
+        "4;1": {
+            "id": "floor"
+        },
+        "4;2": {
+            "id": "floor"
+        },
+        "4;3": {
+            "id": "floor"
+        },
+        "4;4": {
+            "id": "wall",
+            "variant": 9
+        },
+        "5;0": {
+            "id": "wall",
+            "variant": 0
+        },
+        "5;1": {
+            "id": "floor"
+        },
+        "5;2": {
+            "id": "floor"
+        },
+        "5;3": {
+            "id": "floor"
+        },
+        "5;4": {
+            "id": "wall",
+            "variant": 9
+        },
+        "6;0": {
+            "id": "wall",
+            "variant": 7
+        },
+        "6;1": {
+            "id": "wall",
+            "variant": 6
+        },
+        "6;2": {
+            "id": "door",
+            "variant": 3,
+            "meta": {
+                "id": "1"
+            }
+        },
+        "6;3": {
+            "id": "wall",
+            "variant": 6
+        },
+        "6;4": {
+            "id": "wall",
+            "variant": 10
+        }
+    },
+    "tile-groups": {},
+    "items": {},
+    "decor": {
+        "1;1" : "rug",
+        "1;0.3" : "bookshelf",
+        "4;3" : "cobweb"
+    },
+    "entities": {},
+    "meta": {}
+}
