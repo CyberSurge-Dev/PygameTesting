@@ -9,7 +9,7 @@
             "variant": 2
         },
         "0;2": {
-            "id": "door",
+            "id": "locked-door",
             "variant": 1,
             "meta": {
                 "id": "0"
@@ -177,7 +177,14 @@
     },
     "tile-groups": {},
     "items": {},
-    "decor": {},
-    "entities": {},
+    "decor": {
+        "1.5;1" : "large-rug"
+    },
+    "entities": {
+        "1;1" : {"id" : "skeleton"},
+        "6;4" : {"id": "skeleton"},
+        "1;4" : {"id":"skeleton"},
+        "6;1" : {"id":"skeleton"}
+    },
     "meta": {}
 }

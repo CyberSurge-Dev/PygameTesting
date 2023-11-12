@@ -22,6 +22,18 @@
         },
         "0;5": {
             "id": "wall",
+            "variant": 2
+        },
+        "0;6": {
+            "id": "wall",
+            "variant": 2
+        },
+        "0;7": {
+            "id": "wall",
+            "variant": 2
+        },
+        "0;8": {
+            "id": "wall",
             "variant": 8
         },
         "1;0": {
@@ -41,6 +53,15 @@
             "id": "floor"
         },
         "1;5": {
+            "id": "floor"
+        },
+        "1;6": {
+            "id": "floor"
+        },
+        "1;7": {
+            "id": "floor"
+        },
+        "1;8": {
             "id": "wall",
             "variant": 9
         },
@@ -61,6 +82,15 @@
             "id": "floor"
         },
         "2;5": {
+            "id": "floor"
+        },
+        "2;6": {
+            "id": "floor"
+        },
+        "2;7": {
+            "id": "floor"
+        },
+        "2;8": {
             "id": "wall",
             "variant": 9
         },
@@ -69,8 +99,7 @@
             "variant": 0
         },
         "3;1": {
-            "id": "objective-chest",
-            "meta" : {"item" : "anklet-of-the-wind"}
+            "id": "floor"
         },
         "3;2": {
             "id": "floor"
@@ -82,6 +111,15 @@
             "id": "floor"
         },
         "3;5": {
+            "id": "floor"
+        },
+        "3;6": {
+            "id": "floor"
+        },
+        "3;7": {
+            "id": "floor"
+        },
+        "3;8": {
             "id": "wall",
             "variant": 9
         },
@@ -102,6 +140,15 @@
             "id": "floor"
         },
         "4;5": {
+            "id": "floor"
+        },
+        "4;6": {
+            "id": "floor"
+        },
+        "4;7": {
+            "id": "floor"
+        },
+        "4;8": {
             "id": "door",
             "variant": 2,
             "meta": {
@@ -125,6 +172,15 @@
             "id": "floor"
         },
         "5;5": {
+            "id": "floor"
+        },
+        "5;6": {
+            "id": "floor"
+        },
+        "5;7": {
+            "id": "floor"
+        },
+        "5;8": {
             "id": "wall",
             "variant": 9
         },
@@ -145,6 +201,15 @@
             "id": "floor"
         },
         "6;5": {
+            "id": "floor"
+        },
+        "6;6": {
+            "id": "floor"
+        },
+        "6;7": {
+            "id": "floor"
+        },
+        "6;8": {
             "id": "wall",
             "variant": 9
         },
@@ -165,6 +230,15 @@
             "id": "floor"
         },
         "7;5": {
+            "id": "floor"
+        },
+        "7;6": {
+            "id": "floor"
+        },
+        "7;7": {
+            "id": "floor"
+        },
+        "7;8": {
             "id": "wall",
             "variant": 9
         },
@@ -190,18 +264,24 @@
         },
         "8;5": {
             "id": "wall",
+            "variant": 6
+        },
+        "8;6": {
+            "id": "wall",
+            "variant": 6
+        },
+        "8;7": {
+            "id": "wall",
+            "variant": 6
+        },
+        "8;8": {
+            "id": "wall",
             "variant": 10
         }
     },
     "tile-groups": {},
     "items": {},
-    "decor": {
-        "1.5;0.25" : "bookshelf",
-        "2.5;0.9" : "skull"
-    },
-    "entities": {
-        "7;4" : {"id" : "skeleton"},
-        "1;4" : {"id" : "skeleton"}
-    },
+    "decor": {},
+    "entities": {},
     "meta": {}
 }
