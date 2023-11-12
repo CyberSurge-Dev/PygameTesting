@@ -41,26 +41,40 @@ def open_chest(tile, player):
     """Handles what will happen when a chest is interacted with"""
     # Remove old text-box, if there is one
     player.hud.remove("text-box")
+    print(tile.meta)
     if not tile.meta['opened']:
-        # add items in chest to player inventory
-        for i in range(0, tile.meta.get('ammount', 1)):
-            player.inventory.add(player.tilemap.assetMap.items[tile.meta.get('item', 'NaI')].copy())
-        tile.meta['opened'] = True
-        player.gameManager.add_meta(tile.pos, {'opened' : True})
-        tile.variant = 1
-        # Display a message fro the player
-        
-        # Check if the item is an accessory (to display a seprate message)
-        isAccessory = False
-        for attribute in player.tilemap.assetMap.items[tile.meta.get('item', 'NaI')].attributes:
-            if isinstance(attribute, Accessory):
-                isAccessory = True
-        if isAccessory:
-            player.hud.add("text-box", ClosableTextBox((player.game.dPos.TOP_CENTER[0], 42), player.game.scale, player.assetMap.gui['text-box'], player.assetMap.gui['close'], 
-                                                      [f"I got a {player.tilemap.assetMap.items[tile.meta.get('item', 'NaI')].display_name} Accessory!", "", f"Press ' {player.game.settings.settings_data['keybinds'].get('inventory', 'NaK')} ' to open your inventory and equip it."]))
+        if tile.meta.get("text", None) == None: # Display default message if none is set
+            # add items in chest to player inventory
+            for i in range(0, tile.meta.get('ammount', 1)):
+                player.inventory.add(player.tilemap.assetMap.items[tile.meta.get('item', 'NaI')].copy())
+            tile.meta['opened'] = True
+            player.gameManager.add_meta(tile.pos, {'opened' : True})
+            tile.variant = 1
+            # Display a message for the player
+            
+            # Check if the item is an accessory (to display a seprate message)
+            isAccessory = False # Check if the item is an accessory
+            for attribute in player.tilemap.assetMap.items[tile.meta.get('item', 'NaI')].attributes:
+                if isinstance(attribute, Accessory):
+                    isAccessory = True
+            if isAccessory:
+                # Display a different message if the item is an accessory
+                player.hud.add("text-box", ClosableTextBox((player.game.dPos.TOP_CENTER[0], 42), player.game.scale, player.assetMap.gui['text-box'], player.assetMap.gui['close'], 
+                                                        [f"I got a {player.tilemap.assetMap.items[tile.meta.get('item', 'NaI')].display_name} Accessory!", "", f"Press ' {player.game.settings.settings_data['keybinds'].get('inventory', 'NaK')} ' to open your inventory and equip it."]))
+            else:
+                player.hud.add("text-box", ClosableTextBox((player.game.dPos.TOP_CENTER[0], 42), player.game.scale, player.assetMap.gui['text-box'], player.assetMap.gui['close'], 
+                                                        [f"I got a {player.tilemap.assetMap.items[tile.meta.get('item', 'NaI')].display_name}!"]))
         else:
+            # add items in chest to player inventory
+            for i in range(0, tile.meta.get('ammount', 1)):
+                player.inventory.add(player.tilemap.assetMap.items[tile.meta.get('item', 'NaI')].copy())
+            tile.meta['opened'] = True
+            player.gameManager.add_meta(tile.pos, {'opened' : True})
+            tile.variant = 1
+
+            # Display message set in tilemap
             player.hud.add("text-box", ClosableTextBox((player.game.dPos.TOP_CENTER[0], 42), player.game.scale, player.assetMap.gui['text-box'], player.assetMap.gui['close'], 
-                                                      [f"I got a {player.tilemap.assetMap.items[tile.meta.get('item', 'NaI')].display_name}!"]))
+                                                        tile.meta.get('text', [])))
     else:
         # Display a message fro the player
         player.hud.add("text-box", ClosableTextBox((player.game.dPos.TOP_CENTER[0], 42), player.game.scale, player.assetMap.gui['text-box'], player.assetMap.gui['close'], ["This chest is empty!"]))

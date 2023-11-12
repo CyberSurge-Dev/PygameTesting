@@ -120,14 +120,19 @@
         "doors" : {
             "0" : "12"
         },
-        "meta" : {}
+        "meta" : {
+            "completed-text" : ["Congratulations on completing", "the impossible dungeon!"]
+        }
     },
     "14" : {
         "room" : "trial_chambers/room_14.json",
         "doors" : {
             "0" : "10"
         },
-        "meta" : {}
+        "meta" : {
+            "text" : ["You have entered the final chamber.", "Prepare to die!", "- The Dark Lord"],
+            "completed-text" : ["How?! This wasn's in the script!", "- The Dark Lord"]
+        }
     },
     "15" : {
         "room" : "trial_chambers/room_15.json",
