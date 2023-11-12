@@ -156,7 +156,7 @@
         "7;0": {
             "id": "note-wall",
             "variant": 0,
-            "meta" : {"text" : ["This big meanie stole my thing, go", "get it for me NOW", "- Little sis AKA your favorite"]}
+            "meta" : {"text" : ["If you dare enter my dungeon, preapre", "for it to be your end.", "- The Dark Lord"]}
         },
         "7;1": {
             "id": "floor"
@@ -168,7 +168,8 @@
             "id": "floor"
         },
         "7;4": {
-            "id": "floor"
+            "id": "chest",
+            "meta" : {"item" : "god-mode"}
         },
         "7;5": {
             "id": "wall",

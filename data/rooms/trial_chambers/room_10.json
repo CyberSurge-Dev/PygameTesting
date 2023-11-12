@@ -9,25 +9,21 @@
             "variant": 2
         },
         "0;2": {
-            "id": "wall",
-            "variant": 2
-        },
-        "0;3": {
             "id": "door",
             "variant": 1,
             "meta": {
                 "id": "0"
             }
         },
+        "0;3": {
+            "id": "wall",
+            "variant": 2
+        },
         "0;4": {
             "id": "wall",
             "variant": 2
         },
         "0;5": {
-            "id": "wall",
-            "variant": 2
-        },
-        "0;6": {
             "id": "wall",
             "variant": 8
         },
@@ -48,9 +44,6 @@
             "id": "floor"
         },
         "1;5": {
-            "id": "floor"
-        },
-        "1;6": {
             "id": "wall",
             "variant": 9
         },
@@ -71,9 +64,6 @@
             "id": "floor"
         },
         "2;5": {
-            "id": "floor"
-        },
-        "2;6": {
             "id": "wall",
             "variant": 9
         },
@@ -94,9 +84,6 @@
             "id": "floor"
         },
         "3;5": {
-            "id": "floor"
-        },
-        "3;6": {
             "id": "wall",
             "variant": 9
         },
@@ -104,7 +91,7 @@
             "id": "door",
             "variant": 0,
             "meta": {
-                "id": "2"
+                "id": "3"
             }
         },
         "4;1": {
@@ -120,18 +107,21 @@
             "id": "floor"
         },
         "4;5": {
-            "id": "floor"
-        },
-        "4;6": {
             "id": "door",
             "variant": 2,
             "meta": {
-                "id": "1"
+                "id": "2"
             }
         },
         "5;0": {
-            "id": "wall",
-            "variant": 0
+            "id": "note-wall",
+            "meta" : {
+                "text": [
+                    "If you dare enter the final chamber,",
+                    "be prepared to die!",
+                    "- The Dark Lord"
+                ]
+            }
         },
         "5;1": {
             "id": "floor"
@@ -146,9 +136,6 @@
             "id": "floor"
         },
         "5;5": {
-            "id": "floor"
-        },
-        "5;6": {
             "id": "wall",
             "variant": 9
         },
@@ -169,9 +156,6 @@
             "id": "floor"
         },
         "6;5": {
-            "id": "floor"
-        },
-        "6;6": {
             "id": "wall",
             "variant": 9
         },
@@ -192,9 +176,6 @@
             "id": "floor"
         },
         "7;5": {
-            "id": "floor"
-        },
-        "7;6": {
             "id": "wall",
             "variant": 9
         },
@@ -207,8 +188,11 @@
             "variant": 6
         },
         "8;2": {
-            "id": "wall",
-            "variant": 6
+            "id": "door",
+            "variant": 3,
+            "meta": {
+                "id": "1"
+            }
         },
         "8;3": {
             "id": "wall",
@@ -220,16 +204,14 @@
         },
         "8;5": {
             "id": "wall",
-            "variant": 6
-        },
-        "8;6": {
-            "id": "wall",
             "variant": 10
         }
     },
     "tile-groups": {},
     "items": {},
-    "decor": {},
+    "decor": {
+        "2.5;1.5" : "large-rug"
+    },
     "entities": {},
     "meta": {}
 }

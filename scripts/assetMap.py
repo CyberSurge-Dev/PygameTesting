@@ -30,7 +30,8 @@ class AssetMap():
         'chest' : InteractableTile(load_images("tiles/")),
         'spikes' : InteractableTile(load_images('tiles/spikes'), False, {'tick':0, 'cooldown':0, 'spike-time':0, "damage":0, "offset":0}, interactable=False, on_collision=spike_damage, on_render=spike_tick, collision_interactable=False),
         'chest' : InteractableTile([load_image('tiles/chest/chest.png'), load_image('tiles/chest/open_chest.png')], True, {'item':"NaI", "ammount":1, 'opened':False}, open_chest, None, None, True, False, check_chest_state),
-        'objective-chest' : InteractableTile([load_image("tiles/floors/floor_00.png")], False, {'item':"NaI", "ammount":1}, None, None, None, False, False, check_room_state)
+        'objective-chest' : InteractableTile([load_image("tiles/floors/floor_00.png")], False, {'item':"NaI", "ammount":1}, None, None, None, False, False, check_room_state),
+        'locked-door' : Tile(load_images("tiles/locked_doors"), True, {}, check_room_state_doors)
     }
     entities = {
         'player': {
@@ -55,6 +56,17 @@ class AssetMap():
             'up-right' : Animation(load_images('entities/skeleton/right'), 5),
             'idle' : load_image('entities/skeleton/skeleton.png'),
         }),
+        'dark-skeleton': Enemy({
+            'left' : Animation(load_images('entities/dark_skeleton/left'), 5),
+            'right' : Animation(load_images('entities/dark_skeleton/right'), 5),
+            'up' : Animation(load_images('entities/dark_skeleton/up'), 5),
+            'down' : Animation(load_images('entities/dark_skeleton/down'), 5),
+            'down-left' : Animation(load_images('entities/dark_skeleton/left'), 5),
+            'down-right' : Animation(load_images('entities/dark_skeleton/right'), 5),
+            'up-left' : Animation(load_images('entities/dark_skeleton/left'), 5),
+            'up-right' : Animation(load_images('entities/dark_skeleton/right'), 5),
+            'idle' : load_image('entities/dark_skeleton/dark_skeleton.png'),
+        }, 10, 15, 0.5),
         'arrow' : Projectile(load_image('entities/arrows/wooden_arrow.png'), 5, 7, arrow_hit)
     }
     gui = {
@@ -81,11 +93,12 @@ class AssetMap():
         "emerald-bow" :  Item("Wooden Bow", 1, load_image("items/bows/emerald_bow.png"), pickup_item, fire_arrow, None, True, {'cooldown':20, 'tick':0}, Cooldown()),
         "pink-spoon" : Item("Pink Spoon", 1, load_image("items/pink_spoon.png"), pickup_item),
         "heart-sigil" : Item("Heart Sigil (+10 Health)", 1, load_image("items/not_a_item.png"), pickup_item, None, None, False, {}, HealthBoost(10), Accessory()),
-        "anklet-of-the-wind" : Item("Anklet of the Wind (+20% Speed)", 1, load_image("items/not_a_item.png"), pickup_item, None, None, False, {}, SpeedBoost(1.2) , Accessory()),
+        "anklet-of-the-wind" : Item("Anklet of the Wind (+10% Speed)", 1, load_image("items/not_a_item.png"), pickup_item, None, None, False, {}, SpeedBoost(1.1) , Accessory()),
         "ninja-gear" : Item("Ninja Gear (+3 Immunity Frames)", 1, load_image("items/not_a_item.png"), pickup_item, None, None, False, {}, IFrameBoost(3), Accessory()),
         "armor-plate" : Item("Armor Plate (-8% Damage Reduction)", 1, load_image("items/not_a_item.png"), pickup_item, None, None, False, {}, DeffenseBoost(0.92), Accessory()),
         "steel-gauntlet" : Item("Steel Gauntlet (+5% Damage)", 1, load_image("items/not_a_item.png"), pickup_item, None, None, False, {}, DamageBoost(1.05), Accessory()),
-        "glass-cannon" : Item("Glass Cannon (-60% Damage Reduction, +45% Damage)", 1, load_image("items/not_a_item.png"), pickup_item, None, None, False, {}, DamageBoost(1.45), DeffenseBoost(1.6), Accessory())
+        "glass-cannon" : Item("Glass Cannon (-60% Damage Reduction, +45% Damage)", 1, load_image("items/not_a_item.png"), pickup_item, None, None, False, {}, DamageBoost(1.45), DeffenseBoost(1.6), Accessory()),
+        "god-mode" : Item("God Mode", 1, load_image("items/not_a_item.png"), pickup_item, None, None, False, {}, DamageBoost(100), DeffenseBoost(0), Accessory())
     }
     decor = {
         'rug' : load_image("decor/rug.png"),

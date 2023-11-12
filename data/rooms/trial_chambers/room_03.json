@@ -60,7 +60,7 @@
         "3;0": {
             "id": "note-wall", 
             "variant": 0,
-            "meta" : {"text":["beWr of Dnger", "- The Dungeon Master"]}
+            "meta" : {"text":["The enemies will only grow stronger.", "If you ever wish to see your prize,", "you must watch your every step.", "- The Dark Lord"]}
         },
         "3;1": {
             "id": "floor"

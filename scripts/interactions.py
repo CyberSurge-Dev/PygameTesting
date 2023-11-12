@@ -20,10 +20,22 @@ def check_room_state(tile, disp, offset, tile_size, tilemap):
     """Checks room metadata to figure out if tile should be converted to a chest."""
     if tilemap.gameManager.get_meta("completed") == True:
         chest = tilemap.assetMap.tiles['chest'].copy()
+        # Set specific tiledata from old tile
         chest.meta.update(tile.meta)
         chest.pos = tile.pos
         chest.meta = chest.meta.copy()
         tilemap.tilemap[tile.pos] = chest
+
+def check_room_state_doors(tile, disp, offset, tile_size, tilemap):
+    """Checks room metadata to figure out if tile should be converted to a chest."""
+    if tilemap.gameManager.get_meta("completed") == True:
+        door = tilemap.assetMap.tiles['door'].copy()
+        door.meta.update(tile.meta)
+        # Set specific tiledata from old tile
+        door.pos = tile.pos
+        door.meta = door.meta.copy()
+        door.variant = tile.variant # Set tile varient
+        tilemap.tilemap[tile.pos] = door
 
 def open_chest(tile, player):
     """Handles what will happen when a chest is interacted with"""

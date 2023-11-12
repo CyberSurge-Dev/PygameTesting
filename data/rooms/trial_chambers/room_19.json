@@ -9,8 +9,11 @@
             "variant": 2
         },
         "0;2": {
-            "id": "wall",
-            "variant": 2
+            "id": "door",
+            "variant": 1,
+            "meta": {
+                "id": "0"
+            }
         },
         "0;3": {
             "id": "wall",
@@ -55,24 +58,18 @@
             "variant": 9
         },
         "3;0": {
-            "id": "door",
-            "variant": 0,
-            "meta": {
-                "id": "0"
-            }
+            "id": "wall",
+            "variant": 0
         },
         "3;1": {
-            "id": "floor"
+            "id": "chest",
+            "meta" : {"item" : "steel-gauntlet"}
         },
         "3;2": {
             "id": "floor"
         },
         "3;3": {
-            "id": "chest",
-            "meta" : {
-                "item" : "wooden-bow",
-                "ammount" : 1
-            }
+            "id": "floor"
         },
         "3;4": {
             "id": "wall",
@@ -121,11 +118,8 @@
             "variant": 6
         },
         "6;2": {
-            "id": "door",
-            "variant": 3,
-            "meta": {
-                "id": "1"
-            }
+            "id": "wall",
+            "variant": 6
         },
         "6;3": {
             "id": "wall",

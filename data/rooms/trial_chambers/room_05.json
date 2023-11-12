@@ -65,8 +65,15 @@
             "variant": 9
         },
         "3;0": {
-            "id": "wall",
-            "variant": 0
+            "id": "note-wall",
+            "meta" : {
+                "text" : [
+                    "To find the thing you seek, you must",
+                    "venture through my dungeon, and reach",
+                    "the final chamber!",
+                    "- The Dark Lord"
+                ]
+            }
         },
         "3;1": {
             "id": "floor"
@@ -197,7 +204,13 @@
     },
     "tile-groups": {},
     "items": {},
-    "decor": {},
+    "decor": {
+        "2.5;1.5" : "large-rug",
+        "7;1" : "skull",
+        "1;4" : "skull",
+        "1.4;3.8" : "cobweb",
+        "1;0.25" : "bookshelf"
+    },
     "entities": {},
     "meta": {}
 }

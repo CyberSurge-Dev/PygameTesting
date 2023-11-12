@@ -640,7 +640,9 @@
                 "11;8" : {"id":"spikes"},
                 "11;9" : {"id":"spikes"},
                 "11;10" : {"id":"spikes"},
-                "11;11" : {"id":"spikes"}
+                "11;11" : {"id":"spikes"},
+                "1;2" : {"id":"spikes"},
+                "3;5" : {"id":"spikes"}
                 
             }
         }

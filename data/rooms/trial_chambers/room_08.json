@@ -75,7 +75,7 @@
             "variant": 9
         },
         "3;0": {
-            "id": "door",
+            "id": "locked-door",
             "variant": 0,
             "meta": {
                 "id": "1"
@@ -91,7 +91,10 @@
             "id": "floor"
         },
         "3;4": {
-            "id": "floor"
+            "id": "objective-chest",
+            "meta" : {
+                "item":"armor-plate"
+            }
         },
         "3;5": {
             "id": "floor"
@@ -178,9 +181,26 @@
             "variant": 10
         }
     },
-    "tile-groups": {},
+    "tile-groups": {
+         "spike_group_1" : {
+            "meta" : {"cooldown":70, "spike-time":60, "damage":5, "offset":10},
+            "tiles" : {
+                "1;1" : {"id":"spikes"},
+                "1;2" : {"id":"spikes"},
+                "5;1" : {"id":"spikes"},
+                "5;2" : {"id":"spikes"},
+                "5;4" : {"id":"spikes"},
+                "5;5" : {"id":"spikes"},
+                "1;4" : {"id":"spikes"},
+                "1;5" : {"id":"spikes"}
+            }
+        }
+    },
     "items": {},
     "decor": {},
-    "entities": {},
+    "entities": {
+        "1;3" : {"id": "skeleton"},
+        "5;4" : {"id" : "skeleton"}
+    },
     "meta": {}
 }
