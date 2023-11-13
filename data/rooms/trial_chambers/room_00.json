@@ -168,8 +168,7 @@
             "id": "floor"
         },
         "7;4": {
-            "id": "chest",
-            "meta" : {"item" : "god-mode", "text":["This is a test of text-boxes"]}
+            "id": "floor"
         },
         "7;5": {
             "id": "wall",
