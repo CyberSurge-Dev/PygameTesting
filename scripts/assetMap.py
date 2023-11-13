@@ -66,8 +66,8 @@ class AssetMap():
             'up-left' : Animation(load_images('entities/dark_skeleton/left'), 5),
             'up-right' : Animation(load_images('entities/dark_skeleton/right'), 5),
             'idle' : load_image('entities/dark_skeleton/dark_skeleton.png'),
-        }, 10, 23, 0.7),
-        'arrow' : Projectile(load_image('entities/arrows/wooden_arrow.png'), 5, 7, arrow_hit)
+        }, 10, 23, 0.6),
+        'arrow' : Projectile(load_image('entities/arrows/wooden_arrow.png'), 6, 7, arrow_hit)
     }
     gui = {
         "itembar" : load_image("gui/hud/itembar.png"),
@@ -89,7 +89,7 @@ class AssetMap():
         "crumbled-paper" : Item("Crumbled Paper", 64, load_image('items/crumpled_paper.png'), interaction=pickup_item),
         "paper-cup" : Item("Paper Cup", 64, load_image('items/paper_cup.png'), interaction=pickup_item),
         "rotton-apple" : Item("Rotton Apple", 64, load_image('items/rotton_apple.png'), interaction=pickup_item),
-        "wooden-bow" : Item("Wooden Bow", 1, load_image("items/bows/wooden_bow.png"), pickup_item, fire_arrow, None, True, {'cooldown':100, 'tick':0}, Cooldown()),
+        "wooden-bow" : Item("Wooden Bow", 1, load_image("items/bows/wooden_bow.png"), pickup_item, fire_arrow, None, True, {'cooldown':80, 'tick':0}, Cooldown()),
         "emerald-bow" :  Item("Emerald Bow", 1, load_image("items/bows/emerald_bow.png"), pickup_item, fire_arrow, None, True, {'cooldown':35, 'tick':0}, Cooldown()),
         "pink-spoon" : Item("Pink Spoon", 1, load_image("items/pink_spoon.png"), pickup_item),
         "heart-sigil" : Item("Heart Sigil (+10 Health)", 1, load_image("items/accessories/heart_sigil.png"), pickup_item, None, None, False, {}, HealthBoost(10), Accessory()),

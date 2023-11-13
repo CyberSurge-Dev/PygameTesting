@@ -141,7 +141,6 @@ bind TEntry <Tab> 			{# nothing}
 # as a Command modifier.
 if {[tk windowingsystem] eq "aqua"} {
     bind TEntry <Command-Key>		{# nothing}
-    bind TEntry <Mod4-Key>		{# nothing}
 }
 # Tk-on-Cocoa generates characters for these two keys. [Bug 2971663]
 bind TEntry <<PrevLine>>		{# nothing}

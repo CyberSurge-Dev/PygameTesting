@@ -2,7 +2,7 @@
 
 
 a = Analysis(
-    ['C:\\Users\\Zachary Hoover\\Documents\\PygameTesting\\main.py'],
+    ['C:\\Users\\zhoover2891\\Documents\\PygameTesting\\main.py'],
     pathex=[],
     binaries=[],
     datas=[],
