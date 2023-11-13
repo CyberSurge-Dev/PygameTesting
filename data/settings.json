@@ -1,6 +1,6 @@
 {
     "display": {
-        "fullscreen": true,
+        "fullscreen": false,
         "resolution": [854, 480]
     },
     "keybinds": {

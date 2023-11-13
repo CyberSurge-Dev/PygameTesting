@@ -95,7 +95,7 @@ class AssetMap():
         "heart-sigil" : Item("Heart Sigil (+10 Health)", 1, load_image("items/accessories/heart_sigil.png"), pickup_item, None, None, False, {}, HealthBoost(10), Accessory()),
         "anklet-of-the-wind" : Item("Anklet of the Wind (+10% Speed)", 1, load_image("items/accessories/anklet_of_the_wind.png"), pickup_item, None, None, False, {}, SpeedBoost(1.1) , Accessory()),
         "ninja-gear" : Item("Ninja Gear (+3 Immunity Frames)", 1, load_image("items/accessories/ninja_gear.png"), pickup_item, None, None, False, {}, IFrameBoost(3), Accessory()),
-        "armor-plate" : Item("Armor Plate (-8% Damage Reduction)", 1, load_image("items/accessories/armor_plate.png"), pickup_item, None, None, False, {}, DeffenseBoost(0.92), Accessory()),
+        "armor-plate" : Item("Armor Plate (+8% Damage Reduction)", 1, load_image("items/accessories/armor_plate.png"), pickup_item, None, None, False, {}, DeffenseBoost(0.92), Accessory()),
         "steel-gauntlet" : Item("Steel Gauntlet (+5% Damage)", 1, load_image("items/accessories/iron_gauntlet.png"), pickup_item, None, None, False, {}, DamageBoost(1.05), Accessory()),
         "glass-cannon" : Item("Glass Cannon (-60% Damage Reduction, +45% Damage)", 1, load_image("items/accessories/glass_cannon.png"), pickup_item, None, None, False, {}, DamageBoost(1.45), DeffenseBoost(1.6), Accessory()),
         "god-mode" : Item("God Mode", 1, load_image("items/not_a_item.png"), pickup_item, None, None, False, {}, DamageBoost(100), DeffenseBoost(0), Accessory())
