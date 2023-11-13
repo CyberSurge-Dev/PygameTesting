@@ -66,8 +66,8 @@ class AssetMap():
             'up-left' : Animation(load_images('entities/dark_skeleton/left'), 5),
             'up-right' : Animation(load_images('entities/dark_skeleton/right'), 5),
             'idle' : load_image('entities/dark_skeleton/dark_skeleton.png'),
-        }, 10, 23, 0.7),
-        'arrow' : Projectile(load_image('entities/arrows/wooden_arrow.png'), 5, 7, arrow_hit)
+        }, 10, 23, 0.6),
+        'arrow' : Projectile(load_image('entities/arrows/wooden_arrow.png'), 6, 7, arrow_hit)
     }
     gui = {
         "itembar" : load_image("gui/hud/itembar.png"),
@@ -89,13 +89,13 @@ class AssetMap():
         "crumbled-paper" : Item("Crumbled Paper", 64, load_image('items/crumpled_paper.png'), interaction=pickup_item),
         "paper-cup" : Item("Paper Cup", 64, load_image('items/paper_cup.png'), interaction=pickup_item),
         "rotton-apple" : Item("Rotton Apple", 64, load_image('items/rotton_apple.png'), interaction=pickup_item),
-        "wooden-bow" : Item("Wooden Bow", 1, load_image("items/bows/wooden_bow.png"), pickup_item, fire_arrow, None, True, {'cooldown':100, 'tick':0}, Cooldown()),
+        "wooden-bow" : Item("Wooden Bow", 1, load_image("items/bows/wooden_bow.png"), pickup_item, fire_arrow, None, True, {'cooldown':80, 'tick':0}, Cooldown()),
         "emerald-bow" :  Item("Emerald Bow", 1, load_image("items/bows/emerald_bow.png"), pickup_item, fire_arrow, None, True, {'cooldown':35, 'tick':0}, Cooldown()),
         "pink-spoon" : Item("Pink Spoon", 1, load_image("items/pink_spoon.png"), pickup_item),
         "heart-sigil" : Item("Heart Sigil (+10 Health)", 1, load_image("items/accessories/heart_sigil.png"), pickup_item, None, None, False, {}, HealthBoost(10), Accessory()),
         "anklet-of-the-wind" : Item("Anklet of the Wind (+10% Speed)", 1, load_image("items/accessories/anklet_of_the_wind.png"), pickup_item, None, None, False, {}, SpeedBoost(1.1) , Accessory()),
         "ninja-gear" : Item("Ninja Gear (+3 Immunity Frames)", 1, load_image("items/accessories/ninja_gear.png"), pickup_item, None, None, False, {}, IFrameBoost(3), Accessory()),
-        "armor-plate" : Item("Armor Plate (-8% Damage Reduction)", 1, load_image("items/accessories/armor_plate.png"), pickup_item, None, None, False, {}, DeffenseBoost(0.92), Accessory()),
+        "armor-plate" : Item("Armor Plate (+8% Damage Reduction)", 1, load_image("items/accessories/armor_plate.png"), pickup_item, None, None, False, {}, DeffenseBoost(0.92), Accessory()),
         "steel-gauntlet" : Item("Steel Gauntlet (+5% Damage)", 1, load_image("items/accessories/iron_gauntlet.png"), pickup_item, None, None, False, {}, DamageBoost(1.05), Accessory()),
         "glass-cannon" : Item("Glass Cannon (-60% Damage Reduction, +45% Damage)", 1, load_image("items/accessories/glass_cannon.png"), pickup_item, None, None, False, {}, DamageBoost(1.45), DeffenseBoost(1.6), Accessory()),
         "god-mode" : Item("God Mode", 1, load_image("items/not_a_item.png"), pickup_item, None, None, False, {}, DamageBoost(100), DeffenseBoost(0), Accessory())
