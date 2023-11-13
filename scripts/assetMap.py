@@ -66,7 +66,7 @@ class AssetMap():
             'up-left' : Animation(load_images('entities/dark_skeleton/left'), 5),
             'up-right' : Animation(load_images('entities/dark_skeleton/right'), 5),
             'idle' : load_image('entities/dark_skeleton/dark_skeleton.png'),
-        }, 10, 20, 0.5),
+        }, 10, 23, 0.7),
         'arrow' : Projectile(load_image('entities/arrows/wooden_arrow.png'), 5, 7, arrow_hit)
     }
     gui = {
