@@ -37,7 +37,8 @@ class PhysicsEntity:
         self.stunned = False
         self.hitbox = hitbox
         self.hitbox_on_bottom = hitbox_on_bottom
-        self.flip = False # Variable to store direction
+        self.flipx = False # Variable to store direction
+        self.flipy = False
         
         # Create a dictionary to store colisions, and velocity
         self.colisions = {
@@ -80,9 +81,15 @@ class PhysicsEntity:
             )
             # Set flip variable
             if frame_movement[0] < 0:
-                self.flip = True
+                self.flipx = True
             else:
-                self.flip = False
+                self.flipx = False
+
+            # Set flip variable
+            if frame_movement[1] < 0:
+                self.flipy = True
+            else:
+                self.flipy = False
 
         else:
             frame_movement = [0, 0]
@@ -288,7 +295,26 @@ class Player(PhysicsEntity):
         
     def render(self, disp, offset=(0, 0)):
         """Render player and HUD elements."""
-        super().render(disp, offset)
+        
+        # Render item held and the player
+        if self.itembar.items[self.itembar.slot_selected][0] != None and self.itembar.items[self.itembar.slot_selected][0].show_when_held:
+            if self.flipx:
+                if self.flipy:
+                    blit(disp, pygame.transform.flip(self.itembar.items[self.itembar.slot_selected][0].icon, True, False), (self.pos[0]-offset[0], self.pos[1]-offset[1]+self.size[1]//2))
+                    super().render(disp, offset)
+                else:
+                    super().render(disp, offset)
+                    blit(disp, pygame.transform.flip(self.itembar.items[self.itembar.slot_selected][0].icon, True, False), (self.pos[0]-offset[0], self.pos[1]-offset[1]+self.size[1]//2))
+            else:
+                if self.flipy:
+                    blit(disp, self.itembar.items[self.itembar.slot_selected][0].icon, (self.pos[0]-offset[0]+self.size[0]//2, self.pos[1]-offset[1]+self.size[1]//2))
+                    super().render(disp, offset)
+                else:
+                    super().render(disp, offset)
+                    blit(disp, self.itembar.items[self.itembar.slot_selected][0].icon, (self.pos[0]-offset[0]+self.size[0]//2, self.pos[1]-offset[1]+self.size[1]//2))
+        else:
+            super().render(disp, offset)
+
         if self.interaction:
             blit(disp, self.assetMap.gui['interaction'], (self.pos[0]-offset[0], self.pos[1]-offset[1]))
 
@@ -297,13 +323,7 @@ class Player(PhysicsEntity):
             projectile.render(disp, offset)
         render_font(self.gameManager.room_font, self.game.scale, (5, self.game.display.get_height()-(self.gameManager.room_font.get_height()//self.game.scale[1]+5)))
 
-        # Render the bow on the player
-        if self.itembar.items[self.itembar.slot_selected][0] != None and self.itembar.items[self.itembar.slot_selected][0].show_when_held:
-            if self.flip:
-                blit(disp, pygame.transform.flip(self.itembar.items[self.itembar.slot_selected][0].icon, True, False), (self.pos[0]-offset[0], self.pos[1]-offset[1]+self.size[1]//2))
-            else:
-                blit(disp, self.itembar.items[self.itembar.slot_selected][0].icon, (self.pos[0]-offset[0]+self.size[0]//2, self.pos[1]-offset[1]+self.size[1]//2))
-            
+                    
         # Render the HUD items
         self.hud.render(disp)
     
