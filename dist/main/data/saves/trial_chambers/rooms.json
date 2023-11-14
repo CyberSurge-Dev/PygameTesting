@@ -131,7 +131,7 @@
         },
         "meta" : {
             "text" : ["You have entered the final chamber.", "Prepare to die!", "- The Dark Lord"],
-            "completed-text" : ["How?! This wasn's in the script!", "- The Dark Lord"]
+            "completed-text" : ["How?! This wasn't in the script!", "- The Dark Lord"]
         }
     },
     "15" : {

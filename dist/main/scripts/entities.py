@@ -37,6 +37,8 @@ class PhysicsEntity:
         self.stunned = False
         self.hitbox = hitbox
         self.hitbox_on_bottom = hitbox_on_bottom
+        self.flipx = False # Variable to store direction
+        self.flipy = False
         
         # Create a dictionary to store colisions, and velocity
         self.colisions = {
@@ -52,6 +54,7 @@ class PhysicsEntity:
 
     def rect(self):
         """Returns a pygame Rect onject at the location of the player"""
+        # Uses the size of the player hitbox, hitbox will be in the center unless stated otherwize
         if not self.hitbox_on_bottom:
             return pygame.Rect(self.pos[0]+((self.size[0]-self.hitbox[0])//2), self.pos[1]+((self.size[1]-self.hitbox[1])//2), self.hitbox[0], self.hitbox[1])
         else:
@@ -76,6 +79,18 @@ class PhysicsEntity:
                 ((movement['right']-movement['left']) + self.velocity[0]) * self.multiplier,
                 ((movement['down']-movement['up']) + self.velocity[1]) * self.multiplier
             )
+            # Set flip variable
+            if frame_movement[0] < 0:
+                self.flipx = True
+            else:
+                self.flipx = False
+
+            # Set flip variable
+            if frame_movement[1] < 0:
+                self.flipy = True
+            else:
+                self.flipy = False
+
         else:
             frame_movement = [0, 0]
         # Check for collionions in left and right movement
@@ -280,7 +295,26 @@ class Player(PhysicsEntity):
         
     def render(self, disp, offset=(0, 0)):
         """Render player and HUD elements."""
-        super().render(disp, offset)
+        
+        # Render item held and the player
+        if self.itembar.items[self.itembar.slot_selected][0] != None and self.itembar.items[self.itembar.slot_selected][0].show_when_held:
+            if self.flipx:
+                if self.flipy:
+                    blit(disp, pygame.transform.flip(self.itembar.items[self.itembar.slot_selected][0].icon, True, False), (self.pos[0]-offset[0], self.pos[1]-offset[1]+self.size[1]//2))
+                    super().render(disp, offset)
+                else:
+                    super().render(disp, offset)
+                    blit(disp, pygame.transform.flip(self.itembar.items[self.itembar.slot_selected][0].icon, True, False), (self.pos[0]-offset[0], self.pos[1]-offset[1]+self.size[1]//2))
+            else:
+                if self.flipy:
+                    blit(disp, self.itembar.items[self.itembar.slot_selected][0].icon, (self.pos[0]-offset[0]+self.size[0]//2, self.pos[1]-offset[1]+self.size[1]//2))
+                    super().render(disp, offset)
+                else:
+                    super().render(disp, offset)
+                    blit(disp, self.itembar.items[self.itembar.slot_selected][0].icon, (self.pos[0]-offset[0]+self.size[0]//2, self.pos[1]-offset[1]+self.size[1]//2))
+        else:
+            super().render(disp, offset)
+
         if self.interaction:
             blit(disp, self.assetMap.gui['interaction'], (self.pos[0]-offset[0], self.pos[1]-offset[1]))
 
@@ -289,6 +323,7 @@ class Player(PhysicsEntity):
             projectile.render(disp, offset)
         render_font(self.gameManager.room_font, self.game.scale, (5, self.game.display.get_height()-(self.gameManager.room_font.get_height()//self.game.scale[1]+5)))
 
+                    
         # Render the HUD items
         self.hud.render(disp)
     
