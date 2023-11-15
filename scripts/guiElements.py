@@ -13,6 +13,7 @@ import json
 # Internal imports
 from scripts.utils import blit, render_font
 from scripts.itemAttributes import Accessory
+from scripts.utils import convert_time
 
 # --------------------------------------------------------------------------------
 
@@ -542,8 +543,8 @@ class GameOver(MenuItem):
 class EndScreen(MenuItem):
     """Class for the screen showed at the end of the screen"""
     def __init__(self, pos, scale, game_end_image, restart_button, continue_button, player, center=True):
-        super().__init__(pos, 0, scale, [pygame.MOUSEBUTTONDOWN], center)
-        self.game_end_image = game_end_image
+        super().__init__(pos, (game_end_image.get_width(), game_end_image.get_height()), scale, [pygame.MOUSEBUTTONDOWN], center)
+        self.image = game_end_image
         self.restart_button_img = restart_button
         self.continue_button_img = continue_button
         self.player=player
@@ -555,12 +556,17 @@ class EndScreen(MenuItem):
         player.hud.ignore('text-box')
         player.game_over = True
 
-        self.restart_button = Button((self.center_pos[0], self.center_pos[1]+50), (self.restart_button_img.get_width(), self.restart_button_img.get_height()),
+        self.restart_button = Button((self.center_pos[0]+(self.image.get_width()//2), self.center_pos[1]+self.image.get_height()+15+(self.restart_button_img.get_height()//2) ), (self.restart_button_img.get_width(), self.restart_button_img.get_height()),
                                      self.scale, self.restart_button_img, "", self.restart_game)
-        self.continue_button = Button((self.center_pos[0], self.center_pos[1]+55+self.restart_button_img.get_height()), (self.continue_button_img.get_width(), self.continue_button_img.get_height()),
+        self.continue_button = Button((self.center_pos[0]+(self.image.get_width()//2), self.center_pos[1]+self.image.get_height()+20+self.restart_button_img.get_height()+(self.continue_button_img.get_height()//2)), (self.continue_button_img.get_width(), self.continue_button_img.get_height()),
                                      self.scale, self.continue_button_img, "", self.continue_game)
         
-        self.font = pygame.font.Font('freesansbold.ttf', int(12*self.scale[1]))
+        self.large_font_size = 9
+        self.small_font_size = 4
+        self.font_spacing = 1
+
+        self.large_font = pygame.font.Font('freesansbold.ttf', int(self.large_font_size*self.scale[1]))
+        self.small_font = pygame.font.Font('freesansbold.ttf', int(self.small_font_size*self.scale[1]))
 
         items_found = 0
         total_items = 0
@@ -569,6 +575,13 @@ class EndScreen(MenuItem):
         total_notes = 0
         notes_checked = 0
         for room in self.player.gameManager.rooms.values():
+            # Create variables to store temporary values
+            chests_opened_in_room = 0
+            total_chests_in_room = 0
+
+            notes_checked_in_room = 0
+            total_notes_in_room = 0
+
             with open("data/rooms/"+room['room'], 'r') as r:
                 room_data = json.load(r)
             total_rooms += 1 # Increment rooms
@@ -577,63 +590,71 @@ class EndScreen(MenuItem):
             for k, v in room_data.get('tilemap', {}).items():
                 if v.get('id', None) == 'chest' or v.get('id', None) == 'objective-chest':
                     total_items += 1
+                    total_chests_in_room += 1
                     if room.get('meta', {}).get(tuple([int(x) for x in k.split(";")]), {}).get('opened', False):
                         items_found += 1
+                        chests_opened_in_room += 1
 
                 # Check note-walls
                 elif v.get('id', None) == 'note-wall':
                     total_notes += 1
+                    total_notes_in_room += 1
                     if room.get('meta', {}).get(tuple([int(x) for x in k.split(";")]), {}).get('checked', False):
                         notes_checked += 1
+                        notes_checked_in_room += 1
 
-            # Check if the room was marked as completed
-            if room.get('meta', {}).get('completed', False):
+            # Check if the room was marked as completed, and if all chests and notes were checked/opened
+            if (room.get('meta', {}).get('completed', False) and 
+                (chests_opened_in_room >= total_chests_in_room) and 
+                (notes_checked_in_room >= total_notes_in_room)):
                 rooms_completed += 1
 
         # Render fonts to be displayed
-        self.chest_label = self.font.render("Chests Opened:", True, (255, 250, 250))
-        self.chest_counts = self.font.render(f"{items_found}/{total_items}", True, (255, 250, 250))
+        self.chest_label = self.small_font.render(f"Chests Opened - {items_found}/{total_items}", True, (255, 250, 250))
+        self.chest_counts = self.small_font.render(f"{items_found}/{total_items}", True, (255, 250, 250))
 
-        self.rooms_label = self.font.render("Rooms Completed:", True, (255, 250, 250))
-        self.room_counts = self.font.render(f"{rooms_completed}/{total_rooms}", True, (255, 250, 250))
+        self.rooms_label = self.small_font.render(f"Rooms Completed - {rooms_completed}/{total_rooms}", True, (255, 250, 250))
+        self.room_counts = self.small_font.render(f"{rooms_completed}/{total_rooms}", True, (255, 250, 250))
 
-        self.notes_label = self.font.render("Notes Checked:", True, (255, 250, 250))
-        self.note_counts = self.font.render(f"{notes_checked}/{total_notes}", True, (255, 250, 250))
+        self.notes_label = self.small_font.render(f"Notes Checked - {notes_checked}/{total_notes}", True, (255, 250, 250))
+        self.note_counts = self.small_font.render(f"{notes_checked}/{total_notes}", True, (255, 250, 250))
+
+        self.percentage_label = self.large_font.render(f"{int(((items_found+notes_checked+rooms_completed)/(total_items+total_notes+total_rooms))*100)}%", True, (255, 250, 250))
+        self.time_label = self.small_font.render(f"{convert_time(pygame.time.get_ticks()//1000)}", True, (255, 250, 250))
 
 
     def check_events(self, event):
         """Run check events for element"""
         self.restart_button.check_events(event)
-        self.restart_button.check_events(event)
+        self.continue_button.check_events(event)
         
     def restart_game(self):
         """Method called when the user presses the restart button"""
-        self.player.game.run()
+        self.player.game.__init__()
+        
 
     def continue_game(self):
         """Method called when the user resses the continue button"""
         self.delete = True
         self.player.hud.background_tint = False
+        self.player.game_over = False
+        self.player.stunned = False
 
         self.player.hud.unignore('itembar')
         self.player.hud.unignore('text-box')
 
-        
-        
-        
+    def render(self, disp):
+        """Render gui element, and buttons"""
+        super().render(disp)
 
-        
-                    
-                
-                
-        
-        
-    
-        
+        # Render buttons
+        self.restart_button.render(disp)
+        self.continue_button.render(disp)
 
-        
-
-    
-        
-
-
+        # Render game stats
+        render_font(self.percentage_label, self.scale, (self.center_pos[0]+ ((self.size[0]//2) - (self.percentage_label.get_width()//2)//self.scale[0]), self.center_pos[1]+30))
+        render_font(self.time_label, self.scale, (self.center_pos[0]+ (self.size[0]//2)  - (self.time_label.get_width()//2)//self.scale[0], self.center_pos[1]+30+self.large_font_size+self.font_spacing))
+        # Additional game Stats
+        render_font(self.rooms_label, self.scale, (self.center_pos[0]+ (self.size[0]//2)  - (self.rooms_label.get_width()//2)//self.scale[0], self.center_pos[1]+30+(self.small_font_size*2)+self.large_font_size+(self.font_spacing*3)))
+        render_font(self.chest_label, self.scale, (self.center_pos[0]+ (self.size[0]//2)  - (self.chest_label.get_width()//2)//self.scale[0], self.center_pos[1]+30+(self.small_font_size*3)+(self.font_spacing*4)+self.large_font_size))
+        render_font(self.notes_label, self.scale, (self.center_pos[0]+ (self.size[0]//2)  - (self.notes_label.get_width()//2)//self.scale[0], self.center_pos[1]+30+(self.small_font_size*4)+(self.font_spacing*5)+self.large_font_size))

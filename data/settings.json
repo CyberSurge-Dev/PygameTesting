@@ -1,7 +1,7 @@
 {
     "display": {
         "fullscreen": false,
-        "resolution": [854, 480]
+        "resolution": [960, 540]
     },
     "keybinds": {
         "up": "w",
