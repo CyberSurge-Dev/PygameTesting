@@ -81,7 +81,10 @@ class AssetMap():
         "filled-health-bar" : load_image("gui/health_bar/filled_bar.png"),
         "game-over-image" : load_image("gui/game_over/game_over_text.png"),
         "respawn-button" : load_image("gui/game_over/respawn_button.png"),
-        "game-end-image" : load_image("gui/game_end/game_end_image.png")
+        "game-end-image" : load_image("gui/game_end/game_end_image.png"),
+        "restart-button" : load_image("gui/game_end/restart_button.png"),
+        "continue-button" : load_image("gui/game_end/continue_button.png")
+    
     }
     items = {
         "NaI" : Item("NaI", 1, load_image("items/not_a_item.png")),
