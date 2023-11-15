@@ -108,4 +108,7 @@ class AssetMap():
         "cobweb" : load_image("decor/cobweb.png"),
         "danger" : load_image("decor/danger.png")
     }
+    tags = {
+        'final-room' : game_end_screen
+    }
     

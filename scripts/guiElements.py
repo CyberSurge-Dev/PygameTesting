@@ -4,14 +4,11 @@
 # --------------------------------------------------------------------------------
 """
 This program contains base classes to create gui objects eaily throughout the program
-
---+ Classes +-- 
-
-
 """
 # --------------------------------------------------------------------------------
 # External imports
 import pygame
+import json
 
 # Internal imports
 from scripts.utils import blit, render_font
@@ -189,12 +186,14 @@ class TextBox(MenuItem):
 
 class ClosableTextBox(MenuItem):
     """Class to create a text-box on the screen"""
-    def __init__(self, pos, scale, box_image, button_image, text, center=True):
+    def __init__(self, pos, scale, box_image, button_image, text, on_close=None, center=True, *args):
         super().__init__(pos, (box_image.get_width(), box_image.get_height()), scale, [pygame.MOUSEBUTTONDOWN], center)
         self.font = pygame.font.Font('freesansbold.ttf', int(7*self.scale[1]))
         self.padding = 4
         self.image = box_image
         self.text = []
+        self.args = args
+        self.on_close = on_close
         if self.center:
             self.button = Button((self.center_pos[0] + self.image.get_width()+self.padding*2, self.center_pos[1]+button_image.get_height()), (button_image.get_width(), button_image.get_height()), scale, button_image, "", self.close)
         for t in text:
@@ -202,6 +201,9 @@ class ClosableTextBox(MenuItem):
         
     def close(self):
         self.delete = True
+        print(self.on_close)
+        if self.on_close != None:
+            self.on_close(*self.args)
 
     def check_events(self, event):
         self.button.check_events(event)
@@ -536,6 +538,86 @@ class GameOver(MenuItem):
     def check_events(self, event):
         """Checks the event for the object"""
         self.button.check_events(event)
+
+class EndScreen(MenuItem):
+    """Class for the screen showed at the end of the screen"""
+    def __init__(self, pos, scale, game_end_image, restart_button, continue_button, player, center=True):
+        super().__init__(pos, 0, scale, [pygame.MOUSEBUTTONDOWN], center)
+        self.game_end_image = game_end_image
+        self.restart_button_img = restart_button
+        self.continue_button_img = continue_button
+        self.player=player
+        # Freeze the player and hide game elements
+        player.stunned = True
+        player.hud.background_tint = True
+        player.hud.ignore('itembar')
+        player.hud.ignore('inventory')
+        player.hud.ignore('text-box')
+        player.game_over = True
+
+        self.restart_button = Button((self.center_pos[0], self.center_pos[1]+50), (self.restart_button_img.get_width(), self.restart_button_img.get_height()),
+                                     self.scale, self.restart_button_img, "", self.restart_game)
+        self.continue_button = Button((self.center_pos[0], self.center_pos[1]+55+self.restart_button_img.get_height()), (self.continue_button_img.get_width(), self.continue_button_img.get_height()),
+                                     self.scale, self.continue_button_img, "", self.continue_game)
+        
+        self.font = pygame.font.Font('freesansbold.ttf', int(12*self.scale[1]))
+
+        items_found = 0
+        total_items = 0
+        total_rooms = 0
+        rooms_completed = 0
+        total_notes = 0
+        notes_checked = 0
+        for room in self.player.gameManager.rooms.values():
+            with open("data/rooms/"+room['room'], 'r') as r:
+                room_data = json.load(r)
+            total_rooms += 1 # Increment rooms
+
+            # Check for chests opened in the room
+            for k, v in room_data.get('tilemap', {}).items():
+                if v.get('id', None) == 'chest' or v.get('id', None) == 'objective-chest':
+                    total_items += 1
+                    if room.get('meta', {}).get(tuple([int(x) for x in k.split(";")]), {}).get('opened', False):
+                        items_found += 1
+
+                # Check note-walls
+                elif v.get('id', None) == 'note-wall':
+                    total_notes += 1
+                    if room.get('meta', {}).get(tuple([int(x) for x in k.split(";")]), {}).get('checked', False):
+                        notes_checked += 1
+
+            # Check if the room was marked as completed
+            if room.get('meta', {}).get('completed', False):
+                rooms_completed += 1
+
+        # Render fonts to be displayed
+        self.chest_label = self.font.render("Chests Opened:", True, (255, 250, 250))
+        self.chest_counts = self.font.render(f"{items_found}/{total_items}", True, (255, 250, 250))
+
+        self.rooms_label = self.font.render("Rooms Completed:", True, (255, 250, 250))
+        self.room_counts = self.font.render(f"{rooms_completed}/{total_rooms}", True, (255, 250, 250))
+
+        self.notes_label = self.font.render("Notes Checked:", True, (255, 250, 250))
+        self.note_counts = self.font.render(f"{notes_checked}/{total_notes}", True, (255, 250, 250))
+
+
+    def check_events(self, event):
+        """Run check events for element"""
+        self.restart_button.check_events(event)
+        self.restart_button.check_events(event)
+        
+    def restart_game(self):
+        """Method called when the user presses the restart button"""
+        self.player.game.run()
+
+    def continue_game(self):
+        """Method called when the user resses the continue button"""
+        self.delete = True
+        self.player.hud.background_tint = False
+
+        self.player.hud.unignore('itembar')
+        self.player.hud.unignore('text-box')
+
         
         
         

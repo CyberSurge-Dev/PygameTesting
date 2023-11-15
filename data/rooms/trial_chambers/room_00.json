@@ -168,7 +168,8 @@
             "id": "floor"
         },
         "7;4": {
-            "id": "floor"
+            "id": "chest",
+            "meta" : {"item":"god-mode"}
         },
         "7;5": {
             "id": "wall",
