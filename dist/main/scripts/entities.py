@@ -178,6 +178,7 @@ class Player(PhysicsEntity):
         self.inventory = {}
         # Create HUD items
         self.hud = GUIManager()
+        self.game_over = False
         self.damage_multiplier = 1
         self.hud.add('itembar', ItemBar(self.game.dPos.BOTTOM_CENTER, (81, 24), self.game.scale, self.assetMap.gui['itembar'], self.assetMap.gui['itembar_selected']))
         self.itembar = self.hud.menu_items['itembar']
@@ -218,8 +219,8 @@ class Player(PhysicsEntity):
 
     def check_events(self, event):
         """Check events for the player."""
-        if not self.health_bar.dead:
-            if event.type == pygame.MOUSEBUTTONDOWN and self.itembar.items[self.itembar.slot_selected][0] != None and not (self.inventory_open or self.health_bar.dead):
+        if not (self.health_bar.dead or self.game_over):
+            if event.type == pygame.MOUSEBUTTONDOWN and self.itembar.items[self.itembar.slot_selected][0] != None and not (self.inventory_open or self.stunned):
                 if event.button == 1:  # Left mouse button.
                     self.itembar.items[self.itembar.slot_selected][0].left_button(event, self)
                 elif event.button == 3:  # Right mouse button.

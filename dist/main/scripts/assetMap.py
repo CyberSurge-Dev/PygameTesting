@@ -80,7 +80,11 @@ class AssetMap():
         "empty-health-bar" : load_image("gui/health_bar/empty_bar.png"),
         "filled-health-bar" : load_image("gui/health_bar/filled_bar.png"),
         "game-over-image" : load_image("gui/game_over/game_over_text.png"),
-        "respawn-button" : load_image("gui/game_over/respawn_button.png")
+        "respawn-button" : load_image("gui/game_over/respawn_button.png"),
+        "game-end-image" : load_image("gui/game_end/game_end_image.png"),
+        "restart-button" : load_image("gui/game_end/restart_button.png"),
+        "continue-button" : load_image("gui/game_end/continue_button.png")
+    
     }
     items = {
         "NaI" : Item("NaI", 1, load_image("items/not_a_item.png")),
@@ -107,5 +111,8 @@ class AssetMap():
         'bookshelf' : load_image("decor/bookshelf.png"),
         "cobweb" : load_image("decor/cobweb.png"),
         "danger" : load_image("decor/danger.png")
+    }
+    tags = {
+        'final-room' : game_end_screen
     }
     
