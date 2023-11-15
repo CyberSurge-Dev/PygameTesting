@@ -7,14 +7,56 @@ This file contains functions for game interactions, these range from item item a
 to functions used by any game elements.
 """
 # --------------------------------------------------------------------------------
+# External imports
+import math
+import json
+import pygame
+
 # Internal imports 
 from scripts.guiElements import ClosableTextBox
-from scripts.utils import blit
 from scripts.itemAttributes import Trash, Recyclable
 from scripts.guiElements import ClosableTextBox
 from scripts.entities import Projectile
 from scripts.itemAttributes import Accessory
-import math
+from scripts.utils import convert_time
+
+def game_end_screen(*args):
+    """Show the game end screen"""
+    if args[1].gameManager.get_meta('completed') == True:
+        print("\nGAME END\n")
+        items_found = 0
+        total_items = 0
+        total_rooms = 0
+        rooms_completed = 0
+        total_notes = 0
+        notes_checked = 0
+        for room in args[1].gameManager.rooms.values():
+            with open("data/rooms/"+room['room'], 'r') as r:
+                room_data = json.load(r)
+            total_rooms += 1 # Increment rooms
+
+            # Check for chests opened in the room
+            for k, v in room_data.get('tilemap', {}).items():
+                if v.get('id', None) == 'chest' or v.get('id', None) == 'objective-chest':
+                    total_items += 1
+                    if room.get('meta', {}).get(tuple([int(x) for x in k.split(";")]), {}).get('opened', False):
+                        items_found += 1
+
+                # Check note-walls
+                elif v.get('id', None) == 'note-wall':
+                    total_notes += 1
+                    if room.get('meta', {}).get(tuple([int(x) for x in k.split(";")]), {}).get('checked', False):
+                        notes_checked += 1
+
+            # Check if the room was marked as completed
+            if room.get('meta', {}).get('completed', False):
+                rooms_completed += 1
+
+        print(f'Chests opened: {items_found}/{total_items}')
+        print(f'Rooms completed: {rooms_completed}/{total_rooms}')
+        print(f'Notes checked: {notes_checked}/{total_notes}')
+        print(f"Time taken: {convert_time(pygame.time.get_ticks()//1000)}") # Print time taken in seconds
+        
 
 def check_room_state(tile, disp, offset, tile_size, tilemap):
     """Checks room metadata to figure out if tile should be converted to a chest."""
@@ -59,10 +101,22 @@ def open_chest(tile, player):
                     isAccessory = True
             if isAccessory:
                 # Display a different message if the item is an accessory
-                player.hud.add("text-box", ClosableTextBox((player.game.dPos.TOP_CENTER[0], 42), player.game.scale, player.assetMap.gui['text-box'], player.assetMap.gui['close'], 
+                if tile.meta.get('tag', None) != None:
+                    player.hud.add("text-box", ClosableTextBox((player.game.dPos.TOP_CENTER[0], 42), player.game.scale, player.assetMap.gui['text-box'], player.assetMap.gui['close'], 
                                                         [f"I got a {player.tilemap.assetMap.items[tile.meta.get('item', 'NaI')].display_name} Accessory!", "", f"Press ' {player.game.settings.settings_data['keybinds'].get('inventory', 'NaK')} ' to open your inventory and equip it.", "Press it again to close."]))
+                else: 
+                    player.hud.add("text-box", ClosableTextBox((player.game.dPos.TOP_CENTER[0], 42), player.game.scale, player.assetMap.gui['text-box'], player.assetMap.gui['close'], 
+                                                        [f"I got a {player.tilemap.assetMap.items[tile.meta.get('item', 'NaI')].display_name} Accessory!", "", f"Press ' {player.game.settings.settings_data['keybinds'].get('inventory', 'NaK')} ' to open your inventory and equip it.", "Press it again to close."],
+                                                        player.assetMap.tags.get(tile.meta.get('tag', None), None), True, player
+                                                        ))
             else:
-                player.hud.add("text-box", ClosableTextBox((player.game.dPos.TOP_CENTER[0], 42), player.game.scale, player.assetMap.gui['text-box'], player.assetMap.gui['close'], 
+                if tile.meta.get('tag', None) != None:
+                    player.hud.add("text-box", ClosableTextBox((player.game.dPos.TOP_CENTER[0], 42), player.game.scale, player.assetMap.gui['text-box'], player.assetMap.gui['close'], 
+                                                        [f"I got a {player.tilemap.assetMap.items[tile.meta.get('item', 'NaI')].display_name}!"],
+                                                        player.assetMap.tags.get(tile.meta.get('tag', None), None), True, player
+                                                        ))
+                else:
+                    player.hud.add("text-box", ClosableTextBox((player.game.dPos.TOP_CENTER[0], 42), player.game.scale, player.assetMap.gui['text-box'], player.assetMap.gui['close'], 
                                                         [f"I got a {player.tilemap.assetMap.items[tile.meta.get('item', 'NaI')].display_name}!"]))
         else:
             # add items in chest to player inventory
@@ -73,7 +127,13 @@ def open_chest(tile, player):
             tile.variant = 1
 
             # Display message set in tilemap
-            player.hud.add("text-box", ClosableTextBox((player.game.dPos.TOP_CENTER[0], 42), player.game.scale, player.assetMap.gui['text-box'], player.assetMap.gui['close'], 
+            if tile.meta.get('tag', None) != None: 
+                player.hud.add("text-box", ClosableTextBox((player.game.dPos.TOP_CENTER[0], 42), player.game.scale, player.assetMap.gui['text-box'], player.assetMap.gui['close'], 
+                                                        tile.meta.get('text', []),
+                                                        player.assetMap.tags.get(tile.meta.get('tag', None), None), True, player
+                                                        ))
+            else:
+                player.hud.add("text-box", ClosableTextBox((player.game.dPos.TOP_CENTER[0], 42), player.game.scale, player.assetMap.gui['text-box'], player.assetMap.gui['close'], 
                                                         tile.meta.get('text', [])))
     else:
         # Display a message fro the player
@@ -106,6 +166,7 @@ def show_text_box(item, player):
     # Remove old text-box, if there is one
     player.hud.remove("text-box")
     player.hud.add("text-box", ClosableTextBox((player.game.dPos.TOP_CENTER[0], 42), player.game.scale, player.assetMap.gui['text-box'], player.assetMap.gui['close'], item.meta['text']))
+    player.gameManager.add_meta(item.pos, {'checked' : True})
 
 def on_interact_trash(item, player):
     for attribute in player.itembar.items[player.itembar.slot_selected][0].attributes:
@@ -128,6 +189,8 @@ def set_room(tile, *args):
     if args[1].gameManager.get_meta("text") != {}:
         args[1].hud.add("text-box", ClosableTextBox((args[1].game.dPos.TOP_CENTER[0], 42), args[1].game.scale, args[1].assetMap.gui['text-box'], args[1].assetMap.gui['close'], args[1].gameManager.get_meta("text")))
    
+    if tile.meta.get('tag', None) != None:
+        args[1].assetMap.tags.get(tile.meta.get('tag'))(*args)
 
 def on_interact_recycle(item, player):
     for attribute in player.itembar.items[player.itembar.slot_selected][0].attributes:
