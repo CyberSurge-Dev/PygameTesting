@@ -220,7 +220,8 @@
             "id": "door",
             "variant": 2,
             "meta": {
-                "id": "0"
+                "id": "0",
+                "tag":"final-room"
             }
         },
         "6;0": {

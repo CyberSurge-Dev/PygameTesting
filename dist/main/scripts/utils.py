@@ -168,6 +168,15 @@ def load_image(path):
     return pygame.image.load(BASE_IMAGE_PATH +
                              path)  # returns the loaded pygame image object
 
+def convert_time(seconds):
+    seconds = seconds % (24 * 3600)
+    hour = seconds // 3600
+    seconds %= 3600
+    minutes = seconds // 60
+    seconds %= 60
+     
+    return "%d:%02d:%02d" % (hour, minutes, seconds)
+
 
 def blit(surface, image, pos):
     if image == None:
