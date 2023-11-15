@@ -25,8 +25,8 @@ def game_end_screen(*args):
     if args[1].gameManager.get_meta('completed') == True:
         args[1].hud.add("game-end", EndScreen((args[1].game.dPos.CENTER[0], args[1].game.dPos.CENTER[1]-15), args[1].game.scale, 
                   args[1].assetMap.gui['game-end-image'],
-                  args[1].assetMap.gui['respawn-button'],
-                  args[1].assetMap.gui['respawn-button'],
+                  args[1].assetMap.gui['restart-button'],
+                  args[1].assetMap.gui['continue-button'],
                   args[1]
                   ))
         
