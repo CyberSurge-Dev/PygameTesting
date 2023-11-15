@@ -13,7 +13,7 @@ import json
 import pygame
 
 # Internal imports 
-from scripts.guiElements import ClosableTextBox
+from scripts.guiElements import ClosableTextBox, EndScreen
 from scripts.itemAttributes import Trash, Recyclable
 from scripts.guiElements import ClosableTextBox
 from scripts.entities import Projectile
@@ -23,41 +23,13 @@ from scripts.utils import convert_time
 def game_end_screen(*args):
     """Show the game end screen"""
     if args[1].gameManager.get_meta('completed') == True:
-        print("\nGAME END\n")
-        items_found = 0
-        total_items = 0
-        total_rooms = 0
-        rooms_completed = 0
-        total_notes = 0
-        notes_checked = 0
-        for room in args[1].gameManager.rooms.values():
-            with open("data/rooms/"+room['room'], 'r') as r:
-                room_data = json.load(r)
-            total_rooms += 1 # Increment rooms
-
-            # Check for chests opened in the room
-            for k, v in room_data.get('tilemap', {}).items():
-                if v.get('id', None) == 'chest' or v.get('id', None) == 'objective-chest':
-                    total_items += 1
-                    if room.get('meta', {}).get(tuple([int(x) for x in k.split(";")]), {}).get('opened', False):
-                        items_found += 1
-
-                # Check note-walls
-                elif v.get('id', None) == 'note-wall':
-                    total_notes += 1
-                    if room.get('meta', {}).get(tuple([int(x) for x in k.split(";")]), {}).get('checked', False):
-                        notes_checked += 1
-
-            # Check if the room was marked as completed
-            if room.get('meta', {}).get('completed', False):
-                rooms_completed += 1
-
-        print(f'Chests opened: {items_found}/{total_items}')
-        print(f'Rooms completed: {rooms_completed}/{total_rooms}')
-        print(f'Notes checked: {notes_checked}/{total_notes}')
-        print(f"Time taken: {convert_time(pygame.time.get_ticks()//1000)}") # Print time taken in seconds
+        args[1].hud.add("game-end", EndScreen((args[1].game.dPos.CENTER[0], args[1].game.dPos.CENTER[1]-15), args[1].game.scale, 
+                  args[1].assetMap.gui['game-end-image'],
+                  args[1].assetMap.gui['respawn-button'],
+                  args[1].assetMap.gui['respawn-button'],
+                  args[1]
+                  ))
         
-
 def check_room_state(tile, disp, offset, tile_size, tilemap):
     """Checks room metadata to figure out if tile should be converted to a chest."""
     if tilemap.gameManager.get_meta("completed") == True:
